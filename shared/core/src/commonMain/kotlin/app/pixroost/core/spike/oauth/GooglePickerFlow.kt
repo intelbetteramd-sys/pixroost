@@ -20,14 +20,32 @@ class GooglePickerFlow(
     private val openUrl: (String) -> Unit,
     private val log: (String) -> Unit,
     private val nowMillis: () -> Long,
+    /** Keeps the open session's ID, so the picking survives the app being killed while Google Photos is open. */
+    private val saveSession: (String?) -> Unit = {},
 ) {
     private val _status = MutableStateFlow("не запускался")
     val status: StateFlow<String> = _status.asStateFlow()
 
-    fun start() {
+    fun start() = launch { token ->
+        val session = picker.createSession(token)
+        saveSession(session.id)
+        log("Google Фото: сессия создана, открываю выбор")
+        _status.value = "выберите фото в Google Фото, нажмите «Готово» и вернитесь в приложение"
+        openUrl(session.pickerUri)
+        waitAndDownload(token, session)
+    }
+
+    /** Picks up a session the previous run of the app opened. */
+    fun resume(sessionId: String) = launch { token ->
+        log("Google Фото: приложение перезапущено, продолжаю начатый выбор")
+        _status.value = "продолжаю выбор после перезапуска приложения…"
+        waitAndDownload(token, picker.getSession(token, sessionId))
+    }
+
+    private fun launch(block: suspend (String) -> Unit) {
         scope.launch {
             try {
-                pickAndDownload(accessToken() ?: throw OAuthException("сначала войдите в Google"))
+                block(accessToken() ?: throw OAuthException("сначала войдите в Google"))
             } catch (error: IOException) {
                 fail(error)
             } catch (error: OAuthException) {
@@ -36,10 +54,8 @@ class GooglePickerFlow(
         }
     }
 
-    private suspend fun pickAndDownload(token: String) {
-        var session = picker.createSession(token)
-        _status.value = "выберите фото на странице Google и нажмите «Готово»"
-        openUrl(session.pickerUri)
+    private suspend fun waitAndDownload(token: String, started: PickerSession) {
+        var session = started
         val deadline = nowMillis() + OAuthSpikeConstants.SIGN_IN_TIMEOUT_MILLIS
         while (!session.isMediaItemsSet && nowMillis() < deadline) {
             delay(session.pollIntervalMillis)
@@ -51,6 +67,7 @@ class GooglePickerFlow(
         val startedAt = nowMillis()
         val bytes = picked.sumOf { picker.downloadSize(token, it) }
         picker.deleteSession(token, session.id)
+        saveSession(null)
         val millis = nowMillis() - startedAt
         _status.value =
             "скачано ${picked.size} файлов, ${bytes / OAuthSpikeConstants.BYTES_IN_KILOBYTE} КБ за $millis мс"
@@ -58,6 +75,7 @@ class GooglePickerFlow(
     }
 
     private fun fail(error: Exception) {
+        saveSession(null)
         _status.value = "ошибка: ${error.message}"
         log("Google Фото: ошибка ${error.message}")
     }

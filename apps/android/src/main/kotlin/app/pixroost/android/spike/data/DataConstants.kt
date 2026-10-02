@@ -2,6 +2,8 @@ package app.pixroost.android.spike.data
 
 object DataConstants {
     const val TOKEN_PREFERENCES = "s05-tokens"
+    const val PICKER_PREFERENCES = "s05-picker"
+    const val PICKER_SESSION_KEY = "session"
     const val ANDROID_KEYSTORE = "AndroidKeyStore"
     const val KEY_ALIAS = "pixroost-s05-tokens"
     const val CIPHER = "AES/GCM/NoPadding"

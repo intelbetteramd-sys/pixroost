@@ -1,9 +1,11 @@
 package app.pixroost.android.spike.ui
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import app.pixroost.android.spike.data.DataConstants
 import app.pixroost.android.spike.data.KeystoreTokenStore
 import app.pixroost.android.spike.data.RedirectInbox
 import app.pixroost.android.spike.data.signingFingerprints
@@ -53,6 +55,8 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
         signing = application.signingFingerprints(),
     )
     private var pending: PendingSignIn? = null
+    private val pickerPreferences =
+        application.getSharedPreferences(DataConstants.PICKER_PREFERENCES, Context.MODE_PRIVATE)
     val state: StateFlow<OAuthSpikeUiState> = holder.state
 
     /** Pages for the screen to open: sign-in in Custom Tabs, the picker through a VIEW intent. */
@@ -66,11 +70,14 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
         openUrl = { _pages.tryEmit(BrowserRequest(it, inCustomTab = false)) },
         log = holder::log,
         nowMillis = System::currentTimeMillis,
+        saveSession = { pickerPreferences.edit().putString(DataConstants.PICKER_SESSION_KEY, it).apply() },
     )
 
     init {
         CloudService.entries.forEach { service -> store.load(service)?.let { showTokens(service, it) } }
         viewModelScope.launch { RedirectInbox.received.collect(::onRedirect) }
+        // MIUI and others often kill the app while Google Photos is open; the session outlives the process.
+        pickerPreferences.getString(DataConstants.PICKER_SESSION_KEY, null)?.let(picker::resume)
     }
 
     fun signIn(service: CloudService) {
