@@ -7,11 +7,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.pixroost.android.spike.data.DataConstants
 import app.pixroost.android.spike.data.KeystoreTokenStore
+import app.pixroost.android.spike.data.PendingSignIn
+import app.pixroost.android.spike.data.PendingSignInStore
 import app.pixroost.android.spike.data.RedirectInbox
 import app.pixroost.android.spike.data.signingFingerprints
 import app.pixroost.android.spike.ui.model.BrowserRequest
 import app.pixroost.android.spike.ui.model.OAuthSpikeUiState
-import app.pixroost.android.spike.ui.model.PendingSignIn
 import app.pixroost.android.spike.ui.model.ServiceUiState
 import app.pixroost.core.spike.oauth.CloudMediaSample
 import app.pixroost.core.spike.oauth.CloudProbe
@@ -54,7 +55,7 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
         tokenStorage = "токены зашифрованы ключом Android Keystore",
         signing = application.signingFingerprints(),
     )
-    private var pending: PendingSignIn? = null
+    private val pending = PendingSignInStore(application)
     private val pickerPreferences =
         application.getSharedPreferences(DataConstants.PICKER_PREFERENCES, Context.MODE_PRIVATE)
     val state: StateFlow<OAuthSpikeUiState> = holder.state
@@ -74,6 +75,8 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
     )
 
     init {
+        // A restart in the middle of a sign-in or a picking shows up in the report as a second start.
+        holder.log("приложение запущено")
         CloudService.entries.forEach { service -> store.load(service)?.let { showTokens(service, it) } }
         viewModelScope.launch { RedirectInbox.received.collect(::onRedirect) }
         // MIUI and others often kill the app while Google Photos is open; the session outlives the process.
@@ -88,7 +91,7 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
         }
         val codes = pkce.newPkce()
         val signIn = PendingSignIn(service, pkce.newState(), codes, androidRedirectUri(service))
-        pending = signIn
+        pending.save(signIn)
         holder.change(service) { it.copy(status = "вход в браузере…") }
         holder.log("${service.label}: открываю вход, адрес возврата ${signIn.redirectUri}")
         _pages.tryEmit(BrowserRequest(oauth.authorizeUrl(config, signIn.redirectUri, signIn.state, codes), true))
@@ -116,8 +119,8 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
     override fun onCleared() = http.close()
 
     private fun onRedirect(uri: Uri) {
-        val signIn = pending ?: return holder.log("возврат без начатого входа: ${uri.scheme}")
-        pending = null
+        RedirectInbox.handled()
+        val signIn = pending.take() ?: return holder.log("возврат без начатого входа: ${uri.scheme}")
         holder.log("${signIn.service.label}: браузер вернул ${uri.scheme}:…")
         work(signIn.service) {
             val code = codeFromRedirect(signIn.state, uri::getQueryParameter)

@@ -1,4 +1,4 @@
-package app.pixroost.android.spike.ui.model
+package app.pixroost.android.spike.data
 
 import app.pixroost.core.spike.oauth.CloudService
 import app.pixroost.core.spike.oauth.Pkce
