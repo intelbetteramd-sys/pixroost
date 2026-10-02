@@ -54,7 +54,7 @@ class GooglePickerFlow(
         val millis = nowMillis() - startedAt
         _status.value =
             "скачано ${picked.size} файлов, ${bytes / OAuthSpikeConstants.BYTES_IN_KILOBYTE} КБ за $millis мс"
-        log("Google Фото: ${picked.joinToString { "${it.fileName} (${it.mimeType})" }}")
+        log("Google Фото: типы ${picked.groupingBy { it.mimeType }.eachCount()}")
     }
 
     private fun fail(error: Exception) {
