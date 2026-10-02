@@ -1,7 +1,7 @@
 package app.pixroost.android.spike.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -27,15 +27,15 @@ fun ServiceCard(
         state.account?.let { Text(it, style = style) }
         state.tokenInfo?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
         state.media?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-        Row(horizontalArrangement = Arrangement.spacedBy(UiConstants.ROW_SPACING)) {
-            Button(onClick = onSignIn, enabled = !state.isBusy) { Text("Войти") }
-            OutlinedButton(onClick = onRefresh, enabled = !state.isBusy && state.tokenInfo != null) {
-                Text("Обновить токен")
+        // On a phone four buttons do not fit in one row; signed in, "Войти" gives way to the other actions.
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(UiConstants.ROW_SPACING)) {
+            if (state.tokenInfo == null) {
+                Button(onClick = onSignIn, enabled = !state.isBusy) { Text("Войти") }
+            } else {
+                OutlinedButton(onClick = onRefresh, enabled = !state.isBusy) { Text("Обновить токен") }
+                OutlinedButton(onClick = onSample, enabled = !state.isBusy) { Text("Список фото") }
+                OutlinedButton(onClick = onSignOut, enabled = !state.isBusy) { Text("Выйти") }
             }
-            OutlinedButton(onClick = onSample, enabled = !state.isBusy && state.tokenInfo != null) {
-                Text("Список фото")
-            }
-            OutlinedButton(onClick = onSignOut, enabled = !state.isBusy && state.tokenInfo != null) { Text("Выйти") }
         }
     }
 }
