@@ -15,7 +15,7 @@ android {
         versionCode = 1
         versionName = "0.1.0-spike.s05"
         // The redirect scheme Yandex expects on Android; the same public ID as ClientIdConstants.YANDEX.
-        manifestPlaceholders["yandexClientId"] = ""
+        manifestPlaceholders["yandexClientId"] = "637072533a4c4a02803747084b394fc9"
     }
 }
 
