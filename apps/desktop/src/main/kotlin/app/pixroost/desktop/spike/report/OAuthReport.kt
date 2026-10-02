@@ -11,6 +11,7 @@ fun buildOAuthReport(state: OAuthSpikeUiState, pickerStatus: String): String = b
         appendLine("${service.service.label}: ${service.status}")
         service.tokenInfo?.let { appendLine("  $it") }
         service.account?.let { appendLine("  $it") }
+        service.media?.let { appendLine("  $it") }
     }
     appendLine("Выбор в Google Фото: $pickerStatus")
     appendLine("Журнал:")

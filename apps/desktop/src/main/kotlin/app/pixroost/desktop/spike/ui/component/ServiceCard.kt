@@ -11,13 +11,14 @@ import androidx.compose.ui.Modifier
 import app.pixroost.desktop.spike.ui.UiConstants
 import app.pixroost.desktop.spike.ui.model.ServiceUiState
 
-/** One cloud: sign in through the browser, refresh the token, sign out. */
+/** One cloud: sign in through the browser, refresh the token, list a few files, sign out. */
 @Composable
 fun ServiceCard(
     state: ServiceUiState,
     onSignIn: () -> Unit,
     onRefresh: () -> Unit,
     onSignOut: () -> Unit,
+    onSample: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val style = MaterialTheme.typography.bodyMedium
@@ -25,10 +26,14 @@ fun ServiceCard(
         Text(state.status, style = style)
         state.account?.let { Text(it, style = style) }
         state.tokenInfo?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+        state.media?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
         Row(horizontalArrangement = Arrangement.spacedBy(UiConstants.ROW_SPACING)) {
             Button(onClick = onSignIn, enabled = !state.isBusy) { Text("Войти") }
             OutlinedButton(onClick = onRefresh, enabled = !state.isBusy && state.tokenInfo != null) {
                 Text("Обновить токен")
+            }
+            OutlinedButton(onClick = onSample, enabled = !state.isBusy && state.tokenInfo != null) {
+                Text("Список фото")
             }
             OutlinedButton(onClick = onSignOut, enabled = !state.isBusy && state.tokenInfo != null) { Text("Выйти") }
         }

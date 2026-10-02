@@ -1,5 +1,6 @@
 package app.pixroost.desktop.spike.ui
 
+import app.pixroost.core.spike.oauth.CloudMediaSample
 import app.pixroost.core.spike.oauth.CloudProbe
 import app.pixroost.core.spike.oauth.CloudService
 import app.pixroost.core.spike.oauth.GooglePhotosPicker
@@ -39,6 +40,7 @@ class OAuthSpikeController(private val scope: CoroutineScope) {
     private val http = HttpClient(OkHttp)
     private val oauth = OAuthClient(http, System::currentTimeMillis)
     private val probe = CloudProbe(http)
+    private val sampler = CloudMediaSample(http)
     private val random = SecureRandom()
     private val pkce = PkceFactory(
         randomBytes = { size -> ByteArray(size).also(random::nextBytes) },
@@ -90,6 +92,13 @@ class OAuthSpikeController(private val scope: CoroutineScope) {
         store.save(service, fresh)
         holder.log("${service.label}: токен обновлён")
         showTokens(service, fresh)
+    }
+
+    fun sample(service: CloudService) = work(service, "читаю список файлов…") {
+        val tokens = store.load(service) ?: throw OAuthException("токена нет")
+        val media = sampler.sample(service, tokens.accessToken)
+        holder.change(service) { it.copy(status = "подключено", media = media) }
+        holder.log("${service.label}: $media")
     }
 
     fun signOut(service: CloudService) {

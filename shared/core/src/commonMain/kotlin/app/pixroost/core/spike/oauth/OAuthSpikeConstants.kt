@@ -10,6 +10,7 @@ object OAuthSpikeConstants {
 
     const val PICKER_API = "https://photospicker.googleapis.com/v1/"
     const val PICKER_PAGE_SIZE = 100
+    const val SAMPLE_SIZE = 20
     const val DEFAULT_POLL_MILLIS = 3000L
     const val DOWNLOAD_BUFFER = 64 * 1024
     const val BYTES_IN_KILOBYTE = 1024L

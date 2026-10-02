@@ -26,6 +26,7 @@ import kotlinx.serialization.json.jsonObject
 class GooglePhotosPicker(private val http: HttpClient) {
     suspend fun createSession(token: String): PickerSession =
         session(json(http.post(OAuthSpikeConstants.PICKER_API + "sessions") { bearer(token) }))
+            .also { if (it.pickerUri.isEmpty()) throw OAuthException("нет pickerUri") }
 
     suspend fun getSession(token: String, id: String): PickerSession =
         session(json(http.get(OAuthSpikeConstants.PICKER_API + "sessions/" + id) { bearer(token) }))
@@ -73,7 +74,8 @@ class GooglePhotosPicker(private val http: HttpClient) {
             ?.removeSuffix("s")?.toDoubleOrNull()
         return PickerSession(
             id = json.text("id") ?: throw OAuthException("нет id сессии"),
-            pickerUri = json.text("pickerUri") ?: throw OAuthException("нет pickerUri"),
+            // Only a new session carries the link; once the user has picked, polling replies come without it.
+            pickerUri = json.text("pickerUri").orEmpty(),
             isMediaItemsSet = (json["mediaItemsSet"] as? JsonPrimitive)?.booleanOrNull == true,
             pollIntervalMillis = interval?.let { (it * OAuthSpikeConstants.MILLIS_IN_SECOND).toLong() }
                 ?: OAuthSpikeConstants.DEFAULT_POLL_MILLIS,

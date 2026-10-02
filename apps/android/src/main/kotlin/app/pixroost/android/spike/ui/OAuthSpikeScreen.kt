@@ -65,6 +65,7 @@ fun OAuthSpikeScreen(viewModel: OAuthSpikeViewModel, modifier: Modifier = Modifi
                 onSignIn = { viewModel.signIn(service.service) },
                 onRefresh = { viewModel.refresh(service.service) },
                 onSignOut = { viewModel.signOut(service.service) },
+                onSample = { viewModel.sample(service.service) },
             )
         }
         PickerCard(

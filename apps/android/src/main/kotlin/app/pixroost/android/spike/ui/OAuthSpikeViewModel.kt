@@ -11,6 +11,7 @@ import app.pixroost.android.spike.ui.model.BrowserRequest
 import app.pixroost.android.spike.ui.model.OAuthSpikeUiState
 import app.pixroost.android.spike.ui.model.PendingSignIn
 import app.pixroost.android.spike.ui.model.ServiceUiState
+import app.pixroost.core.spike.oauth.CloudMediaSample
 import app.pixroost.core.spike.oauth.CloudProbe
 import app.pixroost.core.spike.oauth.CloudService
 import app.pixroost.core.spike.oauth.GooglePhotosPicker
@@ -40,6 +41,7 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
     private val http = HttpClient(OkHttp)
     private val oauth = OAuthClient(http, System::currentTimeMillis)
     private val probe = CloudProbe(http)
+    private val sampler = CloudMediaSample(http)
     private val random = SecureRandom()
     private val pkce = PkceFactory(
         randomBytes = { size -> ByteArray(size).also(random::nextBytes) },
@@ -90,6 +92,12 @@ class OAuthSpikeViewModel(application: Application) : AndroidViewModel(applicati
         store.save(service, fresh)
         holder.log("${service.label}: токен обновлён")
         showTokens(service, fresh)
+    }
+
+    fun sample(service: CloudService) = work(service) {
+        val media = sampler.sample(service, store.load(service)?.accessToken ?: throw OAuthException("токена нет"))
+        holder.change(service) { it.copy(media = media) }
+        holder.log("${service.label}: $media")
     }
 
     fun signOut(service: CloudService) {

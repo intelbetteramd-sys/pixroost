@@ -8,5 +8,7 @@ data class ServiceUiState(
     val status: String = "не подключено",
     val account: String? = null,
     val tokenInfo: String? = null,
+    /** Which content hashes the first page of files came with. */
+    val media: String? = null,
     val isBusy: Boolean = false,
 )
