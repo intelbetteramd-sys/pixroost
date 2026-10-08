@@ -14,7 +14,7 @@ ktlint = "1.8.0"
 composeRules = "0.6.7"
 # 2.0 is the line built on Kotlin 2.4; 1.23 is built on Kotlin 2.0 and cannot parse newer syntax.
 detekt = "2.0.0-alpha.6"
-kover = "0.9.9"
+kover = "0.9.11"
 
 # Android SDK levels, read by the convention plugins in build-logic.
 androidCompileSdk = "37"
