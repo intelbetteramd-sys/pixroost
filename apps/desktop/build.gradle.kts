@@ -15,6 +15,8 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "app.pixroost.desktop.MainKt"
+        // Spike S-06 decodes full-size photos: cap the heap so it cannot eat the whole PC.
+        jvmArgs += listOf("-Xmx2g")
         nativeDistributions {
             // Installers are worked out in spike S-07 (step 1.10).
             targetFormats(TargetFormat.Msi, TargetFormat.Dmg, TargetFormat.Deb)

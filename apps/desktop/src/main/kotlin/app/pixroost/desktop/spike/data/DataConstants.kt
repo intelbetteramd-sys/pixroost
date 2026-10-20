@@ -5,7 +5,7 @@ object DataConstants {
     val DECODABLE = setOf("jpg", "jpeg", "png")
     val HEIC = setOf("heic", "heif")
     const val MAX_PHOTOS = 2000
-    const val MAX_PARALLEL = 6
+    const val MAX_PARALLEL = 3
     const val NANOS_IN_MILLI = 1_000_000L
 
     const val HALF_SCALE = 0.5
