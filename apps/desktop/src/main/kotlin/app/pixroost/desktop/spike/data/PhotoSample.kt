@@ -1,7 +1,8 @@
 package app.pixroost.desktop.spike.data
 
-/** One photo of the folder: its hashes, its shot time and the hashes of each worse copy made from it. */
+/** One photo of the folder: what it is, its hashes, its shot time and the hashes of each worse copy of it. */
 data class PhotoSample(
+    val info: PhotoInfo,
     val original: ImageHashes,
     val shotTimeMillis: Long?,
     val variants: Map<Variant, ImageHashes>,

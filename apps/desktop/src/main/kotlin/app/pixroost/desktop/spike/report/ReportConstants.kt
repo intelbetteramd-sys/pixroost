@@ -10,6 +10,13 @@ object ReportConstants {
     /** Width to height ratios closer than this count as the same proportions. */
     const val ASPECT_TOLERANCE = 0.02
 
+    /** Photos whose halved copy is farther than this are listed one by one. */
+    const val UNFOUND_DISTANCE = 10
+
+    /** Distances for which false pairs are counted and extrapolated, and the library sizes to extrapolate to. */
+    val FALSE_DISTANCES = listOf(2, 3, 4)
+    val LIBRARY_SIZES = listOf(10_000, 50_000)
+
     val THRESHOLDS = listOf(2, 4, 6, 8, 10)
     const val PERCENT = 100.0
     const val PRECISION_SCALE = 10_000.0
