@@ -701,6 +701,15 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 
 
 .a .card p.big-num, .w .card p.big-num { font: 600 var(--t-a-title)/1.25 var(--f-display); color: var(--text); margin: 0; letter-spacing: -.01em; }
+.w .cb input:checked + .box { background: var(--primary); box-shadow: none; }
+.w .cb:hover .box, .w .cb .box.is-hover { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
+.w .cb .box.is-pressed { background: color-mix(in srgb, var(--text) 10%, var(--surface)); }
+.w .cb:hover input:checked + .box, .w .cb input:checked + .box.is-hover { background: color-mix(in srgb, var(--primary) 90%, var(--surface)); }
+.w .cb input:checked + .box.is-pressed { background: color-mix(in srgb, var(--primary) 80%, var(--surface)); }
+.w .cb input:disabled + .box { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 38%, transparent); }
+.w .cb input:disabled:checked + .box { background: color-mix(in srgb, var(--text) 38%, transparent); box-shadow: none; }
+.radio:hover .dot, .radio .dot.is-hover { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
+.radio:hover input:checked + .dot { background: var(--primary); }
 /* Сетка «вариант × состояние» */
 .sg-wrap { overflow-x: auto; padding: 6px 4px 8px; margin: 0 -4px; }
 .sg { display: grid; gap: 14px 16px; align-items: center; justify-items: start; }
@@ -1559,6 +1568,249 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
               <div class="bar indet" role="progressbar" aria-label="Распаковка архива Google Takeout"><span class="fill"></span></div>
               <p class="sub">takeout-20261012-001.zip · 48&nbsp;ГБ</p></div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ПЕРЕКЛЮЧАТЕЛИ ======================= -->
+  <section class="doc-section" id="toggles" aria-labelledby="h-toggles">
+    <h2 id="h-toggles">Переключатели, чекбоксы, радиокнопки</h2>
+    <p class="lead"><code>SettingSwitch</code> (Android): выключенный — контур и ползунок «Сланец», 5,9:1 (Д6). <code>FluentToggleSwitch</code>
+      (Windows) — с подписью «Вкл.» / «Выкл.». Кольцо фокуса рисуется на видимой дорожке или квадрате, а не на скрытом поле (Д2).
+      Отмеченный чекбокс «Удалить» — «Сумерки», а не красный <span class="choice">выбор</span>: красным становится только кнопка,
+      которая удаляет.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · SettingSwitch 52×32 и чекбокс 18, зона касания 48</p>
+          <div class="sg-wrap"><div class="sg c4">
+            <span class="hd">Состояние</span><span class="hd">По умолчанию</span><span class="hd">Нажат</span><span class="hd">Фокус</span><span class="hd">Недоступен</span>
+            <span class="vn">Вкл.</span>
+            <button class="sw-a demo hit" role="switch" aria-checked="true" aria-label="Автоархив"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <button class="sw-a demo hit is-pressed" role="switch" aria-checked="true" aria-label="Автоархив"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <button class="sw-a demo hit is-focus" role="switch" aria-checked="true" aria-label="Автоархив"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <button class="sw-a demo hit" role="switch" aria-checked="true" aria-label="Автоархив" disabled><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <span class="vn">Выкл.</span>
+            <button class="sw-a demo hit" role="switch" aria-checked="false" aria-label="Только по Wi-Fi"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <button class="sw-a demo hit is-pressed" role="switch" aria-checked="false" aria-label="Только по Wi-Fi"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <button class="sw-a demo hit is-focus" role="switch" aria-checked="false" aria-label="Только по Wi-Fi"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <button class="sw-a demo hit" role="switch" aria-checked="false" aria-label="Только по Wi-Fi" disabled><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+            <span class="vn">«Удалить» отмечен</span>
+            <label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box is-pressed"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <label class="cb"><input type="checkbox" checked disabled aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <span class="vn">«Удалить» снят</span>
+            <label class="cb"><input type="checkbox" aria-label="Удалить копию из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <label class="cb"><input type="checkbox" aria-label="Удалить копию из OneDrive"><span class="box is-pressed"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <label class="cb"><input type="checkbox" aria-label="Удалить копию из OneDrive"><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+            <label class="cb"><input type="checkbox" disabled aria-label="Удалить копию из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label>
+          </div></div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · FluentToggleSwitch 40×20, FluentCheckbox 20, FluentRadioGroup</p>
+          <div class="sg-wrap"><div class="sg c5">
+            <span class="hd">Состояние</span><span class="hd">По умолчанию</span><span class="hd">Наведение</span><span class="hd">Нажат</span><span class="hd">Фокус</span><span class="hd">Недоступен</span>
+            <span class="vn">Вкл.</span>
+            <button class="sw-w demo" role="switch" aria-checked="true" aria-label="Принимать фото"><span class="track"></span><span class="val">Вкл.</span></button>
+            <button class="sw-w demo is-hover" role="switch" aria-checked="true" aria-label="Принимать фото"><span class="track"></span><span class="val">Вкл.</span></button>
+            <button class="sw-w demo is-pressed" role="switch" aria-checked="true" aria-label="Принимать фото"><span class="track"></span><span class="val">Вкл.</span></button>
+            <button class="sw-w demo is-focus" role="switch" aria-checked="true" aria-label="Принимать фото"><span class="track"></span><span class="val">Вкл.</span></button>
+            <button class="sw-w demo" role="switch" aria-checked="true" aria-label="Принимать фото" disabled><span class="track"></span><span class="val">Вкл.</span></button>
+            <span class="vn">Выкл.</span>
+            <button class="sw-w demo" role="switch" aria-checked="false" aria-label="Запускать вместе с Windows"><span class="track"></span><span class="val">Выкл.</span></button>
+            <button class="sw-w demo is-hover" role="switch" aria-checked="false" aria-label="Запускать вместе с Windows"><span class="track"></span><span class="val">Выкл.</span></button>
+            <button class="sw-w demo is-pressed" role="switch" aria-checked="false" aria-label="Запускать вместе с Windows"><span class="track"></span><span class="val">Выкл.</span></button>
+            <button class="sw-w demo is-focus" role="switch" aria-checked="false" aria-label="Запускать вместе с Windows"><span class="track"></span><span class="val">Выкл.</span></button>
+            <button class="sw-w demo" role="switch" aria-checked="false" aria-label="Запускать вместе с Windows" disabled><span class="track"></span><span class="val">Выкл.</span></button>
+            <span class="vn">Чекбокс отмечен</span>
+            <label class="cb"><input type="checkbox" checked><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Только чтение</label>
+            <label class="cb"><input type="checkbox" checked><span class="box is-hover"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Только чтение</label>
+            <label class="cb"><input type="checkbox" checked><span class="box is-pressed"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Только чтение</label>
+            <label class="cb"><input type="checkbox" checked><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Только чтение</label>
+            <label class="cb"><input type="checkbox" checked disabled><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Только чтение</label>
+            <span class="vn">Чекбокс снят</span>
+            <label class="cb"><input type="checkbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Отправлять фото</label>
+            <label class="cb"><input type="checkbox"><span class="box is-hover"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Отправлять фото</label>
+            <label class="cb"><input type="checkbox"><span class="box is-pressed"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Отправлять фото</label>
+            <label class="cb"><input type="checkbox"><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Отправлять фото</label>
+            <label class="cb"><input type="checkbox" disabled><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Отправлять фото</label>
+          </div></div>
+
+          <h4 style="margin-top:20px">LayoutRulePicker · раскладка архива</h4>
+          <fieldset style="border:0;margin:0;padding:0" role="radiogroup" aria-labelledby="lr-legend">
+            <legend id="lr-legend" style="font-size:var(--t-w-body);font-weight:600;margin-bottom:4px">Как раскладывать фото в папке архива</legend>
+            <label class="radio"><input type="radio" name="layout" checked><span class="dot"></span><span class="rtxt">Год, внутри месяц<small>D:\Фото\Pixroost\2026\05\IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout"><span class="dot is-focus"></span><span class="rtxt">Только год <span style="color:var(--text2)">· фокус</span><small>D:\Фото\Pixroost\2026\IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout"><span class="dot"></span><span class="rtxt">По устройствам<small>D:\Фото\Pixroost\Pixel 8 Лены\IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout" disabled><span class="dot"></span><span class="rtxt">Как в облаке — недоступно, пока облака не подключены<small>D:\Фото\Pixroost\Яндекс Диск\Фотокамера\IMG_2041.jpg</small></span></label>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ПОЛЯ ======================= -->
+  <section class="doc-section" id="fields" aria-labelledby="h-fields">
+    <h2 id="h-fields">Поля ввода</h2>
+    <p class="lead">Документы задают только цвет контура полей — «Сланец». Вид поля — контурное Material 3 на Android и TextBox Fluent
+      на Windows <span class="choice">выбор</span>. Ошибка — красная рамка и текст с иконкой: это не удаление, но ошибка ввода — устоявшийся
+      сигнал. Если красный строго только для удаления, ошибку можно показывать «Чернилами» с иконкой — вопрос в отчёте.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · контурное поле 56</p>
+          <div class="states" style="gap:28px 24px">
+            <div class="state"><span class="cap">По умолчанию</span>
+              <div class="field"><div class="fbox"><label for="f-pc1">Название ПК</label><input id="f-pc1" placeholder="Например, Дом"></div>
+                <span class="fhelp">Так ПК будет подписан на всех телефонах</span></div></div>
+            <div class="state"><span class="cap">Фокус</span>
+              <div class="field"><div class="fbox is-focus"><label for="f-pc2">Название ПК</label><input id="f-pc2" value="Дом"></div>
+                <span class="fhelp">Так ПК будет подписан на всех телефонах</span></div></div>
+            <div class="state"><span class="cap">Ошибка</span>
+              <div class="field"><div class="fbox is-error"><label for="f-code">Код с экрана ПК</label><input id="f-code" class="code-input" value="482 171" inputmode="numeric" aria-invalid="true" aria-describedby="f-code-err"></div>
+                <span class="fhelp err" id="f-code-err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Код не подошёл или истёк. Проверьте 6 цифр на экране ПК</span></div></div>
+            <div class="state"><span class="cap">Недоступно</span>
+              <div class="field"><div class="fbox is-disabled"><label for="f-pc3">Название ПК</label><input id="f-pc3" value="Дом" disabled></div>
+                <span class="fhelp">Меняется на самом ПК</span></div></div>
+          </div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · TextBox 32 и FolderPicker</p>
+          <div class="states" style="gap:24px">
+            <div class="state"><span class="cap">По умолчанию</span>
+              <div class="field"><label class="flabel" for="w-name1">Имя этого ПК</label><div class="fbox"><input id="w-name1" placeholder="Например, Дом"></div></div></div>
+            <div class="state"><span class="cap">Наведение</span>
+              <div class="field"><label class="flabel" for="w-name2">Имя этого ПК</label><div class="fbox is-hover"><input id="w-name2" value="Дом"></div></div></div>
+            <div class="state"><span class="cap">Фокус</span>
+              <div class="field"><label class="flabel" for="w-name3">Имя этого ПК</label><div class="fbox is-focus"><input id="w-name3" value="Дом"></div></div></div>
+            <div class="state"><span class="cap">Недоступно</span>
+              <div class="field"><label class="flabel flabel-dis" for="w-name4">Имя этого ПК</label><div class="fbox is-disabled"><input id="w-name4" value="Дом" disabled></div></div></div>
+          </div>
+          <div class="states" style="gap:24px;margin-top:24px">
+            <div class="state" style="flex:1;min-width:280px;max-width:440px"><span class="cap">FolderPicker</span>
+              <div class="field" style="max-width:none"><label class="flabel" for="w-folder1">Папка архива</label>
+                <div class="folder"><div class="fbox"><svg class="ic ic-16" aria-hidden="true"><use href="#i-folder"/></svg><input id="w-folder1" class="mono" value="D:\Фото\Pixroost" aria-describedby="w-folder1-h"></div><button class="btn btn-secondary sl fc hit compact">Выбрать…</button></div>
+                <span class="fhelp" id="w-folder1-h">Свободно 812&nbsp;ГБ на диске D:</span></div></div>
+            <div class="state" style="flex:1;min-width:280px;max-width:440px"><span class="cap">FolderPicker · ошибка</span>
+              <div class="field" style="max-width:none"><label class="flabel" for="w-folder2">Папка архива</label>
+                <div class="folder"><div class="fbox is-error"><svg class="ic ic-16" aria-hidden="true"><use href="#i-folder"/></svg><input id="w-folder2" class="mono" value="C:\Users\Сергей\Pictures" aria-invalid="true" aria-describedby="w-folder2-e"></div><button class="btn btn-secondary sl fc hit compact">Выбрать…</button></div>
+                <span class="fhelp err" id="w-folder2-e"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>На диске C: осталось 3&nbsp;ГБ. Выберите другую папку архива или освободите место</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ПОДСКАЗКИ И ОШИБКИ ======================= -->
+  <section class="doc-section" id="notes" aria-labelledby="h-notes">
+    <h2 id="h-notes">Подсказки, баннеры, ошибки, пустые состояния</h2>
+    <p class="lead"><code>SafetyNote</code> — правило безопасности со знаком лампы. <code>InfoNote</code> и <code>InfoBar</code> — нейтральные подсказки.
+      <code>ErrorSnackbar</code> — инверсная плашка внизу экрана с действием. <code>LimitedAccessBanner</code> — ограниченный доступ к фото.
+      Ошибки — без извинений и с действием. <code>EmptyState</code> в документах пока нет — здесь первый вариант <span class="choice">выбор</span>.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android</p>
+          <div class="cards-grid">
+            <div class="state"><span class="cap">SafetyNote</span>
+              <div class="note-box n-safety"><svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg>
+                <p>Удаляем только копии, у которых есть проверенная копия на ПК «Дом». Копию на ПК не трогаем.</p></div></div>
+            <div class="state"><span class="cap">InfoNote</span>
+              <div class="note-box n-info"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>
+                <div><p>Google даёт доступ только к выбранным фото. Всю библиотеку можно перенести через Google Takeout на ПК.</p>
+                  <button class="btn btn-link sl fc hit" style="padding-left:0;margin-top:4px">Как перенести всё</button></div></div></div>
+            <div class="state"><span class="cap">LimitedAccessBanner</span>
+              <div class="banner"><p>Видны 120 фото, которые вы выбрали</p><button class="btn btn-primary sl fc hit compact">Открыть доступ ко всем</button></div></div>
+            <div class="state"><span class="cap">ErrorSnackbar</span>
+              <div class="snack" role="status"><p>Яндекс Диск не отвечает. Повторим через 5 минут</p><button class="btn btn-link sl fc hit compact">Повторить сейчас</button></div>
+              <div class="snack" role="status"><p>Отправлено на ПК «Дом»</p></div></div>
+            <div class="state"><span class="cap">EmptyState · уборка</span>
+              <div class="card"><div class="empty" style="padding:16px">
+                <div class="art"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
+                <p class="h">Дублей не нашли</p>
+                <p>Проверили 20&nbsp;412 фото в трёх местах. Новые копии появятся здесь сами.</p></div></div></div>
+            <div class="state"><span class="cap">EmptyState · устройства</span>
+              <div class="card"><div class="empty" style="padding:16px">
+                <div class="art"><svg class="ic" aria-hidden="true"><use href="#i-devices"/></svg></div>
+                <p class="h">Устройств пока нет</p>
+                <p>Добавьте ПК — фото будут сами складываться дома.</p>
+                <button class="btn btn-primary sl fc hit">Добавить ПК</button></div></div></div>
+          </div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows</p>
+          <div class="row-gap" style="max-width:720px">
+            <div class="infobar" role="status"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-info"/></svg>
+              <div class="body"><strong>Яндекс Диск на ПК</strong><span>Приложение Диска для ПК стало платным — подключите Диск напрямую, это бесплатно.</span>
+                <button class="btn btn-secondary sl fc hit compact">Подключить</button></div>
+              <button class="icon-btn sl fc hit" aria-label="Закрыть подсказку"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+            <div class="infobar" role="status"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-info"/></svg>
+              <div class="body"><strong>Мало места</strong><span>На диске D: осталось 3&nbsp;ГБ. Выберите другую папку архива или освободите место.</span>
+                <button class="btn btn-secondary sl fc hit compact is-hover">Выбрать папку</button></div>
+              <button class="icon-btn sl fc hit is-focus" aria-label="Закрыть подсказку"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+            <div class="note-box n-safety"><svg class="lamp-svg" width="20" height="20" aria-hidden="true"><use href="#lamp"/></svg>
+              <p>Копии из облаков удаляем только если оригинал лежит в архиве на этом ПК и проверен.</p></div>
+          </div>
+          <p class="note">Подсказки на Windows не красные даже про место на диске: это не удаление.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ПРЕВЬЮ ======================= -->
+  <section class="doc-section" id="thumbs" aria-labelledby="h-thumbs">
+    <h2 id="h-thumbs">Превью</h2>
+    <p class="lead"><code>MediaThumbnail</code>: метки мест в левом нижнем углу (лежат на фото и с темой не меняются), длительность видео —
+      13 на затемнении 72% (Д13), выбор — галочка «Сумерки». Имя для скринридера — дата и список мест: «Фото, 12 мая, 14:20.
+      Лежит: ПК „Дом“, Яндекс Диск». Порядок меток и правило «не больше трёх, дальше +N» — <span class="choice">выбор</span>.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · 4 колонки, зазор 2</p>
+          <div class="states">
+            <div class="state"><span class="cap">Обычный режим: по умолчанию, видео, нет на ПК, нажато, фокус</span>
+              <div class="thumbs">
+                <button class="thumb" aria-label="Фото, 12 мая, 14:20. Лежит: ПК «Дом», Яндекс Диск"><svg class="photo" aria-hidden="true"><use href="#ph-sea"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span><span class="src src-20">Я</span></span></button>
+                <button class="thumb" aria-label="Видео, 42 секунды, 12 мая. Лежит: ПК «Дом», телефон"><svg class="photo" aria-hidden="true"><use href="#ph-hills"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span><span class="src src-20"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span></span><span class="dur" aria-hidden="true">0:42</span></button>
+                <button class="thumb" aria-label="Фото, 11 мая. Лежит: телефон. На ПК ещё нет"><svg class="photo" aria-hidden="true"><use href="#ph-kid"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span></span></button>
+                <button class="thumb" aria-label="Фото, 11 мая. Лежит: ПК «Дом», Яндекс Диск, OneDrive, Dropbox"><svg class="photo" aria-hidden="true"><use href="#ph-city"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span><span class="src src-20">Я</span><span class="src src-20">O</span><span class="src src-20" style="width:auto;padding:0 4px;border-radius:10px">+1</span></span></button>
+                <button class="thumb is-pressed" aria-label="Фото, 10 мая. Лежит: Яндекс Диск"><svg class="photo" aria-hidden="true"><use href="#ph-snow"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20">Я</span></span></button>
+                <button class="thumb is-focus" aria-label="Фото, 10 мая. Лежит: ПК «Дом»"><svg class="photo" aria-hidden="true"><use href="#ph-sea"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span></span></button>
+                <button class="thumb" aria-label="Фото, 10 мая. Лежит: OneDrive"><svg class="photo" aria-hidden="true"><use href="#ph-hills"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20">O</span></span></button>
+                <button class="thumb" aria-label="Видео, 3 минуты 05 секунд, 9 мая. Лежит: телефон"><svg class="photo" aria-hidden="true"><use href="#ph-kid"/></svg>
+                  <span class="marks" aria-hidden="true"><span class="src src-20"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span></span><span class="dur" aria-hidden="true">3:05</span></button>
+              </div></div>
+            <div class="state"><span class="cap">Режим выбора: 2 из 4 выбраны, фокус на выбранном</span>
+              <div class="thumbs" role="group" aria-label="Выбор фото">
+                <button class="thumb selected" aria-pressed="true" aria-label="Фото, 12 мая, 14:20. Лежит: ПК «Дом», Яндекс Диск"><svg class="photo" aria-hidden="true"><use href="#ph-sea"/></svg><span class="selc" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+                <button class="thumb" aria-pressed="false" aria-label="Видео, 42 секунды, 12 мая. Лежит: ПК «Дом», телефон"><svg class="photo" aria-hidden="true"><use href="#ph-hills"/></svg><span class="selc" aria-hidden="true"></span><span class="dur" aria-hidden="true">0:42</span></button>
+                <button class="thumb selected is-focus" aria-pressed="true" aria-label="Фото, 11 мая. Лежит: телефон. На ПК ещё нет"><svg class="photo" aria-hidden="true"><use href="#ph-kid"/></svg><span class="selc" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
+                <button class="thumb" aria-pressed="false" aria-label="Фото, 11 мая. Лежит: ПК «Дом», Яндекс Диск, OneDrive"><svg class="photo" aria-hidden="true"><use href="#ph-city"/></svg><span class="selc" aria-hidden="true"></span></button>
+              </div></div>
+          </div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · 112, зазор 4, скругление 8</p>
+          <div class="thumbs">
+            <button class="thumb selected" aria-pressed="true" aria-label="Фото, открыто в панели справа. 12 мая, 14:20. Лежит: ПК «Дом», Яндекс Диск"><svg class="photo" aria-hidden="true"><use href="#ph-sea"/></svg><span class="selc" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>
+              <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span><span class="src src-20">Я</span></span></button>
+            <button class="thumb is-pressed" aria-label="Видео, 42 секунды, 12 мая. Лежит: ПК «Дом»"><svg class="photo" aria-hidden="true"><use href="#ph-hills"/></svg>
+              <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span></span><span class="dur" aria-hidden="true">0:42</span></button>
+            <button class="thumb is-focus" aria-label="Фото, 11 мая. Лежит: ПК «Дом», OneDrive"><svg class="photo" aria-hidden="true"><use href="#ph-city"/></svg>
+              <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span><span class="src src-20">O</span></span></button>
+            <button class="thumb" aria-label="Фото, 10 мая. Лежит: ПК «Дом»"><svg class="photo" aria-hidden="true"><use href="#ph-snow"/></svg>
+              <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span></span></button>
+          </div>
+          <p class="note">Выбрано (открыто в панели справа) · нажато · фокус · по умолчанию.</p>
         </div>
       </div>
     </div>
