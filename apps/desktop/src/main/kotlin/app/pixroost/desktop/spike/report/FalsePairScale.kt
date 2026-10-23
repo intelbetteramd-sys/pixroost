@@ -28,9 +28,8 @@ private fun rateText(count: Int, pairs: Int): String {
     return formatRu("%.2e (1 на %d)", count.toDouble() / pairs, pairs / count)
 }
 
-private fun expectedText(count: Int, pairs: Int): String =
-    ReportConstants.LIBRARY_SIZES.joinToString(", ") { size ->
-        val libraryPairs = size.toDouble() * (size - 1) / 2
-        val expected = if (pairs == 0) 0.0 else count.toDouble() / pairs * libraryPairs
-        "$size фото — ${formatRu("%.1f", expected)}"
-    }
+private fun expectedText(count: Int, pairs: Int): String = ReportConstants.LIBRARY_SIZES.joinToString(", ") { size ->
+    val libraryPairs = size.toDouble() * (size - 1) / 2
+    val expected = if (pairs == 0) 0.0 else count.toDouble() / pairs * libraryPairs
+    "$size фото — ${formatRu("%.1f", expected)}"
+}
