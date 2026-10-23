@@ -10,8 +10,15 @@ object ReportConstants {
     /** Width to height ratios closer than this count as the same proportions. */
     const val ASPECT_TOLERANCE = 0.02
 
-    /** Photos whose halved copy is farther than this are listed one by one. */
-    const val UNFOUND_DISTANCE = 10
+    /** Blank-frame thresholds to compare, and how many of the lowest deviations of the other photos to list. */
+    val BLANK_THRESHOLDS = listOf(0.01, 0.02, 0.04)
+    const val LOWEST_DEVIATIONS = 10
+
+    /** Pairs of different photos within this distance are listed one by one. */
+    const val LISTED_PAIR_DISTANCE = 6
+
+    /** Confidence 95 %: with no hit in N trials the share is below 3 / N (the rule of three). */
+    const val RULE_OF_THREE = 3
 
     /** Distances for which false pairs are counted and extrapolated, and the library sizes to extrapolate to. */
     val FALSE_DISTANCES = listOf(2, 3, 4)

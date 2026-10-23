@@ -3,11 +3,10 @@ package app.pixroost.desktop.spike.report
 import app.pixroost.core.spike.phash.hammingDistance
 import app.pixroost.core.spike.phash.sharesFiveLshBands
 import app.pixroost.core.spike.phash.sharesLshBand
-import app.pixroost.desktop.spike.data.HashMethod
 import app.pixroost.desktop.spike.data.PhotoSample
 
-/** What pairs of different photos look like to one hashing [method]: close hashes, the rule, index candidates. */
-class DistinctPairCounts(private val method: HashMethod) {
+/** What pairs of different photos look like to the hash: close hashes, the rule, index candidates. */
+class DistinctPairCounts {
     var pairs = 0
     var timedPairs = 0
     val withinDistance = IntArray(ReportConstants.FALSE_DISTANCES.size)
@@ -22,7 +21,7 @@ class DistinctPairCounts(private val method: HashMethod) {
         pairs++
         val gap = shotGapMillis(a, b)
         if (gap != Long.MAX_VALUE) timedPairs++
-        val (hashA, hashB) = a.original[method] to b.original[method]
+        val (hashA, hashB) = a.original.hash to b.original.hash
         val distance = hammingDistance(hashA, hashB)
         ReportConstants.FALSE_DISTANCES.forEachIndexed { index, limit ->
             if (distance <= limit) withinDistance[index]++

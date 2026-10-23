@@ -1,6 +1,5 @@
 package app.pixroost.desktop.spike.data
 
-import app.pixroost.core.spike.phash.PhashConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -47,7 +46,8 @@ class PhotoScanner {
             null
         } ?: return null
         val decodedAt = System.nanoTime()
-        val original = hashesOf(image)
+        val grey = greyOf(image)
+        val original = hashesOf(image, grey)
         val hashedAt = System.nanoTime()
         return PhotoSample(
             info = PhotoInfo(
@@ -55,7 +55,7 @@ class PhotoScanner {
                 height = image.height,
                 extension = file.extension.lowercase(),
                 orientation = exifOrientation(file),
-                grey = greyStatsOf(image.toGreyBox(PhashConstants.DCT_SIZE, PhashConstants.DCT_SIZE)),
+                grey = greyStatsOf(grey),
             ),
             original = original,
             shotTimeMillis = shotTimeMillis(file),

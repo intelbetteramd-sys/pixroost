@@ -1,16 +1,14 @@
 package app.pixroost.desktop.spike.report
 
-import app.pixroost.desktop.spike.data.HashMethod
 import app.pixroost.desktop.spike.data.ScanResult
 
 /** Plain-text report to paste into the spike's issue. It holds no file names and no paths. */
 fun buildPhashReport(result: ScanResult): String = buildString {
     val samples = result.samples
     val cores = Runtime.getRuntime().availableProcessors()
-    appendLine("Pixroost S-06, ПК, второй прогон")
+    appendLine("Pixroost S-06, ПК, третий прогон")
     appendLine(
-        "Хеш: pHash, два способа сжатия до 32×32: «по ступеням» (деление пополам и билинейный шаг) и " +
-            "«по площади» (среднее по площади). dHash убран из замеров: на уменьшенных копиях он заметно хуже",
+        "Хеш: pHash, сжатие до 32×32 по площади (среднее по площади). Пустые кадры в сопоставлении не участвуют",
     )
     appendLine("ОС: ${System.getProperty("os.name")} ${System.getProperty("os.version")}, ядер: $cores")
     appendLine(
@@ -22,20 +20,22 @@ fun buildPhashReport(result: ScanResult): String = buildString {
         appendLine(
             "Время: всего ${result.wallMillis / ReportConstants.MILLIS_IN_SECOND} с; на фото в среднем " +
                 "декодирование ${samples.sumOf { it.decodeMillis } / samples.size} мс, " +
-                "оба pHash ${samples.sumOf { it.hashMillis } / samples.size} мс",
+                "pHash ${samples.sumOf { it.hashMillis } / samples.size} мс",
         )
     }
-    for (method in HashMethod.entries) {
-        appendLine()
-        appendLine("=== Сжатие ${method.label} ===")
-        appendLine("Точность «тот же кадр» (как если бы у каждого фото была одна копия):")
-        sameShotLines(samples, method).forEach { appendLine("  $it") }
-        appendLine("Копии хуже качеством — доля найденных при пороге:")
-        variantLines(samples, method).forEach { appendLine("  $it") }
-        appendLine("Разные фото — ложные совпадения, рост с размером библиотеки, индекс:")
-        distinctPairLines(samples, method).forEach { appendLine("  $it") }
-    }
     appendLine()
-    appendLine("=== Фото, чья копия вдвое меньше не нашлась ===")
-    unfoundPhotoLines(samples).forEach { appendLine("  $it") }
+    appendLine("=== Пустые кадры ===")
+    blankFrameLines(samples).forEach { appendLine("  $it") }
+    val kept = samples.filterNot { it.isBlank() }
+    appendLine()
+    appendLine("=== Остальные фото: ${kept.size} ===")
+    appendLine("Точность «тот же кадр» (как если бы у каждого фото была одна копия):")
+    sameShotLines(kept).forEach { appendLine("  $it") }
+    appendLine("Копии хуже качеством — доля найденных при пороге:")
+    variantLines(kept).forEach { appendLine("  $it") }
+    appendLine("Разные фото — ложные совпадения, рост с размером библиотеки, индекс:")
+    distinctPairLines(kept).forEach { appendLine("  $it") }
+    appendLine()
+    appendLine("=== Пары разных фото с близким pHash ===")
+    closePairLines(samples).forEach { appendLine("  $it") }
 }

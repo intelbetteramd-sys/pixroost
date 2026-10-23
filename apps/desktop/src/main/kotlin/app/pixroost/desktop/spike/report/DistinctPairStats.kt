@@ -1,6 +1,5 @@
 package app.pixroost.desktop.spike.report
 
-import app.pixroost.desktop.spike.data.HashMethod
 import app.pixroost.desktop.spike.data.PhotoSample
 
 /**
@@ -8,8 +7,8 @@ import app.pixroost.desktop.spike.data.PhotoSample
  * within the thresholds by hash alone, how many would also pass the time and proportion checks of the rule, how
  * the false pairs scale with the library size, and how many random pairs the index would hand over as candidates.
  */
-fun distinctPairLines(samples: List<PhotoSample>, method: HashMethod): List<String> {
-    val counts = DistinctPairCounts(method)
+fun distinctPairLines(samples: List<PhotoSample>): List<String> {
+    val counts = DistinctPairCounts()
     for (i in samples.indices) {
         for (j in i + 1 until samples.size) counts.add(samples[i], samples[j])
     }

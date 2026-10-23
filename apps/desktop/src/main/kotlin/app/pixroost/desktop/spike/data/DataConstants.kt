@@ -22,7 +22,6 @@ object DataConstants {
     const val RED_WEIGHT = 0.299f
     const val GREEN_WEIGHT = 0.587f
     const val BLUE_WEIGHT = 0.114f
-    const val GREY_MAX = 255f
     const val BYTE_MASK = 0xFF
     const val RED_SHIFT = 16
     const val GREEN_SHIFT = 8
