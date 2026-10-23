@@ -623,7 +623,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
   background: var(--bg); }
 .rail .fab-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 0 24px; padding: 0; border: 0;
   background: transparent; cursor: pointer; font: 600 var(--t-a-cap)/1.38 var(--f-ui); color: var(--text); text-align: center;
-  width: 88px; overflow-wrap: anywhere; }
+  width: 88px; }
 .rail .fab-wrap:focus-visible, .rail .fab-wrap.is-focus { outline: none; }
 .rail .fab-wrap:focus-visible .fab, .rail .fab-wrap.is-focus .fab { outline: 3px solid var(--focus); outline-offset: 2px; }
 .rail .fab-wrap .fab { position: relative; isolation: isolate; }
@@ -638,7 +638,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
   color: color-mix(in srgb, var(--text) 38%, transparent); }
 .rail .fab-wrap[aria-disabled="true"] .fab::before { opacity: 0 !important; }
 .rail a { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 88px; min-height: 64px; padding-top: 4px;
-  text-decoration: none; color: var(--text2); font-size: var(--t-a-cap); line-height: 1.38; text-align: center; overflow-wrap: anywhere; }
+  text-decoration: none; color: var(--text2); font-size: var(--t-a-cap); line-height: 1.38; text-align: center; }
 .rail .ind { position: relative; width: 56px; height: 32px; border-radius: var(--r-full); display: flex; align-items: center;
   justify-content: center; isolation: isolate; }
 .rail .ind::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--text); opacity: 0; z-index: -1; }
@@ -743,7 +743,8 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .radii { display: flex; flex-wrap: wrap; gap: 16px; }
 .radius-tile { width: 132px; display: flex; flex-direction: column; gap: 8px; font-size: .8125rem; }
 .radius-tile .shape { height: 72px; background: var(--tonal); border: 2px solid var(--primary); }
-.radius-tile .use { color: var(--text2); font-size: .75rem; }
+.radius-tile .use { color: var(--text2); font-size: .75rem; hyphens: auto; overflow-wrap: break-word; }
+html.text-200 .radius-tile { width: auto; flex: 1 1 140px; min-width: 0; }
 .grid-demo { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
 .gd-phone { width: 220px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); padding: 12px 0; position: relative; }
 .gd-phone .m { position: absolute; top: 0; bottom: 0; width: 16px; background: color-mix(in srgb, var(--lamp) 30%, transparent); }
@@ -751,6 +752,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .gd-phone .gt i { aspect-ratio: 1; background: var(--tonal); }
 .gd-phone .blk { margin: 8px 16px 0; height: 28px; border-radius: 8px; background: var(--tonal); }
 .gd-win { flex: 1; min-width: min(100%, 320px); max-width: 640px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); display: flex; min-height: 200px; overflow: hidden; }
+.gd-win .np, .gd-win .pn { overflow-wrap: anywhere; }
 .gd-win .np { width: 30%; border-right: 1px dashed var(--outline); padding: 8px; font-size: .75rem; color: var(--text2); }
 .gd-win .ct { flex: 1; background: var(--surface); padding: 24px; position: relative; font-size: .75rem; color: var(--text2); }
 .gd-win .ct .gw { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 8px; }
@@ -864,7 +866,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .shot .tags .badge { white-space: normal; }
 .a .shot .act { flex-basis: 100%; }
 .shot .act .btn { white-space: normal; max-width: 100%; text-align: center; }
-.w .shot .act { flex: none; }
+.w .shot .act { flex: 0 1 auto; min-width: 0; max-width: 100%; }
 .shot-group .gf { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
   padding-top: 12px; border-top: 1px solid var(--line); }
 .shot-group .gf p { margin: 0; flex: 1; min-width: 180px; }
@@ -942,7 +944,34 @@ fieldset { min-width: 0; }
 .navbar a { min-width: 0; overflow-wrap: anywhere; text-align: center; }
 html.text-200 .btn, html.text-200 .chip, html.text-200 .wchip, html.text-200 .cmd { white-space: normal; text-align: center; height: auto; }
 html.text-200 .phone { height: auto; min-height: 640px; }
-html.text-200 .tablet { height: auto; min-height: 520px; }
+html.text-200 .tablet { height: auto; min-height: 520px; overflow-x: auto; }
+html.text-200 .tablet .t-main { min-width: 300px; }
+/* Подписи rail не рвутся внутри слова: если самая длинная не помещается в пункт 88, rail становится широким
+   (WideNavigationRail Material 3 Expressive): иконка и подпись в строку, ширина по самой длинной подписи, 220–360. */
+html.text-200 .rail { width: fit-content; min-width: 220px; max-width: 360px; align-items: stretch; padding: 16px 12px 12px; }
+html.text-200 .rail a { flex-direction: row; width: auto; min-height: 56px; padding: 4px 20px 4px 4px; gap: 4px; text-align: start;
+  border-radius: var(--r-full); position: relative; isolation: isolate; }
+html.text-200 .rail a .ind { flex: none; width: 48px; height: 40px; background: transparent !important; }
+html.text-200 .rail a .ind::before { opacity: 0 !important; }
+html.text-200 .rail a::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--text); opacity: 0; z-index: -1; }
+html.text-200 .rail a:hover::before, html.text-200 .rail a.is-hover::before { opacity: .08; }
+html.text-200 .rail a:active::before, html.text-200 .rail a.is-pressed::before { opacity: .10; }
+html.text-200 .rail a[aria-current="page"] { background: var(--tonal); color: var(--on-tonal); }
+html.text-200 .rail a:focus-visible .ind, html.text-200 .rail a.is-focus .ind { outline: none; }
+html.text-200 .rail a:focus-visible, html.text-200 .rail a.is-focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+html.text-200 .rail .fab-wrap { flex-direction: row; align-self: flex-start; gap: 0; width: auto; min-height: 56px; margin-bottom: 16px;
+  padding: 0 20px 0 0; border-radius: var(--r-plate); background: var(--primary); color: var(--on-primary); text-align: start;
+  position: relative; isolation: isolate; }
+html.text-200 .rail .fab-wrap .fab { background: transparent; flex: none; }
+html.text-200 .rail .fab-wrap .fab::before { display: none; }
+html.text-200 .rail .fab-wrap::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--on-primary); opacity: 0; z-index: -1; }
+html.text-200 .rail .fab-wrap:hover::before, html.text-200 .rail .fab-wrap.is-hover::before { opacity: .08; }
+html.text-200 .rail .fab-wrap:active::before, html.text-200 .rail .fab-wrap.is-pressed::before { opacity: .10; }
+html.text-200 .rail .fab-wrap:focus-visible .fab, html.text-200 .rail .fab-wrap.is-focus .fab { outline: none; }
+html.text-200 .rail .fab-wrap:focus-visible, html.text-200 .rail .fab-wrap.is-focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+html.text-200 .rail .fab-wrap[aria-disabled="true"] { background: color-mix(in srgb, var(--text) 12%, transparent);
+  color: color-mix(in srgb, var(--text) 38%, transparent); }
+html.text-200 .rail .fab-wrap[aria-disabled="true"]::before { opacity: 0 !important; }
 html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative; left: auto; right: auto; top: auto; transform: none;
   max-height: none; margin-top: 16px; }
 /* Ширина таблицы по содержимому, на узком экране — прокрутка внутри обёртки */
@@ -2429,7 +2458,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
             </nav>
           </div>
           <p class="note">Подписи у пунктов видны всегда — как у нижней панели телефона. Наведение есть на планшете с мышью или тачпадом.
-            Недоступная кнопка — фон 12% и подпись 38%, как у недоступных кнопок; нажатие на неё ничего не делает.</p>
+            Недоступная кнопка — фон 12% и подпись 38%, как у недоступных кнопок; нажатие на неё ничего не делает.
+            Подписи растут со шрифтом и не рвутся внутри слова. Если самая длинная не помещается в пункт 88, rail становится широким
+            (<code>WideNavigationRail</code>): иконка и подпись в строку, ширина 220–360 — включите «Текст 200%».</p>
         </div>
       </div>
     </div>
