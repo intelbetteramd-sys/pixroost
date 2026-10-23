@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="ru" data-view="light" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixroost — основа дизайна: токены и компоненты</title>
+<!-- Только для макета. Приложение кладёт файлы шрифтов в сборку и в Google Fonts не ходит (docs/design/README.md). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600&family=Unbounded:wght@600&display=swap">
+<style>
+/* ============================================================
+   Токены. Источник: docs/design/README.md, «Цвета» и «Тёмная тема».
+   Цвета — роли, а не цвета экранов. Роли с пометкой «выбор» в документах
+   не заданы, их значения выбраны здесь и вынесены в отчёт.
+   ============================================================ */
+[data-theme="light"] {
+  --bg: #F3F5F9;            /* fog, Туман */
+  --surface: #FFFFFF;       /* paper, Бумага */
+  --text: #172036;          /* ink, Чернила */
+  --text2: #5B657A;         /* slate, Сланец */
+  --line: #DDE2EB;          /* line, Линия */
+  --primary: #22305C;       /* dusk, Сумерки */
+  --on-primary: #FFFFFF;
+  --tonal: #E4E8F3;         /* dusk-tint, Сумерки светлые */
+  --on-tonal: #22305C;      /* выбор: текст на тональном фоне */
+  --lamp: #F2A93B;          /* lamp, Лампа — не меняется с темой */
+  --lamp-tint: #FDF1DC;     /* lamp-tint, Лампа светлая */
+  --danger: #B42318;        /* danger, Опасность */
+  --on-danger: #FFFFFF;
+  --danger-tint: #FBE9E7;   /* danger-tint, Опасность светлая */
+  --inverse: #172036;       /* уведомление внизу экрана */
+  --on-inverse: #FFFFFF;    /* выбор */
+  --inverse-accent: #9DB0F0;
+  --focus: #22305C;         /* review-findings.md, Д1 */
+  --outline: #5B657A;       /* контуры полей и выключенного переключателя */
+  --scrim: rgba(15, 21, 40, .48);   /* выбор */
+  --shadow: 0 8px 24px rgba(23, 32, 54, .16), 0 2px 6px rgba(23, 32, 54, .08); /* выбор: только листы и диалоги */
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --bg: #0F1528;            /* Ночь */
+  --surface: #182038;
+  --text: #E8ECF4;
+  --text2: #A3ADC2;
+  --line: #2A3350;
+  --primary: #9DB0F0;
+  --on-primary: #0F1528;
+  --tonal: #26345E;
+  --on-tonal: #E8ECF4;
+  --lamp: #F2A93B;
+  --lamp-tint: #372C18;
+  --danger: #FF8A7A;
+  --on-danger: #0F1528;
+  --danger-tint: #3D1C22;
+  --inverse: #E8ECF4;
+  --on-inverse: #172036;
+  --inverse-accent: #22305C;
+  --focus: #9DB0F0;
+  --outline: #A3ADC2;
+  --scrim: rgba(5, 8, 18, .64);
+  --shadow: 0 8px 24px rgba(0, 0, 0, .48), 0 2px 6px rgba(0, 0, 0, .32);
+  color-scheme: dark;
+}
+:root {
+  --ink-fixed: #172036;     /* контур знака лампы и текст на «Лампе» — не меняются с темой */
+  --sp-4: 4px; --sp-8: 8px; --sp-12: 12px; --sp-16: 16px; --sp-24: 24px; --sp-32: 32px; --sp-48: 48px;
+  --r-win: 4px; --r-thumb: 8px; --r-plate: 16px; --r-card: 20px; --r-sheet: 28px; --r-full: 999px;
+  --f-display: 'Unbounded', 'Segoe UI', system-ui, sans-serif;
+  --f-ui: 'Onest', 'Segoe UI', Roboto, system-ui, sans-serif;
+  /* Шкала телефона: 28, 18, 15, 13. Шкала ПК: 28, 20, 14, 12. rem — чтобы работало увеличение текста. */
+  --t-a-title: 1.75rem;  --t-a-head: 1.125rem; --t-a-body: .9375rem; --t-a-cap: .8125rem;
+  --t-w-title: 1.75rem;  --t-w-head: 1.25rem;  --t-w-body: .875rem;   --t-w-cap: .75rem;
+}
+
+/* ============================================================
+   Страница-витрина
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+html.text-200 { font-size: 32px; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 var(--t-w-body)/1.45 var(--f-ui);
+  -webkit-font-smoothing: antialiased;
+}
+html[data-view="both"] body { background: #E9ECF2; }
+a { color: var(--primary); }
+.skip { position: absolute; left: 16px; top: -64px; z-index: 100; background: var(--surface); color: var(--primary);
+  padding: 12px 16px; border-radius: var(--r-win); }
+.skip:focus { top: 8px; outline: 2px solid var(--focus); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.page-head {
+  position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.page-head-in { max-width: 1480px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap;
+  align-items: center; gap: 12px 24px; }
+.brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+.brand h1 { margin: 0; font: 600 1.25rem/1.3 var(--f-display); letter-spacing: -.01em; }
+.brand p { margin: 0; color: var(--text2); font-size: .75rem; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.seg { display: inline-flex; border: 1px solid var(--outline); border-radius: var(--r-win); overflow: hidden; }
+.seg legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.seg { margin: 0; padding: 0; }
+.seg label { position: relative; display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px;
+  cursor: pointer; font-size: .875rem; border-left: 1px solid var(--outline); }
+.seg label:first-of-type { border-left: 0; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg input:checked + span { font-weight: 600; }
+.seg label:has(input:checked) { background: var(--primary); color: var(--on-primary); }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; z-index: 1; }
+.chk { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: .875rem; cursor: pointer; }
+.chk input { width: 18px; height: 18px; margin: 0; accent-color: var(--primary); }
+.chk input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.toc { max-width: 1480px; margin: 0 auto; padding: 8px 24px 12px; display: flex; flex-wrap: wrap; gap: 4px 16px;
+  font-size: .8125rem; }
+.toc a { display: inline-flex; align-items: center; min-height: 32px; text-decoration: none; color: var(--text2); }
+.toc a:hover { color: var(--text); text-decoration: underline; }
+.toc a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+main { max-width: 1480px; margin: 0 auto; padding: 24px 24px 96px; }
+.intro { max-width: 860px; color: var(--text2); font-size: .9375rem; margin: 0 0 8px; }
+.doc-section { margin-top: 48px; scroll-margin-top: 140px; }
+.doc-section > h2 { font: 600 1.5rem/1.3 var(--f-display); margin: 0 0 8px; letter-spacing: -.01em; }
+.doc-section h3 { font: 600 1.125rem/1.35 var(--f-ui); margin: 32px 0 8px; }
+.doc-section h4 { font: 600 .9375rem/1.4 var(--f-ui); margin: 0 0 12px; }
+.lead { max-width: 900px; color: var(--text2); margin: 0 0 16px; font-size: .875rem; }
+.lead code, .note code, td code { font: 400 .8125rem/1 ui-monospace, 'Cascadia Mono', Consolas, monospace; }
+.note { font-size: .8125rem; color: var(--text2); margin: 8px 0 0; max-width: 900px; }
+.flag { display: inline-block; font-size: .75rem; font-weight: 600; padding: 1px 8px; border-radius: var(--r-plate);
+  background: var(--danger-tint); color: var(--danger); }
+.choice { display: inline-block; font-size: .75rem; font-weight: 600; padding: 1px 8px; border-radius: var(--r-plate);
+  background: var(--tonal); color: var(--on-tonal); }
+
+/* Пары «светлая — тёмная». Скрипт внизу клонирует каждую .stage в тёмную тему. */
+.pair { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+html[data-view="both"] .pair { grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); }
+html[data-view="light"] .stage[data-theme="dark"],
+html[data-view="dark"] .stage[data-theme="light"] { display: none; }
+.stage { background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r-plate);
+  padding: 20px 24px 24px; min-width: 0; }
+.stage-label { margin: -4px 0 16px; font-size: .75rem; color: var(--text2); display: flex; gap: 8px; align-items: center; }
+.stage-label::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--outline);
+  background: var(--surface); }
+.plat { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); }
+.plat-title { font: 600 .8125rem/1.3 var(--f-ui); color: var(--text2); margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+.plat-title .tag { font-weight: 400; }
+.states { display: flex; flex-wrap: wrap; gap: 20px 24px; align-items: flex-start; }
+.state { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cap { font-size: .75rem; line-height: 1.3; color: var(--text2); }
+.row-gap { display: flex; flex-direction: column; gap: 12px; }
+.divider { height: 1px; background: var(--line); margin: 20px 0; border: 0; }
+
+/* Таблицы витрины */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-plate); background: var(--surface); }
+table.tbl { border-collapse: collapse; width: 100%; font-size: .8125rem; }
+.tbl caption { text-align: left; padding: 12px 16px; font-weight: 600; }
+.tbl th, .tbl td { text-align: left; padding: 10px 16px; border-top: 1px solid var(--line); vertical-align: middle; }
+.tbl thead th { font-weight: 600; color: var(--text2); border-top: 0; white-space: nowrap; }
+.tbl td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sw-cell { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.sw { width: 40px; height: 28px; border-radius: 6px; flex: none; box-shadow: inset 0 0 0 1px rgba(23, 32, 54, .18); }
+.ok { color: var(--text); font-weight: 600; }
+.bad { color: var(--danger); font-weight: 600; }
+
+/* Иконки */
+.ic { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75;
+  stroke-linecap: round; stroke-linejoin: round; }
+.ic-20 { width: 20px; height: 20px; }
+.ic-18 { width: 18px; height: 18px; }
+.ic-16 { width: 16px; height: 16px; }
+.lamp-svg { flex: none; display: block; }
+
+/* ============================================================
+   Слои состояний: наведение, нажатие, фокус.
+   Документы задают только цвет кольца фокуса. Прозрачности слоёв — выбор
+   по образцу Material 3 (8/10 %) и Fluent (6/10 %).
+   ============================================================ */
+.sl { position: relative; isolation: isolate; }
+.sl::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0;
+  transition: opacity .15s; pointer-events: none; z-index: -1; }
+.a .sl:hover::before, .a .sl.is-hover::before { opacity: .08; }
+.a .sl:active::before, .a .sl.is-pressed::before { opacity: .10; }
+.w .sl:hover::before, .w .sl.is-hover::before { opacity: .06; }
+.w .sl:active::before, .w .sl.is-pressed::before { opacity: .10; }
+.sl:disabled::before, .sl[aria-disabled="true"]::before { opacity: 0 !important; }
+.a .fc:focus-visible, .a .fc.is-focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+.w .fc:focus-visible, .w .fc.is-focus { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Зоны касания: 48 dp на Android, 32 px на ПК. Видимый размер может быть меньше. */
+.hit { position: relative; }
+.hit::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: max(100%, 48px); height: max(100%, 48px); border-radius: inherit; }
+.w .hit::after { width: max(100%, 32px); height: max(100%, 32px); }
+html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1px dashed rgb(200, 30, 150); }
+
+/* ============================================================
+   Кнопки
+   ============================================================ */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; margin: 0;
+  cursor: pointer; text-decoration: none; white-space: nowrap; font-family: var(--f-ui); }
+.a .btn { min-height: 44px; padding: 10px 24px; border-radius: var(--r-full); font-size: var(--t-a-body);
+  font-weight: 600; line-height: 1.35; }
+.a .btn.compact { padding: 10px 16px; }
+.w .btn { min-height: 32px; padding: 5px 12px; border-radius: var(--r-win); font-size: var(--t-w-body);
+  font-weight: 400; line-height: 1.4; min-width: 96px; }
+.w .btn.compact { min-width: 0; }
+.btn .ic { width: 18px; height: 18px; }
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-tonal { background: var(--tonal); color: var(--on-tonal); }
+.btn-secondary { background: transparent; color: var(--primary); box-shadow: inset 0 0 0 1px var(--outline); }
+.w .btn-secondary { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+.btn-danger { background: var(--danger); color: var(--on-danger); }
+.btn-link { background: transparent; color: var(--primary); }
+.a .btn-link { padding: 10px 12px; }
+.w .btn-link { min-width: 0; padding: 5px 8px; text-decoration: underline; text-underline-offset: 3px; }
+.btn-lamp { background: var(--lamp); color: var(--ink-fixed); }
+.btn:disabled, .btn[aria-disabled="true"] { cursor: not-allowed; }
+.btn-primary:disabled, .btn-tonal:disabled, .btn-danger:disabled, .btn-lamp:disabled {
+  background: color-mix(in srgb, var(--text) 12%, transparent); color: color-mix(in srgb, var(--text) 38%, transparent); }
+.btn-secondary:disabled { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 12%, transparent);
+  color: color-mix(in srgb, var(--text) 38%, transparent); background: transparent; }
+.btn-link:disabled { color: color-mix(in srgb, var(--text) 38%, transparent); }
+.btn.full { width: 100%; }
+
+.icon-btn { display: inline-flex; align-items: center; justify-content: center; border: 0; padding: 0; margin: 0;
+  background: transparent; color: var(--text); cursor: pointer; }
+.a .icon-btn { width: 48px; height: 48px; border-radius: var(--r-full); }
+.w .icon-btn { width: 32px; height: 32px; border-radius: var(--r-win); }
+.w .icon-btn .ic { width: 16px; height: 16px; }
+.icon-btn:disabled { color: color-mix(in srgb, var(--text) 38%, transparent); cursor: not-allowed; }
+.tip-wrap { position: relative; display: inline-flex; flex-direction: column; align-items: center; }
+.tooltip { margin-top: 6px; background: var(--surface); color: var(--text); border: 1px solid var(--line);
+  border-radius: var(--r-win); padding: 4px 8px; font-size: var(--t-w-cap); white-space: nowrap; box-shadow: var(--shadow); }
+.kbd { display: inline-flex; align-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: var(--r-win);
+  border: 1px solid var(--outline); font: 600 var(--t-w-cap)/1 var(--f-ui); color: var(--text2); background: var(--surface); }
+
+/* ============================================================
+   Чипы фильтра (Android), кнопки-переключатели и SelectorBar (Windows)
+   ============================================================ */
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px; border-radius: var(--r-thumb);
+  border: 0; box-shadow: inset 0 0 0 1px var(--outline); background: transparent; color: var(--text);
+  font: 400 var(--t-a-body)/1 var(--f-ui); cursor: pointer; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--tonal); color: var(--on-tonal); box-shadow: none; font-weight: 600; padding-left: 10px; }
+.chip .ic { width: 18px; height: 18px; }
+.chip:disabled { color: color-mix(in srgb, var(--text) 38%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 12%, transparent); cursor: not-allowed; }
+.wchip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: var(--r-win);
+  border: 0; box-shadow: inset 0 0 0 1px var(--line); background: var(--surface); color: var(--text);
+  font: 400 var(--t-w-body)/1 var(--f-ui); cursor: pointer; white-space: nowrap; }
+.wchip[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); box-shadow: none; }
+.wchip:disabled { color: color-mix(in srgb, var(--text) 38%, transparent); cursor: not-allowed; }
+.selbar { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+.selbar button { position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 8px 12px;
+  border: 0; background: transparent; color: var(--text2); font: 400 var(--t-w-body)/1.3 var(--f-ui); cursor: pointer;
+  border-radius: var(--r-win) var(--r-win) 0 0; }
+.selbar button[aria-selected="true"] { color: var(--text); font-weight: 600; }
+.selbar button[aria-selected="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px;
+  height: 3px; border-radius: 2px; background: var(--primary); }
+.selbar .count { color: var(--text2); font-weight: 400; }
+
+/* ============================================================
+   Метки: StatusBadge, SourceMark, ArchiveStatus
+   ============================================================ */
+.badge { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 2px 10px; border-radius: var(--r-plate);
+  font-weight: 600; line-height: 1.25; white-space: nowrap; }
+.a .badge { font-size: var(--t-a-cap); }
+.w .badge { font-size: var(--t-w-cap); min-height: 22px; padding: 2px 8px; }
+.badge .ic { width: 14px; height: 14px; stroke-width: 2.25; }
+.b-lamp { background: var(--lamp-tint); color: var(--text); }
+.b-tonal { background: var(--tonal); color: var(--on-tonal); }
+.b-marked { background: var(--primary); color: var(--on-primary); }
+.b-neutral { background: transparent; color: var(--text2); box-shadow: inset 0 0 0 1px var(--outline); font-weight: 400; }
+.b-danger { background: var(--danger-tint); color: var(--danger); }
+
+.src { display: inline-flex; align-items: center; justify-content: center; flex: none; border-radius: 50%;
+  background: var(--tonal); color: var(--on-tonal); font-weight: 600; }
+.src-40 { width: 40px; height: 40px; font-size: var(--t-a-body); }
+.src-32 { width: 32px; height: 32px; font-size: var(--t-w-body); }
+.src-20 { width: 20px; height: 20px; font-size: 12px; background: #FFFFFF; color: #172036; box-shadow: 0 0 0 1px rgba(23, 32, 54, .5); }
+.src .ic { width: 20px; height: 20px; }
+.src-20 .ic { width: 13px; height: 13px; stroke-width: 2.25; }
+.src-lamp { background: var(--lamp-tint); }
+.src-20.src-lamp { background: #FFFFFF; }
+
+.status { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 12px 10px 14px;
+  border-radius: var(--r-plate); color: var(--text); text-decoration: none; border: 0; width: 100%; text-align: left;
+  font-family: var(--f-ui); cursor: pointer; }
+.a .status { font-size: var(--t-a-body); }
+.w .status { font-size: var(--t-w-body); min-height: 40px; border-radius: var(--r-win); }
+.status .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.status strong { font-weight: 600; }
+.status small { color: var(--text2); font-size: var(--t-a-cap); }
+.w .status small { font-size: var(--t-w-cap); }
+.status .chev { color: var(--text2); }
+.s-saved { background: var(--lamp-tint); }
+.s-wait { background: var(--tonal); }
+.s-wait .ic-lead { color: var(--on-tonal); }
+.s-pause { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.s-pause .ic-lead { color: var(--text2); }
+.status .mini-bar { height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--primary) 22%, transparent); overflow: hidden; margin-top: 4px; }
+.status .mini-bar i { display: block; height: 100%; background: var(--primary); border-radius: 2px; }
+
+/* ============================================================
+   Строки списков
+   ============================================================ */
+.list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); overflow: hidden; }
+.a .list { border-radius: var(--r-card); }
+.w .list { border-radius: 8px; }
+.list > li + li { border-top: 1px solid var(--line); }
+.row { display: flex; align-items: center; gap: 16px; min-height: 72px; padding: 12px 16px; width: 100%; text-align: left;
+  background: transparent; border: 0; color: var(--text); font-family: var(--f-ui); }
+.w .row { min-height: 56px; padding: 8px 16px; gap: 12px; }
+.row.clickable { cursor: pointer; }
+.row .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.a .row .t1 { font-size: var(--t-a-body); font-weight: 600; line-height: 1.35; }
+.a .row .t2 { font-size: var(--t-a-cap); color: var(--text2); line-height: 1.35; }
+.w .row .t1 { font-size: var(--t-w-body); font-weight: 600; line-height: 1.4; }
+.w .row .t2 { font-size: var(--t-w-cap); color: var(--text2); line-height: 1.35; }
+.row .trail { display: flex; align-items: center; gap: 8px; flex: none; }
+.row.is-disabled .t1, .row.is-disabled .t2 { color: color-mix(in srgb, var(--text) 38%, transparent); }
+.row .lead-ic { color: var(--text2); }
+.row-err .t2 { color: var(--text); }
+
+/* Чекбокс «Удалить» (DeleteToggle) и чекбоксы Fluent */
+.cb { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text);
+  font-family: var(--f-ui); }
+.a .cb { font-size: var(--t-a-body); min-height: 48px; }
+.w .cb { font-size: var(--t-w-body); min-height: 32px; gap: 8px; }
+.cb input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.cb .box { position: relative; flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 2px; box-shadow: inset 0 0 0 2px var(--outline); color: var(--on-primary); }
+.w .cb .box { width: 20px; height: 20px; border-radius: var(--r-win); box-shadow: inset 0 0 0 1px var(--outline); background: var(--surface); }
+.cb .box .ic { width: 14px; height: 14px; stroke-width: 3; opacity: 0; }
+.cb input:checked + .box { background: var(--primary); box-shadow: none; }
+.cb input:checked + .box .ic { opacity: 1; }
+.a .cb input:focus-visible + .box, .a .cb .box.is-focus { outline: 3px solid var(--focus); outline-offset: 3px; }
+.w .cb input:focus-visible + .box, .w .cb .box.is-focus { outline: 2px solid var(--focus); outline-offset: 2px; }
+.a .cb .box::before { content: ""; position: absolute; inset: -11px; border-radius: 50%; background: currentColor; opacity: 0; }
+.a .cb:hover .box::before, .a .cb .box.is-pressed::before { opacity: .10; background: var(--text); }
+.cb input:disabled + .box { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text) 38%, transparent); background: transparent; }
+.cb input:disabled:checked + .box { background: color-mix(in srgb, var(--text) 38%, transparent); box-shadow: none; }
+.cb:has(input:disabled) { cursor: not-allowed; color: color-mix(in srgb, var(--text) 38%, transparent); }
+.cb.invalid .box { box-shadow: inset 0 0 0 2px var(--danger); }
+
+.radio { position: relative; display: flex; align-items: flex-start; gap: 8px; min-height: 32px; padding: 6px 0; cursor: pointer;
+  font-size: var(--t-w-body); }
+.radio input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.radio .dot { flex: none; width: 20px; height: 20px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--outline);
+  background: var(--surface); margin-top: 0; display: inline-flex; align-items: center; justify-content: center; }
+.radio input:checked + .dot { background: var(--primary); box-shadow: none; }
+.radio input:checked + .dot::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--on-primary); }
+.radio input:focus-visible + .dot, .radio .dot.is-focus { outline: 2px solid var(--focus); outline-offset: 2px; }
+.radio:has(input:disabled) { color: color-mix(in srgb, var(--text) 38%, transparent); cursor: not-allowed; }
+.radio input:disabled + .dot { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 38%, transparent); }
+.radio .rtxt { display: flex; flex-direction: column; gap: 2px; }
+.radio .rtxt small { color: var(--text2); font-size: var(--t-w-cap); font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; }
+
+/* ============================================================
+   Переключатели
+   ============================================================ */
+.sw-a { position: relative; flex: none; display: inline-flex; align-items: center; width: 52px; height: 32px; border-radius: var(--r-full);
+  border: 0; padding: 0; cursor: pointer; background: var(--surface); box-shadow: inset 0 0 0 2px var(--outline); }
+.sw-a .thumb { position: absolute; left: 8px; top: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--outline);
+  transition: all .15s; display: inline-flex; align-items: center; justify-content: center; color: var(--primary); }
+.sw-a .thumb .ic { width: 16px; height: 16px; stroke-width: 2.5; opacity: 0; }
+.sw-a[aria-checked="true"] { background: var(--primary); box-shadow: none; }
+.sw-a[aria-checked="true"] .thumb { left: 24px; top: 4px; width: 24px; height: 24px; background: var(--on-primary); }
+.sw-a[aria-checked="true"] .thumb .ic { opacity: 1; }
+.sw-a::before { content: ""; position: absolute; width: 40px; height: 40px; border-radius: 50%; top: -4px; left: -4px;
+  background: var(--text); opacity: 0; transition: opacity .15s; }
+.sw-a[aria-checked="true"]::before { left: 16px; }
+.sw-a:hover::before, .sw-a.is-hover::before { opacity: .08; }
+.sw-a:active::before, .sw-a.is-pressed::before { opacity: .10; }
+.sw-a.is-pressed .thumb { width: 28px; height: 28px; top: 2px; left: 2px; }
+.sw-a[aria-checked="true"].is-pressed .thumb { left: 22px; }
+.sw-a:focus-visible, .sw-a.is-focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sw-a:disabled { cursor: not-allowed; box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text) 12%, transparent);
+  background: transparent; }
+.sw-a:disabled .thumb { background: color-mix(in srgb, var(--text) 38%, transparent); }
+.sw-a[aria-checked="true"]:disabled { background: color-mix(in srgb, var(--text) 12%, transparent); box-shadow: none; }
+.sw-a[aria-checked="true"]:disabled .thumb { background: var(--surface); color: color-mix(in srgb, var(--text) 38%, transparent); }
+.sw-a:disabled::before { display: none; }
+
+.sw-w { display: inline-flex; align-items: center; gap: 12px; border: 0; background: transparent; padding: 6px 0; cursor: pointer;
+  font: 400 var(--t-w-body)/1.3 var(--f-ui); color: var(--text); min-height: 32px; }
+.sw-w .track { position: relative; width: 40px; height: 20px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--outline);
+  background: transparent; flex: none; }
+.sw-w .track::after { content: ""; position: absolute; top: 4px; left: 4px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--outline); transition: all .15s; }
+.sw-w[aria-checked="true"] .track { background: var(--primary); box-shadow: none; }
+.sw-w[aria-checked="true"] .track::after { left: 24px; background: var(--on-primary); }
+.sw-w:hover .track::after, .sw-w.is-hover .track::after { width: 14px; height: 14px; top: 3px; }
+.sw-w.is-pressed .track::after { width: 17px; }
+.sw-w[aria-checked="true"].is-pressed .track::after { left: 19px; }
+.sw-w:focus-visible .track, .sw-w.is-focus .track { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sw-w:focus-visible { outline: none; }
+.sw-w:disabled { cursor: not-allowed; color: color-mix(in srgb, var(--text) 38%, transparent); }
+.sw-w:disabled .track { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 38%, transparent); background: transparent; }
+.sw-w:disabled .track::after { background: color-mix(in srgb, var(--text) 38%, transparent); }
+
+/* ============================================================
+   Поля ввода
+   ============================================================ */
+.field { display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: 320px; }
+.a .fbox { position: relative; display: flex; align-items: center; min-height: 56px; border-radius: var(--r-win);
+  box-shadow: inset 0 0 0 1px var(--outline); background: transparent; padding: 0 16px; gap: 12px; }
+.a .fbox label { position: absolute; left: 12px; top: -9px; padding: 0 4px; background: var(--bg); color: var(--text2);
+  font-size: var(--t-a-cap); line-height: 18px; }
+.a .surface-bg .fbox label { background: var(--surface); }
+.a .fbox input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text);
+  font: 400 var(--t-a-body)/1.4 var(--f-ui); padding: 16px 0; }
+.a .fbox input::placeholder { color: var(--text2); }
+.a .fbox:has(input:focus), .a .fbox.is-focus { box-shadow: inset 0 0 0 2px var(--primary); }
+.a .fbox:has(input:focus) label, .a .fbox.is-focus label { color: var(--primary); }
+.a .fbox.is-error { box-shadow: inset 0 0 0 2px var(--danger); }
+.a .fbox.is-error label { color: var(--danger); }
+.a .fbox.is-disabled { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 12%, transparent); }
+.a .fbox.is-disabled label, .a .fbox.is-disabled input { color: color-mix(in srgb, var(--text) 38%, transparent); }
+.a .fhelp { font-size: var(--t-a-cap); color: var(--text2); padding: 0 16px; line-height: 1.35; }
+.fhelp.err { color: var(--danger); display: flex; gap: 6px; align-items: flex-start; }
+.fhelp.err .ic { width: 16px; height: 16px; margin-top: 1px; }
+.a .fbox.is-hover { box-shadow: inset 0 0 0 1px var(--text); }
+
+.w .flabel { font-size: var(--t-w-body); color: var(--text); }
+.w .fbox { display: flex; align-items: center; min-height: 32px; border-radius: var(--r-win); background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 -1px 0 var(--outline); padding: 0 10px; gap: 8px; }
+.w .fbox input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text);
+  font: 400 var(--t-w-body)/1.4 var(--f-ui); padding: 5px 0; }
+.w .fbox input::placeholder { color: var(--text2); }
+.w .fbox.is-hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+.w .fbox:has(input:focus), .w .fbox.is-focus { box-shadow: inset 0 0 0 1px var(--line), inset 0 -2px 0 var(--primary); }
+.w .fbox.is-error { box-shadow: inset 0 0 0 1px var(--line), inset 0 -2px 0 var(--danger); }
+.w .fbox.is-disabled { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 12%, transparent); }
+.w .fbox.is-disabled input { color: color-mix(in srgb, var(--text) 38%, transparent); }
+.w .fhelp { font-size: var(--t-w-cap); color: var(--text2); line-height: 1.35; }
+.w .fhelp.err { color: var(--danger); }
+.w .flabel-dis { color: color-mix(in srgb, var(--text) 38%, transparent); }
+.folder { display: flex; gap: 8px; align-items: center; }
+.folder .fbox { flex: 1; }
+.mono { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace !important; }
+.code-input { letter-spacing: .3em; font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   Прогресс
+   ============================================================ */
+.prog { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 360px; }
+.prog .top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.a .prog .top strong { font-size: var(--t-a-body); font-weight: 600; }
+.a .prog .top span, .a .prog .sub { font-size: var(--t-a-cap); color: var(--text2); }
+.w .prog .top strong { font-size: var(--t-w-body); font-weight: 600; }
+.w .prog .top span, .w .prog .sub { font-size: var(--t-w-cap); color: var(--text2); }
+.prog .sub { margin: 0; }
+.bar { position: relative; display: flex; gap: 4px; height: 4px; align-items: center; }
+.bar .fill { height: 4px; border-radius: 2px; background: var(--primary); flex: none; }
+.bar .rest { height: 4px; border-radius: 2px; background: var(--tonal); flex: 1; }
+.bar .stop { position: absolute; right: 0; width: 4px; height: 4px; border-radius: 50%; background: var(--primary); }
+.bar.paused .fill { background: var(--text2); }
+.bar.paused .stop { background: var(--text2); }
+.bar.indet { overflow: hidden; border-radius: 2px; background: var(--tonal); gap: 0; }
+.bar.indet .fill { position: absolute; left: 22%; width: 34%; }
+@media (prefers-reduced-motion: no-preference) {
+  .bar.indet .fill { animation: indet 1.6s ease-in-out infinite; }
+  @keyframes indet { 0% { left: -35%; } 100% { left: 100%; } }
+}
+.w .bar { height: 3px; gap: 0; }
+.w .bar .fill { height: 3px; border-radius: 2px; }
+.w .bar .rest { height: 1px; border-radius: 0; background: var(--outline); }
+.w .bar .stop { display: none; }
+
+.usage { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 360px; }
+.ubar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--line); gap: 2px; }
+.ubar i { display: block; height: 100%; }
+.ubar .used { background: var(--primary); }
+.ubar .used.full { background: var(--danger); }
+.ubar .free { background: var(--lamp); box-shadow: inset 0 0 0 1px var(--ink-fixed); }
+.ubar .gap { flex: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--t-a-cap); color: var(--text2); margin: 0; padding: 0; list-style: none; }
+.w .legend { font-size: var(--t-w-cap); }
+.legend li { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend .k-used { background: var(--primary); }
+.legend .k-full { background: var(--danger); }
+.legend .k-free { background: var(--lamp); box-shadow: inset 0 0 0 1px var(--ink-fixed); }
+
+/* ============================================================
+   Карточки, плашки, заметки
+   ============================================================ */
+.card { background: var(--surface); border: 1px solid var(--line); color: var(--text); }
+.a .card { border-radius: var(--r-card); padding: 16px; }
+.w .card { border-radius: 8px; padding: 16px; }
+.card h4, .card .h { margin: 0; font-weight: 600; }
+.a .card .h { font-size: var(--t-a-head); line-height: 1.35; }
+.w .card .h { font-size: var(--t-w-body); line-height: 1.4; }
+.a .card p { font-size: var(--t-a-body); margin: 4px 0 0; color: var(--text2); line-height: 1.4; }
+.w .card p { font-size: var(--t-w-body); margin: 2px 0 0; color: var(--text2); line-height: 1.4; }
+.card .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.card .actions.end { justify-content: flex-end; }
+.card .head-row { display: flex; gap: 12px; align-items: center; }
+.card .head-row .txt { flex: 1; min-width: 0; }
+.card-click { cursor: pointer; text-align: left; width: 100%; font-family: var(--f-ui); }
+.cards-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.big-num { font: 600 var(--t-a-title)/1.25 var(--f-display); letter-spacing: -.01em; color: var(--text); margin: 0; }
+.w .big-num { font-size: var(--t-w-title); }
+.thumbs-mini { display: flex; gap: 4px; }
+.thumbs-mini svg { width: 36px; height: 36px; border-radius: var(--r-thumb); display: block; }
+.kv { display: grid; grid-template-columns: auto 1fr auto; gap: 8px 12px; align-items: center; margin-top: 12px; }
+.a .kv { font-size: var(--t-a-body); }
+.w .kv { font-size: var(--t-w-body); }
+.kv .r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kv .muted { color: var(--text2); }
+
+.note-box { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: var(--r-plate); color: var(--text); }
+.a .note-box { font-size: var(--t-a-body); line-height: 1.4; }
+.w .note-box { font-size: var(--t-w-body); line-height: 1.4; border-radius: var(--r-win); }
+.note-box p { margin: 0; }
+.note-box .sec { color: var(--text2); }
+.n-safety { background: var(--lamp-tint); }
+.n-info { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.n-info .ic { color: var(--primary); }
+
+.infobar { display: flex; gap: 12px; align-items: flex-start; padding: 12px 8px 12px 16px; border-radius: var(--r-win);
+  background: var(--tonal); color: var(--text); font-size: var(--t-w-body); line-height: 1.4; }
+.infobar .ic-lead { color: var(--on-tonal); width: 20px; height: 20px; margin-top: 1px; }
+.infobar .body { flex: 1; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.infobar strong { font-weight: 600; }
+.infobar .btn { margin-left: auto; }
+
+.snack { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 6px 8px 6px 16px; border-radius: var(--r-win);
+  background: var(--inverse); color: var(--on-inverse); font-size: var(--t-a-body); line-height: 1.35; box-shadow: var(--shadow); max-width: 380px; }
+.snack p { margin: 0; flex: 1; padding: 6px 0; }
+.snack .btn-link { color: var(--inverse-accent); }
+.snack .btn-link.sl::before { background: var(--inverse-accent); }
+
+.banner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 16px; border-radius: var(--r-plate);
+  background: var(--tonal); color: var(--text); font-size: var(--t-a-body); }
+.banner p { margin: 0; flex: 1; min-width: 180px; }
+
+.empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 32px 24px;
+  max-width: 340px; }
+.empty .art { width: 72px; height: 72px; border-radius: 50%; background: var(--tonal); color: var(--on-tonal);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+.empty .art .ic { width: 32px; height: 32px; }
+.empty .h { font-size: var(--t-a-head); font-weight: 600; margin: 0; }
+.empty p { margin: 0 0 8px; color: var(--text2); font-size: var(--t-a-body); }
+
+/* Превью */
+.thumbs { display: grid; grid-template-columns: repeat(4, 84px); gap: 2px; }
+.w .thumbs { grid-template-columns: repeat(4, 112px); gap: 4px; }
+.thumb { position: relative; display: block; aspect-ratio: 1; border: 0; padding: 0; background: #C9D3E3; overflow: hidden;
+  cursor: pointer; border-radius: 0; }
+.w .thumb { border-radius: var(--r-thumb); }
+.thumb > svg.photo { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: transform .15s; }
+.thumb .marks { position: absolute; left: 4px; bottom: 4px; display: flex; gap: 2px; }
+.thumb .dur { position: absolute; right: 4px; bottom: 4px; padding: 1px 6px; border-radius: var(--r-win);
+  background: rgba(15, 21, 40, .72); color: #FFFFFF; font: 600 13px/18px var(--f-ui); }
+.w .thumb .dur { font-size: 12px; line-height: 16px; }
+.thumb .selc { position: absolute; left: 6px; top: 6px; width: 24px; height: 24px; border-radius: 50%;
+  box-shadow: inset 0 0 0 2px #FFFFFF, 0 0 0 1px rgba(15, 21, 40, .45); background: rgba(15, 21, 40, .2); }
+.thumb.selected .selc { background: var(--primary); box-shadow: inset 0 0 0 2px #FFFFFF; color: var(--on-primary);
+  display: flex; align-items: center; justify-content: center; }
+.thumb.selected .selc .ic { width: 16px; height: 16px; stroke-width: 3; }
+.thumb.selected > svg.photo { transform: scale(.86); border-radius: var(--r-thumb); }
+.thumb.selected { background: var(--tonal); }
+.thumb:focus-visible, .thumb.is-focus { outline: 3px solid var(--focus); outline-offset: 2px; z-index: 1; }
+.w .thumb:focus-visible, .w .thumb.is-focus { outline-width: 2px; }
+.thumb.is-pressed > svg.photo { filter: brightness(.9); }
+
+/* ============================================================
+   Навигация
+   ============================================================ */
+.navbar { display: flex; background: var(--surface); border-top: 1px solid var(--line); padding: 6px 4px 8px; }
+.navbar a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 56px;
+  padding-top: 2px; text-decoration: none; color: var(--text2); font-size: var(--t-a-cap); line-height: 1.3; border-radius: var(--r-plate); }
+.navbar .ind { position: relative; width: 56px; height: 32px; border-radius: var(--r-full); display: flex;
+  align-items: center; justify-content: center; isolation: isolate; }
+.navbar .ind::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--text); opacity: 0; z-index: -1; }
+.navbar a:hover .ind::before, .navbar a.is-hover .ind::before { opacity: .08; }
+.navbar a:active .ind::before, .navbar a.is-pressed .ind::before { opacity: .10; }
+.navbar a[aria-current="page"] { color: var(--text); font-weight: 600; }
+.navbar a[aria-current="page"] .ind { background: var(--tonal); color: var(--on-tonal); }
+.navbar a[aria-current="page"] .ic { stroke-width: 2.25; }
+.navbar a:focus-visible, .navbar a.is-focus { outline: none; }
+.navbar a:focus-visible .ind, .navbar a.is-focus .ind { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.win { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--bg); box-shadow: var(--shadow); }
+.titlebar { display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 0 0 16px; font-size: var(--t-w-cap); color: var(--text); }
+.titlebar .appname { display: flex; gap: 8px; align-items: center; min-width: 120px; }
+.titlebar .search { flex: 1; max-width: 360px; margin: 0 auto; }
+.titlebar .caption-btns { display: flex; align-self: stretch; }
+.titlebar .caption-btns span { width: 46px; display: flex; align-items: center; justify-content: center; color: var(--text2); }
+.win-body { display: flex; min-height: 380px; }
+.navpane { width: 248px; flex: none; display: flex; flex-direction: column; padding: 4px 4px 8px; gap: 2px; }
+.navpane a { position: relative; display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 12px;
+  border-radius: var(--r-win); color: var(--text); text-decoration: none; font-size: var(--t-w-body); }
+.navpane a .ic { width: 18px; height: 18px; color: var(--text); }
+.navpane a[aria-current="page"] { background: var(--tonal); color: var(--on-tonal); font-weight: 600; }
+.navpane a[aria-current="page"]::after { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 16px; border-radius: 2px; background: var(--primary); }
+.navpane a[aria-current="page"] .ic { color: var(--on-tonal); }
+.navpane .spacer { flex: 1; min-height: 16px; }
+.navpane .sep { height: 1px; background: var(--line); margin: 4px 8px; }
+.navpane .recv { margin: 8px 4px 0; padding: 10px 12px; border-radius: var(--r-win); background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line); font-size: var(--t-w-cap); line-height: 1.35; color: var(--text2); }
+.navpane .recv strong { display: flex; align-items: center; gap: 6px; color: var(--text); font-size: var(--t-w-body); font-weight: 600; }
+.navpane .recv .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+.navpane a.dis { color: color-mix(in srgb, var(--text) 38%, transparent); pointer-events: none; }
+.navpane a.dis .ic { color: inherit; }
+.win-content { flex: 1; min-width: 0; background: var(--surface); border-top-left-radius: 8px; border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line); padding: 20px 24px; }
+.win-content h4 { font: 600 var(--t-w-title)/1.25 var(--f-display); margin: 0 0 4px; letter-spacing: -.01em; }
+
+/* ============================================================
+   Листы и диалоги
+   ============================================================ */
+.phone { position: relative; width: 360px; max-width: 100%; height: 640px; border-radius: 28px; overflow: hidden;
+  background: var(--bg); border: 1px solid var(--line); flex: none; }
+.phone .under { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.phone .under .ph-title { font: 600 var(--t-a-title)/1.25 var(--f-display); margin: 24px 0 4px; }
+.scrim { position: absolute; inset: 0; background: var(--scrim); }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); color: var(--text);
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding: 8px 16px 20px; box-shadow: var(--shadow); max-height: 92%; overflow: auto; }
+.sheet .handle { width: 32px; height: 4px; border-radius: 2px; background: var(--outline); opacity: .6; margin: 8px auto 16px; }
+.sheet h4, .dialog h4 { margin: 0; font: 600 var(--t-a-head)/1.35 var(--f-ui); }
+.sheet .lede { margin: 4px 0 0; color: var(--text2); font-size: var(--t-a-body); }
+.sheet .places { list-style: none; margin: 16px 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.sheet .places li { display: flex; align-items: center; gap: 12px; min-height: 48px; font-size: var(--t-a-body); }
+.sheet .places .txt { flex: 1; display: flex; flex-direction: column; }
+.sheet .places .txt small { color: var(--text2); font-size: var(--t-a-cap); }
+.sheet .places .num { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sheet .btns { display: flex; gap: 8px; margin-top: 16px; }
+.sheet .btns .btn { flex: 1; }
+.a-dialog { position: absolute; left: 24px; right: 24px; top: 50%; transform: translateY(-50%); background: var(--surface);
+  border-radius: var(--r-sheet); padding: 24px; box-shadow: var(--shadow); }
+.a-dialog .ic-top { color: var(--primary); display: flex; justify-content: center; margin-bottom: 16px; }
+.a-dialog h4 { font: 600 var(--t-a-head)/1.35 var(--f-ui); margin: 0; text-align: center; }
+.a-dialog p { color: var(--text2); font-size: var(--t-a-body); margin: 12px 0 0; line-height: 1.4; }
+.a-dialog .btns { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+
+.win-modal { position: relative; min-height: 460px; display: flex; align-items: center; justify-content: center; padding: 24px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.win-modal .scrim { background: var(--scrim); }
+.dialog { position: relative; width: 480px; max-width: 100%; background: var(--surface); border-radius: 8px; overflow: hidden;
+  box-shadow: var(--shadow); border: 1px solid var(--line); color: var(--text); }
+.dialog .d-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; font-size: var(--t-w-body); line-height: 1.45; }
+.dialog h4 { font: 600 var(--t-w-head)/1.35 var(--f-ui); }
+.dialog .d-body p { margin: 0; color: var(--text2); }
+.dialog .d-foot { display: flex; gap: 8px; padding: 24px; background: var(--bg); border-top: 1px solid var(--line); }
+.dialog .d-foot .btn { flex: 1; }
+.dialog .places { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--r-win); }
+.dialog .places li { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 12px; }
+.dialog .places li + li { border-top: 1px solid var(--line); }
+.dialog .places .txt { flex: 1; display: flex; flex-direction: column; }
+.dialog .places .txt small { color: var(--text2); font-size: var(--t-w-cap); }
+.dialog .places .num { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dialog .keys { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: var(--t-w-cap); color: var(--text2); align-items: center; }
+
+/* ============================================================
+   Токены на витрине
+   ============================================================ */
+.type-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0;
+  border-top: 1px solid var(--line); }
+.type-row:first-of-type { border-top: 0; }
+.type-row .meta { font-size: .75rem; color: var(--text2); line-height: 1.35; }
+.type-row .sample { min-width: 0; overflow-wrap: anywhere; }
+.space-row { display: flex; align-items: center; gap: 12px; min-height: 28px; font-size: .8125rem; }
+.space-row .lbl { width: 40px; text-align: right; color: var(--text2); font-variant-numeric: tabular-nums; }
+.space-row .blk { height: 16px; background: var(--primary); border-radius: 2px; }
+.space-row .use { color: var(--text2); }
+.radii { display: flex; flex-wrap: wrap; gap: 16px; }
+.radius-tile { width: 132px; display: flex; flex-direction: column; gap: 8px; font-size: .8125rem; }
+.radius-tile .shape { height: 72px; background: var(--tonal); border: 2px solid var(--primary); }
+.radius-tile .use { color: var(--text2); font-size: .75rem; }
+.grid-demo { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+.gd-phone { width: 220px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); padding: 12px 0; position: relative; }
+.gd-phone .m { position: absolute; top: 0; bottom: 0; width: 16px; background: color-mix(in srgb, var(--lamp) 30%, transparent); }
+.gd-phone .gt { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 0; margin-top: 8px; }
+.gd-phone .gt i { aspect-ratio: 1; background: var(--tonal); }
+.gd-phone .blk { margin: 8px 16px 0; height: 28px; border-radius: 8px; background: var(--tonal); }
+.gd-win { flex: 1; min-width: 320px; max-width: 640px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); display: flex; min-height: 200px; overflow: hidden; }
+.gd-win .np { width: 30%; border-right: 1px dashed var(--outline); padding: 8px; font-size: .75rem; color: var(--text2); }
+.gd-win .ct { flex: 1; background: var(--surface); padding: 24px; position: relative; font-size: .75rem; color: var(--text2); }
+.gd-win .ct .gw { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 8px; }
+.gd-win .ct .gw i { aspect-ratio: 1; background: var(--tonal); border-radius: 8px; }
+.gd-win .pn { width: 26%; border-left: 1px dashed var(--outline); padding: 8px; font-size: .75rem; color: var(--text2); background: var(--surface); }
+.logo-grid { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
+.logo-tile { display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; padding: 16px;
+  min-width: 140px; border-radius: var(--r-plate); border: 1px solid var(--line); background: var(--surface); font-size: .75rem;
+  color: var(--text2); text-align: center; }
+.logo-tile.on-bg { background: var(--bg); }
+.logo-tile.on-photo { background: transparent; position: relative; overflow: hidden; padding: 0; width: 160px; height: 140px; }
+.logo-tile.on-photo svg.photo { position: absolute; inset: 0; width: 100%; height: 100%; }
+.logo-tile.on-photo .cap-ph { position: absolute; left: 8px; right: 8px; bottom: 8px; background: rgba(15, 21, 40, .72); color: #fff;
+  border-radius: 4px; padding: 2px 6px; font-size: 12px; }
+.sizes { display: flex; align-items: flex-end; gap: 16px; }
+.app-icon { width: 96px; height: 96px; border-radius: 22px; background: #22305C; display: flex; align-items: center; justify-content: center; }
+
+@media (max-width: 720px) {
+  main { padding: 16px 12px 64px; }
+  .page-head-in, .toc { padding-left: 12px; padding-right: 12px; }
+  .stage { padding: 16px 12px; }
+  .type-row { grid-template-columns: 1fr; gap: 4px; }
+  .navpane { width: 200px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+
+<!-- Спрайт иконок: штрих 1,75, скругления. Отрисованы для макета, не из сторонних наборов (кроме шестерёнки по образцу Feather, MIT). -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9A5A"/><stop offset="1" stop-color="#E5484D"/></linearGradient></defs>
+  <symbol id="i-photos" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.75"/><path d="M21 15.5l-5-5L5 21"/></symbol>
+  <symbol id="i-storage" viewBox="0 0 24 24"><path d="M7 19h10.5a4.5 4.5 0 0 0 .6-8.96A6.5 6.5 0 0 0 5.6 9.2 5 5 0 0 0 7 19z"/></symbol>
+  <symbol id="i-cleanup" viewBox="0 0 24 24"><path d="M20 4l-6.5 6.5"/><path d="M9.6 9.4l5 5-1.4 1.4C11 18 7.5 20 3.5 20.5 4 16.5 6 13 8.2 10.8z"/><path d="M7 16.5l2 2"/></symbol>
+  <symbol id="i-devices" viewBox="0 0 24 24"><rect x="2.5" y="8" width="7" height="12" rx="1.5"/><path d="M12.5 17h9"/><path d="M13 14V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v8"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5"/><path d="M10 12.5h4"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6v.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16.4v.01"/></symbol>
+  <symbol id="i-retry" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4.5v5h-5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19.5h20"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9.5 7V4.5h5V7"/><path d="M6 7l1 13h10l1-13"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h4.8l2 2.2h8.2A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></symbol>
+  <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M8.6 16.2a5 5 0 0 1 6.8 0"/><path d="M5.2 12.6a10 10 0 0 1 4.2-2.3"/><path d="M18.8 12.6a10 10 0 0 0-2.2-1.6"/><path d="M2 9a15 15 0 0 1 4.3-2.7"/><path d="M22 9a15 15 0 0 0-10.5-4"/><path d="M12 19.8v.01"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.5v13M15 5.5v13"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 3.5v10"/><path d="M8 9.5l4 4 4-4"/><rect x="3.5" y="15.5" width="17" height="5" rx="1.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M12 6v.01M12 12v.01M12 18v.01" stroke-width="3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4.5v5h-5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.7-2.5h5l1.7 2.5h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M4.5 19.5h15"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0"/><path d="M5.2 12.6a10 10 0 0 1 13.6 0"/><path d="M8.6 16.2a5 5 0 0 1 6.8 0"/><path d="M12 19.8v.01"/></symbol>
+
+  <!-- Знак «свет в окне»: окно с переплётом, залитое «Лампой», с тёмным контуром «Чернила». Цвета не меняются с темой. -->
+  <symbol id="lamp" viewBox="0 0 24 24"><rect x="4" y="2.75" width="16" height="18.5" rx="2.25" fill="#F2A93B" stroke="#172036" stroke-width="2"/><path d="M12 3v18M4.5 11.25h15" stroke="#172036" stroke-width="2" fill="none"/></symbol>
+
+  <!-- Примеры фото (контент, а не интерфейс) -->
+  <symbol id="ph-sea" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#9CB8D3"/><circle cx="70" cy="34" r="10" fill="#F4E4C8"/><rect y="56" width="100" height="44" fill="#3D6787"/><path d="M0 80h100v20H0z" fill="#D9C3A0"/><path d="M8 62h26M50 68h30" stroke="#A9C3D9" stroke-width="2"/></symbol>
+  <symbol id="ph-hills" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#C9D9E4"/><path d="M0 64L30 40l22 18 18-14 30 22v34H0z" fill="#6F9271"/><path d="M0 80l26-10 30 8 44-12v34H0z" fill="#4A6B4D"/><path d="M60 30l6-6 6 6" fill="none" stroke="#FFFFFF" stroke-width="1.5"/></symbol>
+  <symbol id="ph-city" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#2D3B63"/><rect x="8" y="44" width="18" height="56" fill="#1B2440"/><rect x="30" y="30" width="22" height="70" fill="#22305C"/><rect x="56" y="50" width="16" height="50" fill="#1B2440"/><rect x="76" y="38" width="18" height="62" fill="#26345E"/><path d="M34 38h4v4h-4zM44 46h4v4h-4zM80 46h4v4h-4zM12 52h4v4h-4zM60 58h4v4h-4z" fill="#E7D7B4"/></symbol>
+  <symbol id="ph-kid" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#E8D8C6"/><circle cx="50" cy="42" r="16" fill="#C99A7B"/><path d="M24 100c2-22 12-34 26-34s24 12 26 34z" fill="#C46F5A"/><path d="M34 36c4-12 28-12 32 0" fill="#5A4034"/></symbol>
+  <symbol id="ph-snow" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#EEF2F7"/><path d="M0 70l40-30 24 16 36-22v66H0z" fill="#B9C7D8"/><path d="M0 86l50-14 50 10v18H0z" fill="#FFFFFF"/><rect x="18" y="62" width="6" height="18" fill="#56614D"/><path d="M12 64l9-16 9 16z" fill="#3F5A45"/></symbol>
+</svg>
+
+<header class="page-head">
+  <div class="page-head-in">
+    <div class="brand">
+      <svg class="lamp-svg" width="28" height="28" aria-hidden="true"><use href="#lamp"/></svg>
+      <div>
+        <h1>Pixroost — основа дизайна</h1>
+        <p>Токены и общие компоненты · Android и Windows · v1.0</p>
+      </div>
+    </div>
+    <div class="controls">
+      <fieldset class="seg" id="view-switch">
+        <legend>Тема</legend>
+        <label><input type="radio" name="view" value="light" checked><span>Светлая</span></label>
+        <label><input type="radio" name="view" value="dark"><span>Тёмная</span></label>
+        <label><input type="radio" name="view" value="both"><span>Обе рядом</span></label>
+      </fieldset>
+      <label class="chk"><input type="checkbox" id="text-200"> Текст 200%</label>
+      <label class="chk"><input type="checkbox" id="show-targets"> Зоны касания</label>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Разделы страницы">
+    <a href="#colors">Цвета</a><a href="#type">Шрифты</a><a href="#space">Отступы, сетка, скругления</a>
+    <a href="#mark">Знак «свет в окне»</a><a href="#buttons">Кнопки</a><a href="#chips">Фильтры и вкладки</a>
+    <a href="#badges">Метки и статусы</a><a href="#rows">Строки</a><a href="#cards">Карточки</a>
+    <a href="#progress">Прогресс</a><a href="#toggles">Переключатели</a><a href="#fields">Поля</a>
+    <a href="#notes">Подсказки и ошибки</a><a href="#thumbs">Превью</a><a href="#nav">Навигация</a>
+    <a href="#dialogs">Диалоги</a><a href="#contrast">Контраст</a>
+  </nav>
+</header>
+
+<main id="main">
+  <p class="intro">Первый шаг восстановления макетов. Страница собрана заново по спецификации из
+    <code>docs/design/README.md</code> и <code>components.md</code>: те же токены, то же направление «Сумерки и свет в окне».
+    Переключатель вверху показывает компоненты в светлой, тёмной теме или в обеих рядом. «Текст 200%» увеличивает
+    только шрифт, «Зоны касания» подсвечивает зону нажатия: 48 dp на Android, 32 px на Windows.</p>
+  <p class="intro">Метка <span class="choice">выбор</span> — документы это не задают, значение выбрано при сборке и ждёт
+    подтверждения. Метка <span class="flag">не проходит</span> — пара не проходит WCAG AA, рядом — предложение.</p>
+
+  <!-- ======================= ЦВЕТА ======================= -->
+  <section class="doc-section" id="colors" aria-labelledby="h-colors">
+    <h2 id="h-colors">Цвета</h2>
+    <p class="lead">Одиннадцать токенов светлой палитры и их значения в тёмной теме. В коде тема — набор ролей
+      (<code>background</code>, <code>surface</code>, <code>text</code>, <code>primary</code>, <code>onPrimary</code>…), экраны берут роль,
+      а не цвет. Жёлтый «Лампа», метки мест на превью и QR-код с темой не меняются.</p>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Палитра: роль, светлая и тёмная тема</caption>
+        <thead><tr><th scope="col">Токен</th><th scope="col">Название</th><th scope="col">Роль в коде</th><th scope="col">Где используется</th><th scope="col">Светлая</th><th scope="col">Тёмная</th></tr></thead>
+        <tbody>
+          <tr><td><code>fog</code></td><td>Туман / Ночь</td><td><code>background</code></td><td>фон экранов</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#F3F5F9"></span>#F3F5F9</span></td><td><span class="sw-cell"><span class="sw" style="background:#0F1528"></span>#0F1528</span></td></tr>
+          <tr><td><code>paper</code></td><td>Бумага</td><td><code>surface</code></td><td>карточки, листы, панели</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</span></td><td><span class="sw-cell"><span class="sw" style="background:#182038"></span>#182038</span></td></tr>
+          <tr><td><code>ink</code></td><td>Чернила</td><td><code>text</code></td><td>основной текст и иконки</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#172036"></span>#172036</span></td><td><span class="sw-cell"><span class="sw" style="background:#E8ECF4"></span>#E8ECF4</span></td></tr>
+          <tr><td><code>slate</code></td><td>Сланец</td><td><code>textSecondary</code>, <code>outline</code></td><td>вторичный текст, контуры полей, выключенный переключатель</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#5B657A"></span>#5B657A</span></td><td><span class="sw-cell"><span class="sw" style="background:#A3ADC2"></span>#A3ADC2</span></td></tr>
+          <tr><td><code>line</code></td><td>Линия</td><td><code>line</code></td><td>разделители и рамки карточек (декоративные)</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#DDE2EB"></span>#DDE2EB</span></td><td><span class="sw-cell"><span class="sw" style="background:#2A3350"></span>#2A3350</span></td></tr>
+          <tr><td><code>dusk</code></td><td>Сумерки</td><td><code>primary</code>, <code>focus</code></td><td>главное действие, выбор, прогресс, фокус</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#22305C"></span>#22305C</span></td><td><span class="sw-cell"><span class="sw" style="background:#9DB0F0"></span>#9DB0F0</span></td></tr>
+          <tr><td>—</td><td>Текст на главном</td><td><code>onPrimary</code></td><td>подпись главной кнопки, галочки</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</span></td><td><span class="sw-cell"><span class="sw" style="background:#0F1528"></span>#0F1528</span></td></tr>
+          <tr><td><code>dusk-tint</code></td><td>Сумерки светлые</td><td><code>tonal</code></td><td>тональные кнопки, выбранный пункт навигации, трек прогресса</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#E4E8F3"></span>#E4E8F3</span></td><td><span class="sw-cell"><span class="sw" style="background:#26345E"></span>#26345E</span></td></tr>
+          <tr><td>—</td><td>Текст на тональном <span class="choice">выбор</span></td><td><code>onTonal</code></td><td>подпись тональной кнопки, выбранный пункт</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#22305C"></span>#22305C</span></td><td><span class="sw-cell"><span class="sw" style="background:#E8ECF4"></span>#E8ECF4</span></td></tr>
+          <tr><td><code>lamp</code></td><td>Лампа</td><td><code>lamp</code></td><td>только «сохранено дома»</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#F2A93B"></span>#F2A93B</span></td><td><span class="sw-cell"><span class="sw" style="background:#F2A93B"></span>#F2A93B, не меняется</span></td></tr>
+          <tr><td><code>lamp-tint</code></td><td>Лампа светлая</td><td><code>lampTint</code></td><td>статус «сохранено», правило безопасности</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#FDF1DC"></span>#FDF1DC</span></td><td><span class="sw-cell"><span class="sw" style="background:#372C18"></span>#372C18</span></td></tr>
+          <tr><td><code>danger</code></td><td>Опасность</td><td><code>danger</code></td><td>только удаление</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#B42318"></span>#B42318</span></td><td><span class="sw-cell"><span class="sw" style="background:#FF8A7A"></span>#FF8A7A</span></td></tr>
+          <tr><td>—</td><td>Текст на опасном</td><td><code>onDanger</code></td><td>подпись опасной кнопки</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</span></td><td><span class="sw-cell"><span class="sw" style="background:#0F1528"></span>#0F1528</span></td></tr>
+          <tr><td><code>danger-tint</code></td><td>Опасность светлая</td><td><code>dangerTint</code></td><td>фон метки «Почти заполнен»</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#FBE9E7"></span>#FBE9E7</span></td><td><span class="sw-cell"><span class="sw" style="background:#3D1C22"></span>#3D1C22</span></td></tr>
+          <tr><td>—</td><td>Инверсия</td><td><code>inverse</code></td><td>уведомление внизу экрана</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#172036"></span>#172036</span></td><td><span class="sw-cell"><span class="sw" style="background:#E8ECF4"></span>#E8ECF4</span></td></tr>
+          <tr><td>—</td><td>Текст на инверсии <span class="choice">выбор</span></td><td><code>onInverse</code></td><td>текст уведомления внизу экрана</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</span></td><td><span class="sw-cell"><span class="sw" style="background:#172036"></span>#172036</span></td></tr>
+          <tr><td>—</td><td>Акцент на инверсии</td><td><code>inverseAccent</code></td><td>действие в уведомлении («Повторить сейчас»)</td>
+            <td><span class="sw-cell"><span class="sw" style="background:#9DB0F0"></span>#9DB0F0</span></td><td><span class="sw-cell"><span class="sw" style="background:#22305C"></span>#22305C</span></td></tr>
+          <tr><td>—</td><td>Затемнение <span class="choice">выбор</span></td><td><code>scrim</code></td><td>под листами и диалогами</td>
+            <td><span class="sw-cell"><span class="sw" style="background:rgba(15,21,40,.48)"></span>#0F1528, 48%</span></td><td><span class="sw-cell"><span class="sw" style="background:rgba(5,8,18,.64)"></span>#050812, 64%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Контраст всех пар, которые встречаются на этой странице, — в разделе <a href="#contrast">«Контраст»</a>.
+      Состояния (наведение, нажатие, недоступно) — не отдельные цвета, а слои поверх ролей, см. <a href="#buttons">«Кнопки»</a>.</p>
+  </section>
+
+  <!-- ======================= ШРИФТЫ ======================= -->
+  <section class="doc-section" id="type" aria-labelledby="h-type">
+    <h2 id="h-type">Шрифты</h2>
+    <p class="lead">Unbounded 600 — крупные заголовки и итоговые цифры. Onest 400 и 600 — весь интерфейс. Две шкалы по четыре
+      размера: телефон 28, 18, 15, 13 и ПК 28, 20, 14, 12 (как Fluent). Высоты строк и что набирается Unbounded, а что Onest
+      на размере 28, — <span class="choice">выбор</span>. Шрифты — SIL OFL 1.1, в приложении лежат в сборке.</p>
+    <div class="pair">
+      <div class="stage" data-theme="light">
+        <div class="plat">
+          <div class="a">
+            <p class="plat-title">Телефон и планшет · Android</p>
+            <div class="type-row"><div class="meta">28 / 36<br>Unbounded 600<br>крупный заголовок, итоговая цифра</div>
+              <div class="sample" style="font:600 1.75rem/1.29 var(--f-display);letter-spacing:-.01em">Освобождено 6,3&nbsp;ГБ</div></div>
+            <div class="type-row"><div class="meta">18 / 24<br>Onest 600<br>заголовок блока</div>
+              <div class="sample" style="font:600 1.125rem/1.33 var(--f-ui)">Можно освободить в Яндекс Диске и OneDrive</div></div>
+            <div class="type-row"><div class="meta">15 / 22<br>Onest 400 и 600<br>текст и кнопки</div>
+              <div class="sample" style="font:400 .9375rem/1.47 var(--f-ui)">Яндекс Диск почти заполнен: 9,6 из 10&nbsp;ГБ. <b style="font-weight:600">Разобрать</b></div></div>
+            <div class="type-row"><div class="meta">13 / 18<br>Onest 400<br>подписи</div>
+              <div class="sample" style="font:400 .8125rem/1.38 var(--f-ui);color:var(--text2)">Проверено на ПК «Дом» в 14:20 · 4,2&nbsp;МБ</div></div>
+          </div>
+          <div class="w">
+            <p class="plat-title">ПК · Windows</p>
+            <div class="type-row"><div class="meta">28 / 36<br>Unbounded 600<br>заголовок страницы</div>
+              <div class="sample" style="font:600 1.75rem/1.29 var(--f-display);letter-spacing:-.01em">Хранилища</div></div>
+            <div class="type-row"><div class="meta">20 / 28<br>Onest 600<br>подзаголовок</div>
+              <div class="sample" style="font:600 1.25rem/1.4 var(--f-ui)">Импорт Google Takeout</div></div>
+            <div class="type-row"><div class="meta">14 / 20<br>Onest 400 и 600<br>текст</div>
+              <div class="sample" style="font:400 .875rem/1.43 var(--f-ui)">Принято 18 412 фото и видео, 212&nbsp;ГБ. <b style="font-weight:600">Показать в проводнике</b></div></div>
+            <div class="type-row"><div class="meta">12 / 16<br>Onest 400<br>подписи</div>
+              <div class="sample" style="font:400 .75rem/1.33 var(--f-ui);color:var(--text2)">D:\Фото\Pixroost\2026\05 · свободно 812&nbsp;ГБ</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">Числа и единицы — с неразрывным пробелом («6,3&nbsp;ГБ», «1&nbsp;240»), чтобы не отрывались при переносе (review-findings, Т9).
+      Разряды — пробелом, дробная часть — запятой. КАПС в подписях не используем.</p>
+  </section>
+
+  <!-- ======================= ОТСТУПЫ, СЕТКА, СКРУГЛЕНИЯ ======================= -->
+  <section class="doc-section" id="space" aria-labelledby="h-space">
+    <h2 id="h-space">Отступы, сетка и скругления</h2>
+    <p class="lead">Отступы кратны 4 и 8. Скругления: 4 — элементы Windows, 8 — превью, 16 — плашки и метки, 20 — карточки,
+      28 — листы, полное — кнопки на телефоне. Цели касания: Android 48 dp (документы требуют ≥ 44, Material — 48; страница
+      проверяет по 48), ПК ≥ 32 px.</p>
+    <div class="pair">
+      <div class="stage" data-theme="light">
+        <h3 style="margin-top:0">Отступы</h3>
+        <div class="space-row"><span class="lbl">4</span><span class="blk" style="width:4px"></span><span class="use">иконка и подпись в метке</span></div>
+        <div class="space-row"><span class="lbl">8</span><span class="blk" style="width:8px"></span><span class="use">между кнопками, между чипами</span></div>
+        <div class="space-row"><span class="lbl">12</span><span class="blk" style="width:12px"></span><span class="use">иконка и текст в строке, между карточками в списке</span></div>
+        <div class="space-row"><span class="lbl">16</span><span class="blk" style="width:16px"></span><span class="use">поля экрана телефона, внутри карточки, между группами настроек (И5)</span></div>
+        <div class="space-row"><span class="lbl">24</span><span class="blk" style="width:24px"></span><span class="use">между блоками экрана, поля страницы на ПК, внутри диалога</span></div>
+        <div class="space-row"><span class="lbl">32</span><span class="blk" style="width:32px"></span><span class="use">пустое состояние, отступ над крупным заголовком</span></div>
+        <div class="space-row"><span class="lbl">48</span><span class="blk" style="width:48px"></span><span class="use">зона касания на Android, высота строки статуса</span></div>
+
+        <h3>Сетка <span class="choice">выбор</span></h3>
+        <div class="grid-demo">
+          <div class="gd-phone" aria-label="Схема экрана телефона: поля 16, сетка превью в 4 колонки с зазором 2">
+            <span class="m" style="left:0"></span><span class="m" style="right:0"></span>
+            <div class="blk"></div><div class="blk" style="width:60%"></div>
+            <div class="gt"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="blk"></div>
+          </div>
+          <div class="gd-win" aria-label="Схема окна Windows: навигация слева, контент с полями 24, панель «Где лежит» справа">
+            <div class="np">NavigationPane<br>248 px</div>
+            <div class="ct">поля 24 · превью 112 px, зазор 4
+              <div class="gw"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="pn">«Где лежит»<br>320 px</div>
+          </div>
+        </div>
+        <p class="note">Телефон: поля экрана 16 (жёлтые полосы), блоки через 24, лента — 4 колонки превью от края до края с зазором 2.
+          Windows: навигация 248, контент с полями 24, превью 112 с зазором 4, панель деталей 320.</p>
+
+        <h3>Скругления</h3>
+        <div class="radii">
+          <div class="radius-tile"><div class="shape" style="border-radius:4px"></div><b>4</b><span class="use">кнопки, поля, диалог Windows</span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:8px"></div><b>8</b><span class="use">превью; чипы Android, карточки Windows <span class="choice">выбор</span></span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:16px"></div><b>16</b><span class="use">плашки статуса, метки, подсказки</span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:20px"></div><b>20</b><span class="use">карточки и списки на телефоне</span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:28px 28px 0 0"></div><b>28</b><span class="use">нижние листы, диалоги Android</span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:999px;height:44px;margin:14px 0"></div><b>полное</b><span class="use">кнопки и переключатели на телефоне</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ЗНАК ======================= -->
+  <section class="doc-section" id="mark" aria-labelledby="h-mark">
+    <h2 id="h-mark">Знак «свет в окне»</h2>
+    <p class="lead">Окно с переплётом, залитое «Лампой», с тёмным контуром «Чернила». Отмечает только то, что уже лежит на ПК
+      пользователя и проверено: метку места на превью, статус «Всё сохранено», строку «ПК „Дом“» в списке копий, итог уборки.
+      Жёлтый на белом — 2,0:1, поэтому контур обязателен. Пропорции переплёта (крестом, верхняя створка короче) — <span class="choice">выбор</span>.</p>
+    <div class="pair">
+      <div class="stage" data-theme="light">
+        <div class="logo-grid">
+          <div class="logo-tile"><div class="sizes">
+            <svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>
+            <svg class="lamp-svg" width="20" height="20" aria-hidden="true"><use href="#lamp"/></svg>
+            <svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg>
+            <svg class="lamp-svg" width="48" height="48" aria-hidden="true"><use href="#lamp"/></svg>
+            <svg class="lamp-svg" width="72" height="72" aria-hidden="true"><use href="#lamp"/></svg></div>
+            14 · 20 · 24 · 48 · 72 на «Бумаге»</div>
+          <div class="logo-tile on-bg"><svg class="lamp-svg" width="48" height="48" aria-hidden="true"><use href="#lamp"/></svg>на фоне экрана</div>
+          <div class="logo-tile on-photo">
+            <svg class="photo" aria-hidden="true"><use href="#ph-snow"/></svg>
+            <span class="src src-20 src-lamp" style="position:absolute;left:8px;top:8px" aria-hidden="true"><svg class="lamp-svg" width="14" height="14"><use href="#lamp"/></svg></span>
+            <span class="cap-ph">метка на светлом фото</span>
+          </div>
+          <div class="logo-tile on-photo">
+            <svg class="photo" aria-hidden="true"><use href="#ph-city"/></svg>
+            <span class="src src-20 src-lamp" style="position:absolute;left:8px;top:8px" aria-hidden="true"><svg class="lamp-svg" width="14" height="14"><use href="#lamp"/></svg></span>
+            <span class="cap-ph">метка на тёмном фото</span>
+          </div>
+          <div class="logo-tile">
+            <div class="app-icon"><svg class="lamp-svg" width="56" height="56" aria-hidden="true"><use href="#lamp"/></svg></div>
+            Предложение иконки приложения:<br>знак на «Сумерках». Не утверждено
+          </div>
+          <div class="logo-tile">
+            <svg width="72" height="72" viewBox="0 0 128 128" role="img" aria-label="Временный логотип Pixroost">
+              <rect width="128" height="128" rx="30" fill="url(#logo-bg)"/>
+              <path d="M30 60 L64 32 L98 60 V92 a8 8 0 0 1 -8 8 H38 a8 8 0 0 1 -8 -8 Z" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="78" cy="64" r="6" fill="#FFFFFF"/>
+              <path d="M42 90 L57 72 L67 83 L75 76 L88 90 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+            </svg>
+            Временная заглушка<br><code>docs/assets/logo.svg</code>: градиент<br>и коралловый цвет вне направления
+          </div>
+        </div>
+        <p class="note">Знак в интерфейсе скрыт от скринридера: рядом всегда есть текст («Проверено», «ПК „Дом“»). На тёмной теме контур
+          сливается с фоном, но сам жёлтый даёт 8,1:1 к поверхности — знак читается.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- @components -->
+
+</main>
+
+<script>
+(function () {
+  // Тёмная копия каждой .stage: те же компоненты в тёмной теме. id получают суффикс, ссылки на них обновляются.
+  var stages = document.querySelectorAll('.stage[data-theme="light"]');
+  stages.forEach(function (st) {
+    var pair = st.parentElement.classList.contains('pair') ? st.parentElement : null;
+    if (!pair) { pair = document.createElement('div'); pair.className = 'pair'; st.parentNode.insertBefore(pair, st); pair.appendChild(st); }
+    var lbl = document.createElement('p'); lbl.className = 'stage-label'; lbl.textContent = 'Светлая тема';
+    st.insertBefore(lbl, st.firstChild);
+    var dk = st.cloneNode(true);
+    dk.setAttribute('data-theme', 'dark');
+    dk.querySelector('.stage-label').textContent = 'Тёмная тема';
+    dk.querySelectorAll('[id]').forEach(function (el) { el.id = el.id + '-dk'; });
+    ['for', 'aria-labelledby', 'aria-describedby', 'aria-controls'].forEach(function (a) {
+      dk.querySelectorAll('[' + a + ']').forEach(function (el) {
+        el.setAttribute(a, el.getAttribute(a).split(' ').map(function (x) { return x + '-dk'; }).join(' '));
+      });
+    });
+    dk.querySelectorAll('input[name]').forEach(function (el) { el.name = el.name + '-dk'; });
+    pair.appendChild(dk);
+  });
+
+  var root = document.documentElement;
+  document.querySelectorAll('input[name="view"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      root.setAttribute('data-view', r.value);
+      root.setAttribute('data-theme', r.value === 'dark' ? 'dark' : 'light');
+    });
+  });
+  document.getElementById('text-200').addEventListener('change', function (e) { root.classList.toggle('text-200', e.target.checked); });
+  document.getElementById('show-targets').addEventListener('change', function (e) { root.classList.toggle('show-targets', e.target.checked); });
+
+  // Живые переключатели и чипы: меняют состояние по нажатию, у образцов состояний (.demo) — нет.
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[role="switch"]:not(.demo)');
+    if (t && !t.disabled) {
+      var on = t.getAttribute('aria-checked') !== 'true';
+      t.setAttribute('aria-checked', String(on));
+      var v = t.querySelector('.val'); if (v) v.textContent = on ? 'Вкл.' : 'Выкл.';
+    }
+    var c = e.target.closest('button[aria-pressed]:not(.demo)');
+    if (c && !c.disabled) {
+      var group = c.closest('[data-single]');
+      if (group) group.querySelectorAll('button[aria-pressed]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      c.setAttribute('aria-pressed', group ? 'true' : String(c.getAttribute('aria-pressed') !== 'true'));
+    }
+    var tab = e.target.closest('[role="tab"]:not(.demo)');
+    if (tab) {
+      tab.parentElement.querySelectorAll('[role="tab"]').forEach(function (b) { b.setAttribute('aria-selected', 'false'); b.tabIndex = -1; });
+      tab.setAttribute('aria-selected', 'true'); tab.tabIndex = 0;
+    }
+  });
+  // Стрелки во вкладках
+  document.addEventListener('keydown', function (e) {
+    var tab = e.target.closest('[role="tab"]');
+    if (!tab || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+    var tabs = Array.prototype.slice.call(tab.parentElement.querySelectorAll('[role="tab"]'));
+    var i = tabs.indexOf(tab) + (e.key === 'ArrowRight' ? 1 : -1);
+    var next = tabs[(i + tabs.length) % tabs.length]; next.focus(); next.click(); e.preventDefault();
+  });
+  // Ссылки-образцы не уводят со страницы
+  document.addEventListener('click', function (e) { var a = e.target.closest('a[href="#"]'); if (a) e.preventDefault(); });
+})();
+</script>
+</body>
+</html>
