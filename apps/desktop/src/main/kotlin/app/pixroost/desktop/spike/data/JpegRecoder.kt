@@ -16,7 +16,7 @@ fun recode(image: BufferedImage, variant: Variant): BufferedImage {
     val scaled = image.scaled(
         (image.width * factor).roundToInt().coerceAtLeast(1),
         (image.height * factor).roundToInt().coerceAtLeast(1),
-    )
+    ).asRgb()
     val bytes = ByteArrayOutputStream()
     val writer = ImageIO.getImageWritersByFormatName("jpeg").next()
     ImageIO.createImageOutputStream(bytes).use { output ->

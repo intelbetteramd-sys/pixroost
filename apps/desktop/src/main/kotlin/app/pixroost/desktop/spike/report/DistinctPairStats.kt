@@ -8,7 +8,7 @@ import app.pixroost.desktop.spike.data.PhotoSample
  * the false pairs scale with the library size, and how many random pairs the index would hand over as candidates.
  */
 fun distinctPairLines(samples: List<PhotoSample>): List<String> {
-    val counts = DistinctPairCounts()
+    val counts = DistinctPairCounts(samples.size)
     for (i in samples.indices) {
         for (j in i + 1 until samples.size) counts.add(samples[i], samples[j])
     }

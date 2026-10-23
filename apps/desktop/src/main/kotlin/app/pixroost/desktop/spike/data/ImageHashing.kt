@@ -9,4 +9,4 @@ fun greyOf(image: BufferedImage): FloatArray = image.toGreyBox(PhashConstants.DC
 
 /** pHash of [image]; pass [grey] when it is already computed. */
 fun hashesOf(image: BufferedImage, grey: FloatArray = greyOf(image)) =
-    ImageHashes(hash = perceptualHash(grey), aspect = image.width.toDouble() / image.height)
+    ImageHashes(hash = perceptualHash(grey), width = image.width, height = image.height)

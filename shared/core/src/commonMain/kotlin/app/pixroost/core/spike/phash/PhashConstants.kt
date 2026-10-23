@@ -20,4 +20,22 @@ object PhashConstants {
      * flat. Its pHash carries no picture, so blank frames take no part in matching.
      */
     const val BLANK_DEVIATION = 0.02
+
+    /**
+     * Two sizes have the same proportions when their aspect ratios differ by at most this share plus one pixel of
+     * the smaller side (see [proportionsMatch]).
+     */
+    const val PROPORTION_TOLERANCE = 0.01
+
+    const val MILLIS_IN_SECOND = 1000L
+    const val SECONDS_IN_MINUTE = 60
+    const val MINUTES_IN_HOUR = 60
+
+    /** EXIF orientation values: 1 is the normal one, 2–8 mirror or rotate; 5–8 swap width and height. */
+    const val ORIENTATION_FIRST_TRANSFORM = 2
+    const val ORIENTATION_FIRST_SWAP = 5
+    const val ORIENTATION_LAST = 8
+
+    /** Confidence 95 %: with no hit in N trials the expected count is below 3 (the rule of three). */
+    const val RULE_OF_THREE = 3.0
 }

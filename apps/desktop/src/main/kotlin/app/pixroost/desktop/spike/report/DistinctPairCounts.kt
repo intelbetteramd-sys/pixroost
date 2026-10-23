@@ -6,10 +6,13 @@ import app.pixroost.core.spike.phash.sharesLshBand
 import app.pixroost.desktop.spike.data.PhotoSample
 
 /** What pairs of different photos look like to the hash: close hashes, the rule, index candidates. */
-class DistinctPairCounts {
+class DistinctPairCounts(val photos: Int) {
     var pairs = 0
     var timedPairs = 0
     val withinDistance = IntArray(ReportConstants.FALSE_DISTANCES.size)
+
+    /** The same, only for pairs shot within a minute of each other: these grow linearly with the library. */
+    val withinDistanceBurst = IntArray(ReportConstants.FALSE_DISTANCES.size)
     var sameShotBurst = 0
     var sameShotRule = 0
     var similarByHash = 0
@@ -24,7 +27,9 @@ class DistinctPairCounts {
         val (hashA, hashB) = a.original.hash to b.original.hash
         val distance = hammingDistance(hashA, hashB)
         ReportConstants.FALSE_DISTANCES.forEachIndexed { index, limit ->
-            if (distance <= limit) withinDistance[index]++
+            if (distance > limit) return@forEachIndexed
+            withinDistance[index]++
+            if (gap <= ReportConstants.SIMILAR_MILLIS) withinDistanceBurst[index]++
         }
         if (distance <= ReportConstants.SAME_SHOT_DISTANCE) {
             if (gap <= ReportConstants.SIMILAR_MILLIS) sameShotBurst++

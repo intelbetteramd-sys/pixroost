@@ -8,6 +8,9 @@ object DataConstants {
     const val MAX_PARALLEL = 3
     const val NANOS_IN_MILLI = 1_000_000L
 
+    /** EXIF tag 0x9011 `OffsetTimeOriginal`, a string such as "+03:00". */
+    const val TAG_OFFSET_TIME_ORIGINAL = 0x9011
+
     const val HALF_SCALE = 0.5
     const val HALF_QUALITY = 0.9f
     const val LOW_QUALITY = 0.6f

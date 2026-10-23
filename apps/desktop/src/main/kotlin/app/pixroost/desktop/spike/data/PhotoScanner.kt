@@ -1,11 +1,11 @@
 package app.pixroost.desktop.spike.data
 
+import app.pixroost.core.spike.phash.resolveShotTimes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.atomic.AtomicInteger
 import javax.imageio.ImageIO
 
@@ -22,43 +22,52 @@ class PhotoScanner {
         val startedAt = System.currentTimeMillis()
         val all = folder.walkTopDown().filter { it.isFile }.toList()
         val heic = all.count { it.extension.lowercase() in DataConstants.HEIC }
-        val photos = all.filter { it.extension.lowercase() in DataConstants.DECODABLE }
-            .sortedBy { it.path }
-            .take(DataConstants.MAX_PHOTOS)
+        val decodable = all.filter { it.extension.lowercase() in DataConstants.DECODABLE }.sortedBy { it.path }
+        val photos = decodable.take(DataConstants.MAX_PHOTOS)
         val done = AtomicInteger()
-        val samples = photos.map { file ->
-            async(dispatcher) { sample(file).also { onProgress(done.incrementAndGet(), photos.size) } }
+        val samples = photos.mapIndexed { index, file ->
+            async(dispatcher) {
+                sampleOrNull(index + 1, file.relativeTo(folder).path, file)
+                    .also { onProgress(done.incrementAndGet(), photos.size) }
+            }
         }.awaitAll()
+        val read = samples.filterNotNull()
+        val shotTimes = resolveShotTimes(read.map { it.wallTime })
         ScanResult(
-            samples = samples.filterNotNull(),
-            found = photos.size,
+            samples = read.mapIndexed { index, sample -> sample.copy(shotTimeMillis = shotTimes[index]) },
+            found = decodable.size,
+            taken = photos.size,
             skippedHeic = heic,
-            failed = samples.count { it == null },
+            failedNumbers = samples.indices.filter { samples[it] == null }.map { it + 1 },
             wallMillis = System.currentTimeMillis() - startedAt,
         )
     }
 
-    private fun sample(file: File): PhotoSample? {
+    /** A bad file of any kind (broken data, unsupported variant, out of memory) must never stop the whole scan. */
+    private fun sampleOrNull(number: Int, name: String, file: File): PhotoSample? =
+        runCatching { sample(number, name, file) }.getOrNull()
+
+    private fun sample(number: Int, name: String, file: File): PhotoSample {
         val startedAt = System.nanoTime()
-        val image = try {
-            ImageIO.read(file)
-        } catch (_: IOException) {
-            null
-        } ?: return null
+        val orientation = exifOrientation(file)
+        val image = ImageIO.read(file)?.oriented(orientation) ?: error("not an image")
         val decodedAt = System.nanoTime()
         val grey = greyOf(image)
         val original = hashesOf(image, grey)
         val hashedAt = System.nanoTime()
         return PhotoSample(
+            number = number,
+            name = name,
             info = PhotoInfo(
                 width = image.width,
                 height = image.height,
                 extension = file.extension.lowercase(),
-                orientation = exifOrientation(file),
+                orientation = orientation,
                 grey = greyStatsOf(grey),
             ),
             original = original,
-            shotTimeMillis = shotTimeMillis(file),
+            wallTime = wallTimeOf(file),
+            shotTimeMillis = null,
             variants = Variant.entries.associateWith { hashesOf(recode(image, it)) },
             decodeMillis = (decodedAt - startedAt) / DataConstants.NANOS_IN_MILLI,
             hashMillis = (hashedAt - decodedAt) / DataConstants.NANOS_IN_MILLI,

@@ -57,5 +57,17 @@ fun PhashSpikeScreen(controller: PhashSpikeController, modifier: Modifier = Modi
         SelectionContainer {
             Text(state.report, style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace))
         }
+        if (state.pairNames.isNotEmpty()) {
+            Text(
+                "Имена файлов близких пар (только на экране, в отчёт не попадают)",
+                style = MaterialTheme.typography.titleSmall,
+            )
+            SelectionContainer {
+                Text(
+                    state.pairNames,
+                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                )
+            }
+        }
     }
 }

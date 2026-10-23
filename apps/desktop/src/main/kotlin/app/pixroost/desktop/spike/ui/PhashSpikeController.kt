@@ -2,6 +2,7 @@ package app.pixroost.desktop.spike.ui
 
 import app.pixroost.desktop.spike.data.PhotoScanner
 import app.pixroost.desktop.spike.report.buildPhashReport
+import app.pixroost.desktop.spike.report.closePairNameLines
 import app.pixroost.desktop.spike.ui.model.PhashSpikeUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -26,14 +27,20 @@ class PhashSpikeController(private val scope: CoroutineScope) {
             _state.update { it.copy(status = "папка не найдена") }
             return
         }
-        _state.update { it.copy(isRunning = true, status = "ищу фото…", report = "") }
+        _state.update { it.copy(isRunning = true, status = "ищу фото…", report = "", pairNames = "") }
         scope.launch {
             val result = scanner.scan(folder) { done, total ->
                 _state.update { it.copy(status = "обработано $done из $total") }
             }
             val report = buildPhashReport(result)
+            val pairNames = closePairNameLines(result.samples).joinToString("\n")
             _state.update {
-                it.copy(isRunning = false, status = "готово: ${result.samples.size} фото", report = report)
+                it.copy(
+                    isRunning = false,
+                    status = "готово: ${result.samples.size} фото",
+                    report = report,
+                    pairNames = pairNames,
+                )
             }
         }
     }
