@@ -700,6 +700,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .app-icon { width: 96px; height: 96px; border-radius: 22px; background: #22305C; display: flex; align-items: center; justify-content: center; }
 
 
+.a .card p.big-num, .w .card p.big-num { font: 600 var(--t-a-title)/1.25 var(--f-display); color: var(--text); margin: 0; letter-spacing: -.01em; }
 /* Сетка «вариант × состояние» */
 .sg-wrap { overflow-x: auto; padding: 6px 4px 8px; margin: 0 -4px; }
 .sg { display: grid; gap: 14px 16px; align-items: center; justify-items: start; }
@@ -1269,6 +1270,294 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
               <span class="grow"><strong>Принимаем с Pixel 8 Лены: 128 из 212</strong><small>Наведение</small></span></a>
             <a href="#" class="status s-pause sl fc is-focus"><svg class="ic ic-lead ic-20" aria-hidden="true"><use href="#i-pause"/></svg>
               <span class="grow"><strong>Приём на паузе</strong><small>Фокус · возобновится в 19:00</small></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= СТРОКИ ======================= -->
+  <section class="doc-section" id="rows" aria-labelledby="h-rows">
+    <h2 id="h-rows">Строки списков</h2>
+    <p class="lead"><code>CopyRow</code> — строка «Где лежит»: место, качество, размер, метка или <code>DeleteToggle</code>. Видимая подпись
+      чекбокса всегда «Удалить», для скринридера — «Удалить копию из Яндекс Диска» (Д3). Копия на ПК в уборке заблокирована: у неё
+      метка, а не чекбокс. <code>SettingsItem</code> — строка настроек на Android.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · CopyRow, строка 72</p>
+          <ul class="list" aria-label="Где лежит IMG_2041.jpg" style="max-width:420px">
+            <li><div class="row"><span class="src src-40 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="22" height="22"><use href="#lamp"/></svg></span>
+              <span class="txt"><span class="t1">ПК «Дом»</span><span class="t2">Оригинал · 4,2&nbsp;МБ · проверено в 14:20</span></span>
+              <span class="trail"><span class="badge b-lamp">Проверено</span></span></div></li>
+            <li><div class="row"><span class="src src-40" aria-hidden="true">Я</span>
+              <span class="txt"><span class="t1">Яндекс Диск</span><span class="t2">Копия · 4,2&nbsp;МБ · /Фотокамера</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+            <li><div class="row"><span class="src src-40" aria-hidden="true">O</span>
+              <span class="txt"><span class="t1">OneDrive</span><span class="t2">Тот же кадр хуже качеством · 1,1&nbsp;МБ</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию хуже качеством из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+            <li><div class="row"><span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>
+              <span class="txt"><span class="t1">Телефон</span><span class="t2">Pixel 8 · 4,2&nbsp;МБ</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" aria-label="Удалить копию с телефона"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+          </ul>
+          <p class="cap" style="margin:16px 0 8px">Нажата · фокус на чекбоксе · недоступна · ошибка</p>
+          <ul class="list" aria-label="Состояния строк" style="max-width:420px">
+            <li><button class="row clickable sl is-pressed"><span class="src src-40" aria-hidden="true">Я</span>
+              <span class="txt"><span class="t1">Яндекс Диск</span><span class="t2">Нажата: откроет файл в Диске</span></span>
+              <svg class="ic chev" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg></button></li>
+            <li><div class="row"><span class="src src-40" aria-hidden="true">O</span>
+              <span class="txt"><span class="t1">OneDrive</span><span class="t2">Копия · 4,2&nbsp;МБ</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из OneDrive"><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+            <li><div class="row is-disabled"><span class="src src-40" aria-hidden="true">D</span>
+              <span class="txt"><span class="t1">Dropbox</span><span class="t2">Нужно войти заново · в уборке не участвует</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" disabled aria-label="Удалить копию из Dropbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+            <li><div class="row row-err"><span class="src src-40" aria-hidden="true">Я</span>
+              <span class="txt"><span class="t1">Яндекс Диск</span><span class="t2">Не отвечает. Повторим через 5 минут</span></span>
+              <span class="trail"><button class="btn btn-link sl fc hit compact">Повторить</button></span></div></li>
+          </ul>
+
+          <p class="plat-title" style="margin-top:24px">Android · SettingsItem</p>
+          <ul class="list" aria-label="Автоархив" style="max-width:420px">
+            <li><div class="row"><svg class="ic lead-ic" aria-hidden="true"><use href="#i-send"/></svg>
+              <span class="txt"><span class="t1" id="si-auto">Автоархив на ПК «Дом»</span><span class="t2" id="si-auto-d">Новые фото уходят на ПК, когда телефон дома</span></span>
+              <button class="sw-a" role="switch" aria-checked="true" aria-labelledby="si-auto" aria-describedby="si-auto-d"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
+            <li><div class="row"><svg class="ic lead-ic" aria-hidden="true"><use href="#i-wifi"/></svg>
+              <span class="txt"><span class="t1" id="si-wifi">Только по Wi-Fi</span><span class="t2">Мобильный интернет не тратим</span></span>
+              <button class="sw-a" role="switch" aria-checked="true" aria-labelledby="si-wifi"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
+            <li><div class="row is-disabled"><svg class="ic lead-ic" aria-hidden="true"><use href="#i-play"/></svg>
+              <span class="txt"><span class="t1" id="si-video">Видео больше 1&nbsp;ГБ</span><span class="t2">Недоступно: сначала включите автоархив</span></span>
+              <button class="sw-a" role="switch" aria-checked="false" aria-labelledby="si-video" disabled><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
+            <li><a href="#" class="row clickable sl" style="text-decoration:none"><svg class="ic lead-ic" aria-hidden="true"><use href="#i-lock"/></svg>
+              <span class="txt"><span class="t1">Блокировка приложения</span><span class="t2">Выключена</span></span>
+              <svg class="ic" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg></a></li>
+          </ul>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · CopyRow в панели «Где лежит», строка 56</p>
+          <ul class="list" aria-label="Где лежит IMG_2041.jpg" style="max-width:460px">
+            <li><div class="row"><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span>
+              <span class="txt"><span class="t1">ПК «Дом» · оригинал</span><span class="t2 mono">D:\Фото\Pixroost\2026\05\IMG_2041.jpg</span></span>
+              <span class="trail"><span class="badge b-lamp">Проверено</span></span></div></li>
+            <li><div class="row sl is-hover"><span class="src src-32" aria-hidden="true">Я</span>
+              <span class="txt"><span class="t1">Яндекс Диск · 4,2&nbsp;МБ</span><span class="t2">Наведение · /Фотокамера</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+            <li><div class="row"><span class="src src-32" aria-hidden="true">O</span>
+              <span class="txt"><span class="t1">OneDrive · 1,1&nbsp;МБ</span><span class="t2">Фокус · тот же кадр хуже качеством</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" aria-label="Удалить копию хуже качеством из OneDrive"><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+            <li><div class="row is-disabled"><span class="src src-32" aria-hidden="true">D</span>
+              <span class="txt"><span class="t1">Dropbox · 4,2&nbsp;МБ</span><span class="t2">Недоступна: нужно войти заново</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" disabled aria-label="Удалить копию из Dropbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= КАРТОЧКИ ======================= -->
+  <section class="doc-section" id="cards" aria-labelledby="h-cards">
+    <h2 id="h-cards">Карточки</h2>
+    <p class="lead">Карточки — «Бумага» с декоративной рамкой «Линия», без теней; скругление 20 на телефоне и 8 на Windows
+      <span class="choice">выбор</span>. Цифры — из одного сценария: Яндекс Диск 4,1&nbsp;ГБ + OneDrive 2,2&nbsp;ГБ = 6,3&nbsp;ГБ,
+      1&nbsp;240 файлов; Dropbox ждёт входа и в уборке не участвует (К1).</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android</p>
+          <div class="cards-grid">
+            <div class="state"><span class="cap">ReclaimCard</span>
+              <div class="card">
+                <p class="big-num" style="font-size:var(--t-a-title)">6,3&nbsp;ГБ</p>
+                <p style="margin-top:4px;color:var(--text)"><b style="font-weight:600">можно освободить в Яндекс Диске и OneDrive</b></p>
+                <p>1&nbsp;240 копий. У каждой есть проверенная копия на ПК «Дом».</p>
+                <div class="actions"><button class="btn btn-lamp sl fc hit">Разобрать</button></div>
+              </div></div>
+
+            <div class="state"><span class="cap">CleanupGroupCard · по умолчанию</span>
+              <a href="#" class="card card-click sl fc" style="text-decoration:none;display:block">
+                <div class="head-row">
+                  <span class="thumbs-mini" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#ph-sea"/></svg><svg viewBox="0 0 100 100"><use href="#ph-hills"/></svg><svg viewBox="0 0 100 100"><use href="#ph-kid"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Точные копии</span>
+                    <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">1&nbsp;240 файлов · 6,3&nbsp;ГБ</span></span>
+                  <svg class="ic" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg>
+                </div>
+                <p style="font-size:var(--t-a-cap)">Выбраны сами: оставляем копию на ПК «Дом»</p>
+              </a></div>
+
+            <div class="state"><span class="cap">CleanupGroupCard · нажата</span>
+              <a href="#" class="card card-click sl fc is-pressed" style="text-decoration:none;display:block">
+                <div class="head-row">
+                  <span class="thumbs-mini" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#ph-city"/></svg><svg viewBox="0 0 100 100"><use href="#ph-snow"/></svg><svg viewBox="0 0 100 100"><use href="#ph-sea"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Тот же кадр хуже качеством</span>
+                    <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">86 файлов · 412&nbsp;МБ</span></span>
+                  <svg class="ic" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg>
+                </div>
+                <p style="font-size:var(--t-a-cap)">Решаете вы: покажем обе версии рядом</p>
+              </a></div>
+
+            <div class="state"><span class="cap">CleanupGroupCard · фокус</span>
+              <a href="#" class="card card-click sl fc is-focus" style="text-decoration:none;display:block">
+                <div class="head-row">
+                  <span class="thumbs-mini" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#ph-kid"/></svg><svg viewBox="0 0 100 100"><use href="#ph-kid"/></svg><svg viewBox="0 0 100 100"><use href="#ph-kid"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Похожие серии</span>
+                    <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">31 серия · 640 фото</span></span>
+                  <svg class="ic" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg>
+                </div>
+                <p style="font-size:var(--t-a-cap)">Решаете вы: лучшие кадры отмечены</p>
+              </a></div>
+
+            <div class="state"><span class="cap">CleanupGroupCard · нечего удалять</span>
+              <div class="card">
+                <div class="head-row">
+                  <span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">212 копий без проверенной копии</span>
+                    <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">Не выбираются</span></span>
+                </div>
+                <p style="font-size:var(--t-a-cap)">Нет проверенной копии — сначала отправьте на ПК.</p>
+                <div class="actions"><button class="btn btn-tonal sl fc hit">Отправить на ПК</button></div>
+              </div></div>
+
+            <div class="state"><span class="cap">CleanupResult</span>
+              <div class="card">
+                <div class="head-row"><svg class="lamp-svg" width="28" height="28" aria-hidden="true"><use href="#lamp"/></svg>
+                  <p class="big-num">Освобождено 6,3&nbsp;ГБ</p></div>
+                <div class="kv">
+                  <span class="src src-32" aria-hidden="true">Я</span><span>Яндекс Диск</span><span class="r">815 файлов · 4,1&nbsp;ГБ</span>
+                  <span class="src src-32" aria-hidden="true">O</span><span>OneDrive</span><span class="r">423 файла · 2,2&nbsp;ГБ</span>
+                </div>
+                <div class="note-box n-info" style="margin-top:12px;padding:10px 12px"><svg class="ic ic-20" aria-hidden="true"><use href="#i-alert"/></svg>
+                  <p>2 файла, 6&nbsp;МБ, не удалились: OneDrive не ответил.</p></div>
+                <p style="font-size:var(--t-a-cap)">Всё лежит в корзинах сервисов до 22 ноября.</p>
+                <div class="actions"><button class="btn btn-primary sl fc hit">Готово</button><button class="btn btn-secondary sl fc hit">Повторить</button></div>
+              </div></div>
+
+            <div class="state"><span class="cap">DeviceCard · в сети</span>
+              <div class="card">
+                <div class="head-row"><span class="src src-40 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="22" height="22"><use href="#lamp"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">ПК «Дом»</span>
+                    <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">В сети, дома · Windows 11</span></span>
+                  <span class="badge b-tonal">Автоархив</span></div>
+                <div class="prog" style="margin-top:16px;max-width:none">
+                  <div class="top"><strong>Отправляем 128 из 212</strong><span>64%</span></div>
+                  <div class="bar" role="progressbar" aria-label="Отправка на ПК «Дом»" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span class="fill" style="width:62%"></span><span class="rest"></span><span class="stop"></span></div>
+                </div>
+                <div class="actions"><button class="btn btn-secondary sl fc hit compact"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg>Пауза</button><button class="btn btn-link sl fc hit">Права</button></div>
+              </div></div>
+
+            <div class="state"><span class="cap">DeviceCard · не в сети</span>
+              <div class="card">
+                <div class="head-row"><span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-laptop"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Ноутбук «Работа»</span>
+                    <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">Не в сети 9 дней</span></span></div>
+                <p>Ждёт отправки: 2&nbsp;140 фото, 11,8&nbsp;ГБ. Уйдут сами, когда ноутбук появится в сети.</p>
+              </div></div>
+
+            <div class="state"><span class="cap">OfferCard</span>
+              <div class="card">
+                <div class="head-row"><span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-storage"/></svg></span>
+                  <span class="txt"><span class="h" style="display:block">Подключите облако</span></span></div>
+                <p>Покажем фото из Яндекс Диска, Dropbox или OneDrive в одной ленте и найдём копии.</p>
+                <div class="actions"><button class="btn btn-tonal sl fc hit">Подключить</button><button class="btn btn-link sl fc hit">Не сейчас</button></div>
+              </div></div>
+          </div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · SettingsCard, StatTile</p>
+          <div class="row-gap" style="max-width:640px">
+            <div class="card" style="display:flex;gap:16px;align-items:center;padding:12px 16px">
+              <svg class="ic ic-20" aria-hidden="true"><use href="#i-download"/></svg>
+              <span style="flex:1"><span class="h" style="display:block" id="sc-recv">Принимать фото с телефонов</span><span style="color:var(--text2);font-size:var(--t-w-cap)">Только в домашней сети, когда Pixroost открыт или свёрнут в трей</span></span>
+              <button class="sw-w" role="switch" aria-checked="true" aria-labelledby="sc-recv"><span class="track"></span><span class="val">Вкл.</span></button>
+            </div>
+            <div class="card sl is-hover" style="display:flex;gap:16px;align-items:center;padding:12px 16px">
+              <svg class="ic ic-20" aria-hidden="true"><use href="#i-folder"/></svg>
+              <span style="flex:1"><span class="h" style="display:block">Папка архива <span style="font-weight:400;color:var(--text2)">· наведение</span></span><span class="mono" style="color:var(--text2);font-size:var(--t-w-cap)">D:\Фото\Pixroost · свободно 812&nbsp;ГБ</span></span>
+              <button class="btn btn-secondary sl fc hit">Изменить</button>
+            </div>
+            <div class="card" style="display:flex;gap:16px;align-items:center;padding:12px 16px">
+              <svg class="ic ic-20" aria-hidden="true"><use href="#i-play"/></svg>
+              <span style="flex:1"><span class="h" style="display:block;color:color-mix(in srgb,var(--text) 38%,transparent)" id="sc-video">Принимать видео больше 4&nbsp;ГБ</span><span style="color:var(--text2);font-size:var(--t-w-cap)">Недоступно: на диске D: меньше 50&nbsp;ГБ</span></span>
+              <button class="sw-w" role="switch" aria-checked="false" aria-labelledby="sc-video" disabled><span class="track"></span><span class="val">Выкл.</span></button>
+            </div>
+          </div>
+          <div class="cards-grid" style="margin-top:16px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));max-width:640px">
+            <div class="card"><p class="big-num" style="font-size:var(--t-w-head);font-family:var(--f-display)">18&nbsp;412</p><p>фото и видео принято</p></div>
+            <div class="card"><p class="big-num" style="font-size:var(--t-w-head);font-family:var(--f-display)">212&nbsp;ГБ</p><p>в архиве</p></div>
+            <div class="card"><p class="big-num" style="font-size:var(--t-w-head);font-family:var(--f-display)">1&nbsp;904</p><p>дубля не копируем</p></div>
+          </div>
+          <p class="note"><code>StatTile</code>: число Unbounded 20 — третий размер Unbounded на ПК <span class="choice">выбор</span>; если держать
+            Unbounded только для 28, число набирается Onest 600 20.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ПРОГРЕСС ======================= -->
+  <section class="doc-section" id="progress" aria-labelledby="h-progress">
+    <h2 id="h-progress">Прогресс и заполненность</h2>
+    <p class="lead"><code>TransferProgress</code> — передача на ПК и проверка файлов. Пауза и обрыв — не красные: красный только для удаления.
+      <code>UsageBar</code> — занято и сколько можно освободить; жёлтый отрезок с тёмной кромкой (Д7), цифры продублированы текстом
+      и в имени полосы для скринридера.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · TransferProgress</p>
+          <div class="cards-grid">
+            <div class="prog"><div class="top"><strong>Отправляем на ПК «Дом»</strong><span>128 из 212</span></div>
+              <div class="bar" role="progressbar" aria-label="Отправка на ПК «Дом»" aria-valuemin="0" aria-valuemax="212" aria-valuenow="128" aria-valuetext="128 из 212 фото"><span class="fill" style="width:58%"></span><span class="rest"></span><span class="stop"></span></div>
+              <p class="sub">Идёт · осталось около 4 минут</p></div>
+            <div class="prog"><div class="top"><strong>Пауза: нет Wi-Fi</strong><span>128 из 212</span></div>
+              <div class="bar paused" role="progressbar" aria-label="Отправка на ПК «Дом», пауза" aria-valuemin="0" aria-valuemax="212" aria-valuenow="128"><span class="fill" style="width:58%"></span><span class="rest"></span><span class="stop"></span></div>
+              <p class="sub">Продолжим, когда телефон будет дома</p></div>
+            <div class="prog"><div class="top"><strong>Передача остановилась на 64%</strong></div>
+              <div class="bar paused" role="progressbar" aria-label="Отправка на ПК «Дом», остановлена" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span class="fill" style="width:62%"></span><span class="rest"></span><span class="stop"></span></div>
+              <p class="sub">Продолжится, когда ПК снова будет в сети</p></div>
+            <div class="prog"><div class="top"><strong>Проверяем файлы Яндекс Диска</strong><span>найдено 8&nbsp;412</span></div>
+              <div class="bar indet" role="progressbar" aria-label="Проверка файлов Яндекс Диска"><span class="fill"></span></div>
+              <p class="sub">Сколько всего — узнаем по ходу</p></div>
+            <div class="prog"><div class="top"><strong>Индексация медиатеки</strong><span>31&nbsp;208 из 52&nbsp;340</span></div>
+              <div class="bar" role="progressbar" aria-label="Индексация медиатеки" aria-valuemin="0" aria-valuemax="52340" aria-valuenow="31208"><span class="fill" style="width:58%"></span><span class="rest"></span><span class="stop"></span></div>
+              <p class="sub">Много фото: лента уже работает, проверка идёт в фоне</p></div>
+            <div class="prog"><div class="top"><strong style="display:inline-flex;gap:8px;align-items:center"><svg class="lamp-svg" width="18" height="18" aria-hidden="true"><use href="#lamp"/></svg>Всё сохранено на ПК «Дом»</strong><span>212 из 212</span></div>
+              <div class="bar" role="progressbar" aria-label="Отправка на ПК «Дом» завершена" aria-valuemin="0" aria-valuemax="212" aria-valuenow="212"><span class="fill" style="width:100%"></span></div>
+              <p class="sub">Готово в 14:20</p></div>
+          </div>
+
+          <p class="plat-title" style="margin-top:24px">Android · UsageBar</p>
+          <div class="cards-grid">
+            <div class="card"><div class="usage">
+              <div class="head-row"><span class="src src-40" aria-hidden="true">Я</span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Яндекс Диск</span><span style="color:var(--text2);font-size:var(--t-a-cap)">9,6 из 10&nbsp;ГБ</span></span><span class="badge b-danger">Почти заполнен</span></div>
+              <div class="ubar" role="img" aria-label="Яндекс Диск: занято 9,6 из 10 ГБ, из них можно освободить 4,1 ГБ"><i class="used full" style="width:55%"></i><i class="free" style="width:41%"></i><i class="gap"></i></div>
+              <ul class="legend"><li><i class="k-full"></i>Занято 9,6&nbsp;ГБ</li><li><i class="k-free"></i>Можно освободить 4,1&nbsp;ГБ</li></ul>
+              <div><button class="btn btn-lamp sl fc hit">Разобрать</button></div></div></div>
+            <div class="card"><div class="usage">
+              <div class="head-row"><span class="src src-40" aria-hidden="true">O</span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">OneDrive</span><span style="color:var(--text2);font-size:var(--t-a-cap)">3,4 из 5&nbsp;ГБ</span></span></div>
+              <div class="ubar" role="img" aria-label="OneDrive: занято 3,4 из 5 ГБ, из них можно освободить 2,2 ГБ"><i class="used" style="width:24%"></i><i class="free" style="width:44%"></i><i class="gap"></i></div>
+              <ul class="legend"><li><i class="k-used"></i>Занято 3,4&nbsp;ГБ</li><li><i class="k-free"></i>Можно освободить 2,2&nbsp;ГБ</li></ul></div></div>
+            <div class="card"><div class="usage">
+              <div class="head-row"><span class="src src-40" aria-hidden="true">D</span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Dropbox</span><span style="color:var(--text2);font-size:var(--t-a-cap)">Нужно войти заново</span></span></div>
+              <p style="margin:0">Данные на 12 октября. Остальные хранилища работают.</p>
+              <div><button class="btn btn-tonal sl fc hit">Войти</button></div></div></div>
+            <div class="card"><div class="usage">
+              <div class="head-row"><span class="src src-40 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="22" height="22"><use href="#lamp"/></svg></span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">ПК «Дом», диск D:</span><span style="color:var(--text2);font-size:var(--t-a-cap)">1,2 из 2&nbsp;ТБ · 52&nbsp;340 файлов</span></span></div>
+              <div class="ubar" role="img" aria-label="ПК «Дом», диск D: занято 1,2 из 2 ТБ"><i class="used" style="width:60%"></i><i class="gap"></i></div>
+              <ul class="legend"><li><i class="k-used"></i>Занято 1,2&nbsp;ТБ</li><li>Свободно 812&nbsp;ГБ</li></ul></div></div>
+          </div>
+          <p class="note">Между отрезками — зазор 2 цвета дорожки. В тёмной теме красный <code>#FF8A7A</code> и жёлтый <code>#F2A93B</code>
+            рядом дают только 1,15:1 <span class="flag">не проходит</span>, без зазора граница не видна. С зазором каждый отрезок
+            сравнивается с дорожкой: 5,4:1 и 6,2:1.</p>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · ProgressBar</p>
+          <div class="cards-grid">
+            <div class="prog"><div class="top"><strong>Принимаем с Pixel 8 Лены</strong><span>128 из 212</span></div>
+              <div class="bar" role="progressbar" aria-label="Приём с Pixel 8 Лены" aria-valuemin="0" aria-valuemax="212" aria-valuenow="128"><span class="fill" style="width:60%"></span><span class="rest"></span></div>
+              <p class="sub">Идёт · 2,1&nbsp;ГБ из 3,4&nbsp;ГБ</p></div>
+            <div class="prog"><div class="top"><strong>Приём на паузе</strong><span>128 из 212</span></div>
+              <div class="bar paused" role="progressbar" aria-label="Приём с Pixel 8 Лены, пауза" aria-valuemin="0" aria-valuemax="212" aria-valuenow="128"><span class="fill" style="width:60%"></span><span class="rest"></span></div>
+              <p class="sub">Телефон ушёл из домашней сети</p></div>
+            <div class="prog"><div class="top"><strong>Распаковываем Takeout</strong><span>шаг 2 из 4</span></div>
+              <div class="bar indet" role="progressbar" aria-label="Распаковка архива Google Takeout"><span class="fill"></span></div>
+              <p class="sub">takeout-20261012-001.zip · 48&nbsp;ГБ</p></div>
           </div>
         </div>
       </div>
