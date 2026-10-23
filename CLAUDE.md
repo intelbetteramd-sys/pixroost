@@ -40,6 +40,12 @@ do not change the visual direction without the maintainer's approval.
 - Docs are public: write them for any contributor. No personal details, no "the owner knows X" or similar
   reasoning; justify decisions by the project's needs.
 
+## Agent roles
+
+Claude Code roles for this repository live in `.claude/agents/`: `developer`, `reviewer`, `architect-pragmatist`
+and `architect-skeptic` (debate decisions that are hard to reverse), `designer`, `tester`, `researcher`.
+A lead session hands out issues to them and reports to the maintainer. Builds and checks run in CI only.
+
 ## Building in a cloud session
 
 - Project JDK is **25** (Gradle toolchain). UI rule: Compose everywhere; whatever Compose can't do well
