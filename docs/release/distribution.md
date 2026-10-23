@@ -80,7 +80,7 @@
 | Яндекс OAuth | приложение с доступом к Диску | Фаза 5 |
 | Dropbox | приложение + заявка на production (> 50 пользователей) | Фаза 5 → Фаза 7 |
 | Microsoft Entra | регистрация приложения | Фаза 5 |
-| Google Cloud | OAuth consent screen + **верификация** (подтверждённый сайт, политика конфиденциальности, иногда видео). Сайт на GitHub Pages скорее всего не подойдёт: `github.io` есть в [Public Suffix List](https://publicsuffix.org/list/public_suffix_list.dat), а Google [требует](https://support.google.com/cloud/answer/13464321?hl=en) подтвердить в Search Console домен верхнего уровня, который принадлежит разработчику (top private domain). Для верификации нужен свой домен; до неё приложение работает в режиме тестирования | начать в Фазе 5, занимает от нескольких дней до недель |
+| Google Cloud | OAuth consent screen + **верификация** (подтверждённый сайт, политика конфиденциальности, иногда видео). Сайт на GitHub Pages скорее всего не подойдёт: `github.io` есть в [Public Suffix List](https://publicsuffix.org/list/public_suffix_list.dat), а Google [требует](https://support.google.com/cloud/answer/13464321?hl=en) подтвердить в Search Console свой регистрируемый домен (top private domain: `example.com` для `sub.example.com`), а `github.io` своим не подтвердить. Для верификации нужен свой домен; до неё приложение работает в режиме тестирования | начать в Фазе 5, занимает от нескольких дней до недель |
 | Домен | `pixroost.app` или аналог — **не обязателен для сторов, обязателен для верификации Google**: идентификаторы приложений (`app.pixroost`) уникальны в сторах по принципу «кто первый», покупка домена для них не нужна | к верификации Google, Фаза 5 |
 
 ## Чек-лист перед публикацией v1.0
