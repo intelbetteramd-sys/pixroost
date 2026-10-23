@@ -30,28 +30,34 @@ private fun orientationTransform(tag: Int?, width: Int, height: Int): AffineTran
             transform.scale(-1.0, 1.0)
             transform.translate(-width.toDouble(), 0.0)
         }
+
         3 -> {
             transform.translate(width.toDouble(), height.toDouble())
             transform.rotate(PI)
         }
+
         4 -> {
             transform.scale(1.0, -1.0)
             transform.translate(0.0, -height.toDouble())
         }
+
         5 -> {
             transform.rotate(-PI / 2)
             transform.scale(-1.0, 1.0)
         }
+
         6 -> {
             transform.translate(height.toDouble(), 0.0)
             transform.rotate(PI / 2)
         }
+
         7 -> {
             transform.scale(-1.0, 1.0)
             transform.translate(-height.toDouble(), 0.0)
             transform.translate(0.0, width.toDouble())
             transform.rotate(-PI / 2)
         }
+
         8 -> {
             transform.translate(0.0, width.toDouble())
             transform.rotate(-PI / 2)
