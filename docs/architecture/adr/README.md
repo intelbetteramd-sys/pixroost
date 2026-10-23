@@ -18,6 +18,7 @@ ADR (Architecture Decision Record) — короткая запись о реше
 | [0008](0008-android-windows-first.md) | Сначала Android и Windows, iOS и macOS — позже | Принято |
 | [0009](0009-liquid-glass-native-navigation.md) | Liquid Glass на iOS и macOS: нативная навигация, экраны на Compose | Принято, уточняется спайками |
 | [0010](0010-room3.md) | Room 3 для локальной базы | Принято, заменяет 0004 |
+| [0011](0011-cleanup-safety-rule.md) | Удаление копий: только точная копия с явным хранителем | Принято |
 
 ## Как добавить
 
