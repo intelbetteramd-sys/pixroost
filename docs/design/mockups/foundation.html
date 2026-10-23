@@ -51,7 +51,7 @@
   --focus: #22305C;         /* review-findings.md, Д1 */
   --outline: #5B657A;       /* контуры полей и выключенного переключателя */
   --scrim: rgba(15, 21, 40, .48);   /* выбор */
-  --shadow: 0 8px 24px rgba(23, 32, 54, .16), 0 2px 6px rgba(23, 32, 54, .08); /* выбор: только листы и диалоги */
+  --shadow: 0 8px 24px rgba(23, 32, 54, .16), 0 2px 6px rgba(23, 32, 54, .08); /* выбор: листы, диалоги, снекбар, плавающая панель, подсказка Windows */
   color-scheme: light;
 }
 [data-theme="dark"] {
@@ -220,11 +220,11 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
    ============================================================ */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; margin: 0;
   cursor: pointer; text-decoration: none; white-space: nowrap; font-family: var(--f-ui); }
-.a .btn { min-height: 44px; padding: 10px 24px; border-radius: var(--r-full); font-size: var(--t-a-body);
-  font-weight: 600; line-height: 1.35; }
-.a .btn.compact { padding: 10px 16px; }
+.a .btn { min-height: 44px; padding: 11px 24px; border-radius: var(--r-full); font-size: var(--t-a-body);
+  font-weight: 600; line-height: 1.47; }
+.a .btn.compact { padding: 11px 16px; }
 .w .btn { min-height: 32px; padding: 5px 12px; border-radius: var(--r-win); font-size: var(--t-w-body);
-  font-weight: 400; line-height: 1.4; min-width: 96px; }
+  font-weight: 400; line-height: 1.43; min-width: 96px; }
 .w .btn.compact { min-width: 0; }
 .btn .ic { width: 18px; height: 18px; }
 .btn-primary { background: var(--primary); color: var(--on-primary); }
@@ -233,7 +233,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .w .btn-secondary { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
 .btn-danger { background: var(--danger); color: var(--on-danger); }
 .btn-link { background: transparent; color: var(--primary); }
-.a .btn-link { padding: 10px 12px; }
+.a .btn-link { padding: 11px 12px; }
 .w .btn-link { min-width: 0; padding: 5px 8px; text-decoration: underline; text-underline-offset: 3px; }
 .btn-lamp { background: var(--lamp); color: var(--ink-fixed); }
 .btn:disabled, .btn[aria-disabled="true"] { cursor: not-allowed; }
@@ -300,13 +300,13 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
   background: var(--tonal); color: var(--on-tonal); font-weight: 600; }
 .src-40 { width: 40px; height: 40px; font-size: var(--t-a-body); }
 .src-32 { width: 32px; height: 32px; font-size: var(--t-w-body); }
-.src-20 { width: 20px; height: 20px; font-size: 12px; background: #FFFFFF; color: #172036; box-shadow: 0 0 0 1px rgba(23, 32, 54, .5); }
+.src-20 { width: 20px; height: 20px; font-size: 13px; background: #FFFFFF; color: #172036; box-shadow: 0 0 0 1px rgba(23, 32, 54, .5); }
 .src .ic { width: 20px; height: 20px; }
 .src-20 .ic { width: 13px; height: 13px; stroke-width: 2.25; }
 .src-lamp { background: var(--lamp-tint); }
 .src-20.src-lamp { background: #FFFFFF; }
 
-.status { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 12px 10px 14px;
+.status { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 12px 12px 12px 16px;
   border-radius: var(--r-plate); color: var(--text); text-decoration: none; border: 0; width: 100%; text-align: left;
   font-family: var(--f-ui); cursor: pointer; }
 .a .status { font-size: var(--t-a-body); }
@@ -329,17 +329,17 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
    ============================================================ */
 .list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); overflow: hidden; }
 .a .list { border-radius: var(--r-card); }
-.w .list { border-radius: 8px; }
+.w .list { border-radius: var(--r-win); }
 .list > li + li { border-top: 1px solid var(--line); }
 .row { display: flex; align-items: center; gap: 16px; min-height: 72px; padding: 12px 16px; width: 100%; text-align: left;
   background: transparent; border: 0; color: var(--text); font-family: var(--f-ui); }
 .w .row { min-height: 56px; padding: 8px 16px; gap: 12px; }
 .row.clickable { cursor: pointer; }
 .row .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; overflow-wrap: anywhere; }
-.a .row .t1 { font-size: var(--t-a-body); font-weight: 600; line-height: 1.35; }
-.a .row .t2 { font-size: var(--t-a-cap); color: var(--text2); line-height: 1.35; }
-.w .row .t1 { font-size: var(--t-w-body); font-weight: 600; line-height: 1.4; }
-.w .row .t2 { font-size: var(--t-w-cap); color: var(--text2); line-height: 1.35; }
+.a .row .t1 { font-size: var(--t-a-body); font-weight: 600; line-height: 1.47; }
+.a .row .t2 { font-size: var(--t-a-cap); color: var(--text2); line-height: 1.38; }
+.w .row .t1 { font-size: var(--t-w-body); font-weight: 600; line-height: 1.43; }
+.w .row .t2 { font-size: var(--t-w-cap); color: var(--text2); line-height: 1.33; }
 .row .trail { display: flex; align-items: center; gap: 8px; flex: none; }
 .row.is-disabled .t1, .row.is-disabled .t2 { color: color-mix(in srgb, var(--text) 38%, transparent); }
 .row .lead-ic { color: var(--text2); }
@@ -510,19 +510,19 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
    ============================================================ */
 .card { background: var(--surface); border: 1px solid var(--line); color: var(--text); }
 .a .card { border-radius: var(--r-card); padding: 16px; }
-.w .card { border-radius: 8px; padding: 16px; }
+.w .card { border-radius: var(--r-win); padding: 16px; }
 .card h4, .card .h { margin: 0; font-weight: 600; }
-.a .card .h { font-size: var(--t-a-head); line-height: 1.35; }
-.w .card .h { font-size: var(--t-w-body); line-height: 1.4; }
-.a .card p { font-size: var(--t-a-body); margin: 4px 0 0; color: var(--text2); line-height: 1.4; }
-.w .card p { font-size: var(--t-w-body); margin: 2px 0 0; color: var(--text2); line-height: 1.4; }
+.a .card .h { font-size: var(--t-a-head); line-height: 1.33; }
+.w .card .h { font-size: var(--t-w-body); line-height: 1.43; }
+.a .card p { font-size: var(--t-a-body); margin: 4px 0 0; color: var(--text2); line-height: 1.47; }
+.w .card p { font-size: var(--t-w-body); margin: 2px 0 0; color: var(--text2); line-height: 1.43; }
 .card .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .card .actions.end { justify-content: flex-end; }
 .card .head-row { display: flex; gap: 12px; align-items: center; }
 .card .head-row .txt { flex: 1; min-width: 0; }
 .card-click { cursor: pointer; text-align: left; width: 100%; font-family: var(--f-ui); }
 .cards-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
-.big-num { font: 600 var(--t-a-title)/1.25 var(--f-display); letter-spacing: -.01em; color: var(--text); margin: 0; }
+.big-num { font: 600 var(--t-a-title)/1.29 var(--f-display); letter-spacing: -.01em; color: var(--text); margin: 0; }
 .w .big-num { font-size: var(--t-w-title); }
 .thumbs-mini { display: flex; gap: 4px; }
 .thumbs-mini svg { width: 36px; height: 36px; border-radius: var(--r-thumb); display: block; }
@@ -570,11 +570,12 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 84px)); gap: 2px; }
 .w .thumbs { grid-template-columns: repeat(4, minmax(0, 112px)); gap: 4px; }
 .thumb { position: relative; display: block; aspect-ratio: 1; border: 0; padding: 0; background: #C9D3E3; overflow: hidden;
-  cursor: pointer; border-radius: 0; }
+  cursor: pointer; border-radius: 0; } /* лента Android от края до края — 0, выбор; отдельные превью — 8 */
 .w .thumb { border-radius: var(--r-thumb); }
 .thumb > svg.photo { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: transform .15s; }
 .thumb .marks { position: absolute; left: 4px; bottom: 4px; display: flex; gap: 2px; }
-.src-20.more { width: auto; padding: 0 5px; border-radius: 10px; font-size: 11px; }
+.src-20.more { width: auto; padding: 0 6px; border-radius: 10px; font-size: 13px; }
+.w .src-20 { font-size: 12px; }
 .thumb .dur { position: absolute; right: 4px; top: 4px; padding: 1px 6px; border-radius: var(--r-win);
   background: rgba(15, 21, 40, .72); color: #FFFFFF; font: 600 13px/18px var(--f-ui); }
 .w .thumb .dur { font-size: 12px; line-height: 16px; }
@@ -588,6 +589,15 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .thumb:focus-visible, .thumb.is-focus { outline: 3px solid var(--focus); outline-offset: 2px; z-index: 1; }
 .w .thumb:focus-visible, .w .thumb.is-focus { outline-width: 2px; }
 .thumb.is-pressed > svg.photo { filter: brightness(.9); }
+.thumb.loading, .thumb.unavail { background: var(--tonal); }
+.thumb .ph-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; padding: 4px 4px 24px; color: var(--text2); font: 400 13px/18px var(--f-ui); text-align: center; }
+.w .thumb .ph-state { font-size: 12px; line-height: 16px; }
+.thumb .ph-state .ic { width: 20px; height: 20px; }
+@media (prefers-reduced-motion: no-preference) {
+  .thumb.loading { animation: ph-pulse 1.6s ease-in-out infinite; }
+  @keyframes ph-pulse { 50% { background: color-mix(in srgb, var(--tonal) 60%, var(--bg)); } }
+}
 
 /* ============================================================
    Навигация
@@ -605,8 +615,42 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .navbar a[aria-current="page"] .ic { stroke-width: 2.25; }
 .navbar a:focus-visible, .navbar a.is-focus { outline: none; }
 .navbar a:focus-visible .ind, .navbar a.is-focus .ind { outline: 3px solid var(--focus); outline-offset: 2px; }
+.tablet { display: flex; width: 100%; max-width: 640px; height: 520px; border: 1px solid var(--line); border-radius: var(--r-card);
+  overflow: hidden; background: var(--bg); }
+.rail { width: 96px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 0 12px;
+  background: var(--bg); }
+.rail .fab-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 0 24px; padding: 0; border: 0;
+  background: transparent; cursor: pointer; font: 600 var(--t-a-cap)/1.38 var(--f-ui); color: var(--text); text-align: center;
+  width: 88px; overflow-wrap: anywhere; }
+.rail .fab-wrap:focus-visible, .rail .fab-wrap.is-focus { outline: none; }
+.rail .fab-wrap:focus-visible .fab, .rail .fab-wrap.is-focus .fab { outline: 3px solid var(--focus); outline-offset: 2px; }
+.rail .fab-wrap .fab { position: relative; isolation: isolate; }
+.rail .fab-wrap .fab::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--on-primary); opacity: 0; z-index: -1; }
+.rail .fab-wrap:hover .fab::before, .rail .fab-wrap.is-hover .fab::before { opacity: .08; }
+.rail .fab-wrap:active .fab::before, .rail .fab-wrap.is-pressed .fab::before { opacity: .10; }
+.rail .fab { width: 56px; height: 56px; border-radius: var(--r-plate); border: 0; display: inline-flex; align-items: center;
+  justify-content: center; background: var(--primary); color: var(--on-primary); cursor: pointer; }
+.rail .fab .ic { width: 24px; height: 24px; }
+.rail a { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 88px; min-height: 64px; padding-top: 4px;
+  text-decoration: none; color: var(--text2); font-size: var(--t-a-cap); line-height: 1.38; text-align: center; overflow-wrap: anywhere; }
+.rail .ind { position: relative; width: 56px; height: 32px; border-radius: var(--r-full); display: flex; align-items: center;
+  justify-content: center; isolation: isolate; }
+.rail .ind::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--text); opacity: 0; z-index: -1; }
+.rail a:hover .ind::before, .rail a.is-hover .ind::before { opacity: .08; }
+.rail a:active .ind::before, .rail a.is-pressed .ind::before { opacity: .10; }
+.rail a[aria-current="page"] { color: var(--text); font-weight: 600; }
+.rail a[aria-current="page"] .ind { background: var(--tonal); color: var(--on-tonal); }
+.rail a[aria-current="page"] .ic { stroke-width: 2.25; }
+.rail a:focus-visible, .rail a.is-focus { outline: none; }
+.rail a:focus-visible .ind, .rail a.is-focus .ind { outline: 3px solid var(--focus); outline-offset: 2px; }
+.rail .spacer { flex: 1; }
+.tablet .t-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.tablet .t-main .thumbs { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0 16px; gap: 2px; }
+.tablet .t-pane { width: 220px; flex: none; background: var(--surface); border-left: 1px solid var(--line); padding: 16px;
+  font-size: var(--t-a-cap); color: var(--text2); }
+.tablet .t-pane .h { margin: 0 0 8px; font: 600 var(--t-a-body)/1.47 var(--f-ui); color: var(--text); }
 
-.win { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--bg); box-shadow: var(--shadow); }
+.win { border: 1px solid var(--line); border-radius: 8px; /* рамка окна Windows 11 — её рисует система */ overflow: hidden; background: var(--bg); box-shadow: var(--shadow); }
 .titlebar { display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 0 0 16px; font-size: var(--t-w-cap); color: var(--text); }
 .titlebar .appname { display: flex; gap: 8px; align-items: center; min-width: 120px; }
 .titlebar .search { flex: 1; max-width: 360px; margin: 0 auto; }
@@ -629,9 +673,9 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .navpane .recv .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
 .navpane a.dis { color: color-mix(in srgb, var(--text) 38%, transparent); pointer-events: none; }
 .navpane a.dis .ic { color: inherit; }
-.win-content { flex: 1; min-width: 0; background: var(--surface); border-top-left-radius: 8px; border-top: 1px solid var(--line);
-  border-left: 1px solid var(--line); padding: 20px 24px; }
-.win-content h4 { font: 600 var(--t-w-title)/1.25 var(--f-display); margin: 0 0 4px; letter-spacing: -.01em; }
+.win-content { flex: 1; min-width: 0; background: var(--surface); border-top-left-radius: var(--r-win); border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line); padding: 24px; }
+.win-content h4 { font: 600 var(--t-w-title)/1.29 var(--f-display); margin: 0 0 4px; letter-spacing: -.01em; }
 
 /* ============================================================
    Листы и диалоги
@@ -639,12 +683,12 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .phone { position: relative; width: 360px; max-width: 100%; height: 640px; border-radius: 28px; overflow: hidden;
   background: var(--bg); border: 1px solid var(--line); flex: none; }
 .phone .under { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.phone .under .ph-title { font: 600 var(--t-a-title)/1.25 var(--f-display); margin: 24px 0 4px; }
+.phone .under .ph-title { font: 600 var(--t-a-title)/1.29 var(--f-display); margin: 24px 0 4px; }
 .scrim { position: absolute; inset: 0; background: var(--scrim); }
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); color: var(--text);
-  border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding: 8px 16px 20px; box-shadow: var(--shadow); max-height: 92%; overflow: auto; }
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding: 8px 16px 24px; box-shadow: var(--shadow); max-height: 92%; overflow: auto; }
 .sheet .handle { width: 32px; height: 4px; border-radius: 2px; background: var(--outline); opacity: .6; margin: 8px auto 16px; }
-.sheet h4, .dialog h4 { margin: 0; font: 600 var(--t-a-head)/1.35 var(--f-ui); }
+.sheet h4, .dialog h4 { margin: 0; font: 600 var(--t-a-head)/1.33 var(--f-ui); }
 .sheet .lede { margin: 4px 0 0; color: var(--text2); font-size: var(--t-a-body); }
 .sheet .places { list-style: none; margin: 16px 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .sheet .places li { display: flex; align-items: center; gap: 12px; min-height: 48px; font-size: var(--t-a-body); }
@@ -656,17 +700,17 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .a-dialog { position: absolute; left: 24px; right: 24px; top: 50%; transform: translateY(-50%); background: var(--surface);
   border-radius: var(--r-sheet); padding: 24px; box-shadow: var(--shadow); }
 .a-dialog .ic-top { color: var(--primary); display: flex; justify-content: center; margin-bottom: 16px; }
-.a-dialog h4 { font: 600 var(--t-a-head)/1.35 var(--f-ui); margin: 0; text-align: center; }
+.a-dialog h4 { font: 600 var(--t-a-head)/1.33 var(--f-ui); margin: 0; text-align: center; }
 .a-dialog p { color: var(--text2); font-size: var(--t-a-body); margin: 12px 0 0; line-height: 1.4; }
 .a-dialog .btns { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
 
 .win-modal { position: relative; min-height: 460px; display: flex; align-items: center; justify-content: center; padding: 24px;
-  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; } /* рамка окна — её рисует система */
 .win-modal .scrim { background: var(--scrim); }
-.dialog { position: relative; width: 480px; max-width: 100%; background: var(--surface); border-radius: 8px; overflow: hidden;
+.dialog { position: relative; width: 480px; max-width: 100%; background: var(--surface); border-radius: var(--r-win); overflow: hidden;
   box-shadow: var(--shadow); border: 1px solid var(--line); color: var(--text); }
 .dialog .d-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; font-size: var(--t-w-body); line-height: 1.45; }
-.dialog h4 { font: 600 var(--t-w-head)/1.35 var(--f-ui); }
+.dialog h4 { font: 600 var(--t-w-head)/1.4 var(--f-ui); }
 .dialog .d-body p { margin: 0; color: var(--text2); }
 .dialog .d-foot { display: flex; gap: 8px; padding: 24px; background: var(--bg); border-top: 1px solid var(--line); }
 .dialog .d-foot .btn { flex: 1; }
@@ -719,7 +763,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .app-icon { width: 96px; height: 96px; border-radius: 22px; background: #22305C; display: flex; align-items: center; justify-content: center; }
 
 
-.a .card p.big-num, .w .card p.big-num { font: 600 var(--t-a-title)/1.25 var(--f-display); color: var(--text); margin: 0; letter-spacing: -.01em; }
+.a .card p.big-num, .w .card p.big-num { font: 600 var(--t-a-title)/1.29 var(--f-display); color: var(--text); margin: 0; letter-spacing: -.01em; }
 .w .cb input:checked + .box { background: var(--primary); box-shadow: none; }
 .w .cb:hover .box, .w .cb .box.is-hover { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
 .w .cb .box.is-pressed { background: color-mix(in srgb, var(--text) 10%, var(--surface)); }
@@ -743,10 +787,10 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
    ============================================================ */
 .appbar { display: flex; align-items: center; gap: 4px; min-height: 64px; padding: 8px 4px 8px 16px; background: var(--bg); }
 .appbar.scrolled { background: var(--surface); box-shadow: 0 1px 0 var(--line); }
-.appbar .ttl { flex: 1; min-width: 0; margin: 0; font: 600 var(--t-a-title)/1.25 var(--f-display); letter-spacing: -.01em; }
+.appbar .ttl { flex: 1; min-width: 0; margin: 0; font: 600 var(--t-a-title)/1.29 var(--f-display); letter-spacing: -.01em; }
 .appbar.sub { padding-left: 4px; }
-.appbar.sub .ttl { font: 600 var(--t-a-head)/1.35 var(--f-ui); letter-spacing: 0; }
-.appbar .ttl small { display: block; font: 400 var(--t-a-cap)/1.35 var(--f-ui); color: var(--text2); }
+.appbar.sub .ttl { font: 600 var(--t-a-head)/1.33 var(--f-ui); letter-spacing: 0; }
+.appbar .ttl small { display: block; font: 400 var(--t-a-cap)/1.38 var(--f-ui); color: var(--text2); }
 
 .feed { position: relative; width: 360px; max-width: 100%; border: 1px solid var(--line); border-radius: var(--r-card);
   overflow: hidden; background: var(--bg); }
@@ -756,11 +800,11 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .feed .thumbs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .fast { position: absolute; right: 4px; top: 96px; display: flex; align-items: center; gap: 8px; }
 .fast .bubble { background: var(--inverse); color: var(--on-inverse); border-radius: var(--r-plate); padding: 6px 12px;
-  font: 600 var(--t-a-cap)/1.3 var(--f-ui); box-shadow: var(--shadow); white-space: nowrap; }
+  font: 600 var(--t-a-cap)/1.38 var(--f-ui); white-space: nowrap; }
 .fast .handle { width: 8px; height: 48px; border-radius: 4px; background: var(--primary); box-shadow: 0 0 0 2px var(--surface); }
 
 .cmdbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 4px; background: var(--surface);
-  border: 1px solid var(--line); border-radius: 8px; }
+  border: 1px solid var(--line); border-radius: var(--r-win); }
 .cmd { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 10px; border: 0; border-radius: var(--r-win);
   background: transparent; color: var(--text); font: 400 var(--t-w-body)/1.3 var(--f-ui); cursor: pointer; white-space: nowrap; }
 .cmd .ic { width: 16px; height: 16px; }
@@ -769,14 +813,14 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .cmdbar .end { margin-left: auto; color: var(--text2); font-size: var(--t-w-cap); padding: 0 8px; }
 
 .crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none;
-  font: 600 var(--t-w-head)/1.35 var(--f-ui); }
-.crumbs a { color: var(--text2); text-decoration: none; border-radius: var(--r-win); padding: 0 4px; }
+  font: 600 var(--t-w-head)/1.4 var(--f-ui); }
+.crumbs a { display: inline-flex; align-items: center; min-height: 32px; color: var(--text2); text-decoration: none; border-radius: var(--r-win); padding: 0 8px; }
 .crumbs a:hover { color: var(--text); text-decoration: underline; }
 .crumbs li + li::before { content: "›"; color: var(--text2); margin-right: 4px; font-weight: 400; }
-.crumbs [aria-current] { color: var(--text); padding: 0 4px; }
+.crumbs [aria-current] { display: inline-flex; align-items: center; min-height: 32px; color: var(--text); padding: 0 8px; }
 
 .dtable { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--t-w-body); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  border: 1px solid var(--line); border-radius: var(--r-win); overflow: hidden; }
 .dtable th { text-align: left; font-weight: 600; font-size: var(--t-w-cap); color: var(--text2); padding: 8px 12px; white-space: nowrap; }
 .dtable td { padding: 8px 12px; border-top: 1px solid var(--line); vertical-align: middle; }
 .dtable td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
@@ -789,6 +833,11 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .dtable tr.is-focus td:last-child { box-shadow: inset -2px 2px 0 var(--focus), inset 0 -2px 0 var(--focus); }
 .dtable tr.is-disabled td { color: color-mix(in srgb, var(--text) 38%, transparent); }
 .dtable tr.is-disabled small { color: inherit; }
+.dtable td .cb { min-width: 32px; min-height: 32px; justify-content: center; }
+.dt-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 16px 0 8px; font-size: var(--t-w-body); }
+.dt-label strong { font-weight: 600; }
+.dt-label span { color: var(--text2); font-size: var(--t-w-cap); }
+.badge.b-better { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--outline); }
 
 .stepper { display: flex; flex-wrap: wrap; gap: 8px 4px; margin: 0; padding: 0; list-style: none; font-size: var(--t-w-body); }
 .stepper li { display: flex; align-items: center; gap: 8px; min-height: 32px; padding-right: 12px; color: var(--text2); }
@@ -802,7 +851,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .stepper [aria-current] .n { box-shadow: inset 0 0 0 2px var(--primary); color: var(--primary); }
 
 .pairing { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
-.qr { width: 168px; height: 168px; padding: 12px; background: #FFFFFF; border-radius: 8px; box-shadow: inset 0 0 0 1px #DDE2EB; flex: none; }
+.qr { width: 168px; height: 168px; padding: 12px; background: #FFFFFF; border-radius: var(--r-win); box-shadow: inset 0 0 0 1px #DDE2EB; flex: none; }
 .qr svg { display: block; width: 100%; height: 100%; }
 .qr.expired { position: relative; }
 .qr.expired svg { opacity: .12; }
@@ -835,6 +884,7 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
   .titlebar .caption-btns { margin-left: auto; }
   .titlebar .caption-btns span { width: 36px; }
   .titlebar .search { order: 3; flex-basis: 100%; max-width: none; margin: 0 12px 0 0; }
+  .tablet .t-pane { display: none; }
   .win-modal { padding: 12px; }
   .dialog .d-body, .dialog .d-foot { padding: 16px; }
   .dialog .d-foot { flex-wrap: wrap; }
@@ -862,6 +912,7 @@ fieldset { min-width: 0; }
 .navbar a { min-width: 0; overflow-wrap: anywhere; text-align: center; }
 html.text-200 .btn, html.text-200 .chip, html.text-200 .wchip, html.text-200 .cmd { white-space: normal; text-align: center; height: auto; }
 html.text-200 .phone { height: auto; min-height: 640px; }
+html.text-200 .tablet { height: auto; min-height: 520px; }
 html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative; left: auto; right: auto; top: auto; transform: none;
   max-height: none; margin-top: 16px; }
 /* Ширина таблицы по содержимому, на узком экране — прокрутка внутри обёртки */
@@ -917,7 +968,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
   <symbol id="ph-kid" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#E8D8C6"/><circle cx="50" cy="42" r="16" fill="#C99A7B"/><path d="M24 100c2-22 12-34 26-34s24 12 26 34z" fill="#C46F5A"/><path d="M34 36c4-12 28-12 32 0" fill="#5A4034"/></symbol>
   <!-- Образец QR (не настоящий код): всегда тёмный на белом, с темой не меняется -->
   <symbol id="qr-sample" viewBox="-1 -1 27 27"><path fill="#172036" d="M0 0h7v1h-7zM8 0h1v1h-1zM11 0h2v1h-2zM15 0h1v1h-1zM18 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h2v1h-2zM11 1h1v1h-1zM13 1h1v1h-1zM15 1h2v1h-2zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM18 2h1v1h-1zM20 2h3v1h-3zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM9 3h1v1h-1zM11 3h2v1h-2zM14 3h3v1h-3zM18 3h1v1h-1zM20 3h3v1h-3zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM9 4h1v1h-1zM13 4h4v1h-4zM18 4h1v1h-1zM20 4h3v1h-3zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM15 5h2v1h-2zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h7v1h-7zM10 7h1v1h-1zM12 7h5v1h-5zM0 8h1v1h-1zM6 8h2v1h-2zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM2 9h3v1h-3zM7 9h2v1h-2zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h2v1h-2zM18 9h1v1h-1zM20 9h4v1h-4zM1 10h1v1h-1zM3 10h1v1h-1zM5 10h2v1h-2zM9 10h1v1h-1zM12 10h2v1h-2zM17 10h1v1h-1zM19 10h1v1h-1zM21 10h3v1h-3zM1 11h1v1h-1zM3 11h2v1h-2zM7 11h2v1h-2zM11 11h1v1h-1zM14 11h1v1h-1zM17 11h1v1h-1zM24 11h1v1h-1zM0 12h10v1h-10zM12 12h2v1h-2zM15 12h2v1h-2zM19 12h1v1h-1zM21 12h2v1h-2zM1 13h1v1h-1zM8 13h2v1h-2zM12 13h1v1h-1zM14 13h1v1h-1zM16 13h2v1h-2zM19 13h3v1h-3zM24 13h1v1h-1zM0 14h1v1h-1zM2 14h2v1h-2zM6 14h5v1h-5zM12 14h1v1h-1zM15 14h1v1h-1zM18 14h1v1h-1zM20 14h2v1h-2zM23 14h2v1h-2zM0 15h2v1h-2zM3 15h3v1h-3zM7 15h1v1h-1zM10 15h1v1h-1zM15 15h3v1h-3zM20 15h1v1h-1zM23 15h2v1h-2zM1 16h1v1h-1zM3 16h2v1h-2zM6 16h1v1h-1zM14 16h1v1h-1zM20 16h3v1h-3zM24 16h1v1h-1zM8 17h2v1h-2zM11 17h1v1h-1zM13 17h1v1h-1zM16 17h1v1h-1zM18 17h6v1h-6zM0 18h7v1h-7zM8 18h1v1h-1zM11 18h3v1h-3zM16 18h1v1h-1zM18 18h6v1h-6zM0 19h1v1h-1zM6 19h1v1h-1zM12 19h1v1h-1zM15 19h1v1h-1zM18 19h2v1h-2zM0 20h1v1h-1zM2 20h3v1h-3zM6 20h1v1h-1zM8 20h3v1h-3zM14 20h1v1h-1zM18 20h1v1h-1zM21 20h3v1h-3zM0 21h1v1h-1zM2 21h3v1h-3zM6 21h1v1h-1zM12 21h3v1h-3zM19 21h2v1h-2zM23 21h2v1h-2zM0 22h1v1h-1zM2 22h3v1h-3zM6 22h1v1h-1zM9 22h1v1h-1zM12 22h4v1h-4zM17 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM9 23h2v1h-2zM12 23h5v1h-5zM21 23h2v1h-2zM24 23h1v1h-1zM0 24h7v1h-7zM8 24h1v1h-1zM16 24h2v1h-2zM20 24h1v1h-1zM22 24h3v1h-3z"/></symbol>
-  <symbol id="ph-snow"viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#EEF2F7"/><path d="M0 70l40-30 24 16 36-22v66H0z" fill="#B9C7D8"/><path d="M0 86l50-14 50 10v18H0z" fill="#FFFFFF"/><rect x="18" y="62" width="6" height="18" fill="#56614D"/><path d="M12 64l9-16 9 16z" fill="#3F5A45"/></symbol>
+  <symbol id="ph-snow" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#EEF2F7"/><path d="M0 70l40-30 24 16 36-22v66H0z" fill="#B9C7D8"/><path d="M0 86l50-14 50 10v18H0z" fill="#FFFFFF"/><rect x="18" y="62" width="6" height="18" fill="#56614D"/><path d="M12 64l9-16 9 16z" fill="#3F5A45"/></symbol>
 </svg>
 
 <header class="page-head">
@@ -945,7 +996,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     <a href="#mark">Знак «свет в окне»</a><a href="#buttons">Кнопки</a><a href="#chips">Фильтры и вкладки</a>
     <a href="#badges">Метки и статусы</a><a href="#rows">Строки</a><a href="#cards">Карточки</a>
     <a href="#progress">Прогресс</a><a href="#toggles">Переключатели</a><a href="#fields">Поля</a>
-    <a href="#notes">Подсказки и ошибки</a><a href="#thumbs">Превью</a><a href="#nav">Навигация</a>
+    <a href="#notes">Подсказки и ошибки</a><a href="#thumbs">Превью</a><a href="#nav">Навигация</a><a href="#rail">Планшет</a>
     <a href="#dialogs">Диалоги</a><a href="#contrast">Контраст</a>
   </nav>
 </header>
@@ -957,7 +1008,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     только шрифт, «Зоны касания» подсвечивает зону нажатия: 48 dp на Android, 32 px на Windows.</p>
   <p class="intro">Здесь только общие компоненты. Компоненты одного сценария — <code>QrScanner</code>, <code>WhereSheet</code> /
     <code>WherePane</code>, <code>SourcePicker</code>, <code>IndexingCard</code>, <code>PermissionList</code>, <code>ConnectionLog</code>,
-    <code>TrayPanel</code>, <code>MainNavigationRail</code> (планшет), уведомления Android — появятся в макетах своих сценариев:
+    <code>TrayPanel</code>, уведомления Android — появятся в макетах своих сценариев:
     они собираются из того, что есть на этой странице.</p>
   <p class="intro">Метка <span class="choice">выбор</span> — документы это не задают, значение выбрано при сборке и ждёт
     подтверждения. Метка <span class="flag">не проходит</span> — пара не проходит WCAG AA, рядом — предложение.</p>
@@ -1057,8 +1108,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
   <!-- ======================= ОТСТУПЫ, СЕТКА, СКРУГЛЕНИЯ ======================= -->
   <section class="doc-section" id="space" aria-labelledby="h-space">
     <h2 id="h-space">Отступы, сетка и скругления</h2>
-    <p class="lead">Отступы кратны 4 и 8. Скругления: 4 — элементы Windows, 8 — превью, 16 — плашки и метки, 20 — карточки,
-      28 — листы, полное — кнопки на телефоне. Цели касания: Android 48 dp (документы требуют ≥ 44, Material — 48; страница
+    <p class="lead">Отступы кратны 4 и 8. Скругления: 4 — всё, что рисует приложение на Windows (кнопки, поля, карточки, диалоги),
+      8 — превью, 16 — плашки и метки, 20 — карточки, 28 — листы, полное — кнопки на телефоне. Цели касания: Android 48 dp (документы требуют ≥ 44, Material — 48; страница
       проверяет по 48), ПК ≥ 32 px.</p>
     <div class="pair">
       <div class="stage" data-theme="light">
@@ -1088,11 +1139,18 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
         </div>
         <p class="note">Телефон: поля экрана 16 (жёлтые полосы), блоки через 24, лента — 4 колонки превью от края до края с зазором 2.
           Windows: навигация 248, контент с полями 24, превью 112 с зазором 4, панель деталей 320.</p>
+        <p class="note">Превью в ленте Android — без скругления <span class="choice">выбор</span>: сетка от края до края с зазором 2 читается
+          как одно полотно, как в системной галерее, а скругление 8 на превью 84 срезает углы кадра и дробит сетку на плитки.
+          Скругление 8 остаётся у отдельных превью: выбранное фото в ленте, превью в карточках уборки и в «Где лежит», вся сетка Windows.
+          Если мейнтейнер решит следовать README буквально, меняется одно значение.</p>
+        <p class="note">Окно Windows 11 и его рамку рисует система (скругление 8), поэтому на макетах окно скруглено на 8, а всё внутри — на 4.
+          В WinUI диалоги и всплывающие панели скруглены на 8 (<code>OverlayCornerRadius</code>), а README задаёт 4 для всего Windows —
+          здесь сделано по README, вопрос в отчёте.</p>
 
         <h3>Скругления</h3>
         <div class="radii">
-          <div class="radius-tile"><div class="shape" style="border-radius:4px"></div><b>4</b><span class="use">кнопки, поля, диалог Windows</span></div>
-          <div class="radius-tile"><div class="shape" style="border-radius:8px"></div><b>8</b><span class="use">превью; чипы Android, карточки Windows <span class="choice">выбор</span></span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:4px"></div><b>4</b><span class="use">Windows: кнопки, поля, карточки, списки, диалоги; поле ввода Android</span></div>
+          <div class="radius-tile"><div class="shape" style="border-radius:8px"></div><b>8</b><span class="use">превью; чипы Android <span class="choice">выбор</span></span></div>
           <div class="radius-tile"><div class="shape" style="border-radius:16px"></div><b>16</b><span class="use">плашки статуса, метки, подсказки</span></div>
           <div class="radius-tile"><div class="shape" style="border-radius:20px"></div><b>20</b><span class="use">карточки и списки на телефоне</span></div>
           <div class="radius-tile"><div class="shape" style="border-radius:28px 28px 0 0"></div><b>28</b><span class="use">нижние листы, диалоги Android</span></div>
@@ -1267,7 +1325,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     </div>
     <p class="note">«Лампа» по документам — только «сохранено дома», а кнопка «Разобрать» на ней стоит в «Хранилищах» рядом с суммой,
       которую можно освободить благодаря копиям на ПК. Вопрос к мейнтейнеру — в отчёте. Тональная кнопка на «Бумаге» — 1,2:1, её
-      узнают по подписи (осознанное исключение 3); то же для «Лампы» на «Бумаге» — 2,0:1.</p>
+      узнают по подписи (осознанное исключение 3). «Лампа» на «Бумаге» — 2,0:1: такого исключения в документах нет, это
+      <span class="flag">новое</span> по образцу исключения 3 — кнопку узнают по подписи «Разобрать» (8,1:1). Решение за мейнтейнером.</p>
   </section>
 
   <!-- ======================= ЧИПЫ И ВКЛАДКИ ======================= -->
@@ -1414,7 +1473,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <div class="chips">
             <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Проверено</span>
             <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span>
-            <span class="badge b-tonal">Автоархив</span>
+            <span class="badge b-tonal"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Автоархив</span>
             <span class="badge b-marked"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Отмечено</span>
             <span class="badge b-neutral">Копия</span>
             <span class="badge b-neutral">Хуже</span>
@@ -1443,7 +1502,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     <h2 id="h-rows">Строки списков</h2>
     <p class="lead"><code>CopyRow</code> — строка «Где лежит»: место, качество, размер, метка или <code>DeleteToggle</code>. Видимая подпись
       чекбокса всегда «Удалить», для скринридера — «Удалить копию из Яндекс Диска» (Д3). Копия на ПК в уборке заблокирована: у неё
-      метка, а не чекбокс. <code>SettingsItem</code> — строка настроек на Android.</p>
+      метка, а не чекбокс. Сами отмечаются только точные копии — тот же SHA-256, что у проверенной копии на ПК
+      (<code>data-model.md</code>, «Как определяем одинаковые фото»). Тот же кадр хуже качеством и похожие кадры никогда не
+      отмечены заранее: решает пользователь. <code>SettingsItem</code> — строка настроек на Android.</p>
     <div class="stage" data-theme="light">
       <div class="plat">
         <div class="a">
@@ -1456,8 +1517,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <span class="txt"><span class="t1">Яндекс Диск</span><span class="t2">Копия · 4,2&nbsp;МБ · /Фотокамера</span></span>
               <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
             <li><div class="row"><span class="src src-40" aria-hidden="true">O</span>
-              <span class="txt"><span class="t1">OneDrive</span><span class="t2">Тот же кадр хуже качеством · 1,1&nbsp;МБ</span></span>
-              <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию хуже качеством из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
+              <span class="txt"><span class="t1">OneDrive</span><span class="t2">Тот же кадр хуже качеством · 1,1&nbsp;МБ · решаете вы</span></span>
+              <span class="trail"><label class="cb"><input type="checkbox" aria-label="Удалить копию хуже качеством из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
             <li><div class="row"><span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>
               <span class="txt"><span class="t1">Телефон</span><span class="t2">Pixel 8 · 4,2&nbsp;МБ</span></span>
               <span class="trail"><label class="cb"><input type="checkbox" aria-label="Удалить копию с телефона"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
@@ -1504,7 +1565,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <span class="txt"><span class="t1">Яндекс Диск · 4,2&nbsp;МБ</span><span class="t2">Наведение · /Фотокамера</span></span>
               <span class="trail"><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
             <li><div class="row"><span class="src src-32" aria-hidden="true">O</span>
-              <span class="txt"><span class="t1">OneDrive · 1,1&nbsp;МБ</span><span class="t2">Фокус · тот же кадр хуже качеством</span></span>
+              <span class="txt"><span class="t1">OneDrive · 1,1&nbsp;МБ</span><span class="t2">Фокус · тот же кадр хуже качеством, решаете вы</span></span>
               <span class="trail"><label class="cb"><input type="checkbox" aria-label="Удалить копию хуже качеством из OneDrive"><span class="box is-focus"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Удалить</label></span></div></li>
             <li><div class="row is-disabled"><span class="src src-32" aria-hidden="true">D</span>
               <span class="txt"><span class="t1">Dropbox · 4,2&nbsp;МБ</span><span class="t2">Недоступна: нужно войти заново</span></span>
@@ -1512,9 +1573,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           </ul>
 
           <h3 class="plat-title mt">Windows · DataTable в уборке</h3>
+          <p class="dt-label" id="dt-exact-l"><strong>Вкладка «Точные копии» · IMG_2041.jpg</strong><span>у всех копий один SHA-256 · сами отмечены копии в облаках</span></p>
           <div class="dt-wrap">
-            <table class="dtable">
-              <caption class="sr-only">Копии IMG_2041.jpg, группа 1 из 1&nbsp;240</caption>
+            <table class="dtable" aria-labelledby="dt-exact-l">
               <thead><tr><th scope="col">Удалить</th><th scope="col">Где</th><th scope="col">Качество</th><th scope="col">Размер</th><th scope="col">Когда</th></tr></thead>
               <tbody>
                 <tr><td><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Оставляем</span></td>
@@ -1523,9 +1584,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                 <tr class="is-hover"><td><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></label></td>
                   <td><span class="place"><span class="src src-32" aria-hidden="true">Я</span><span>Яндекс Диск<small>/Фотокамера</small></span></span></td>
                   <td>Копия</td><td class="num">4,2&nbsp;МБ</td><td class="num">12 мая</td></tr>
-                <tr class="is-focus"><td><label class="cb"><input type="checkbox" checked aria-label="Удалить копию хуже качеством из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></label></td>
+                <tr class="is-focus"><td><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></label></td>
                   <td><span class="place"><span class="src src-32" aria-hidden="true">O</span><span>OneDrive<small>/Pictures/Camera Roll</small></span></span></td>
-                  <td>Хуже: 1600×1200</td><td class="num">1,1&nbsp;МБ</td><td class="num">14 мая</td></tr>
+                  <td>Копия</td><td class="num">4,2&nbsp;МБ</td><td class="num">12 мая</td></tr>
                 <tr class="is-disabled"><td><label class="cb"><input type="checkbox" disabled aria-label="Удалить копию из Dropbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></label></td>
                   <td><span class="place"><span class="src src-32" aria-hidden="true">D</span><span>Dropbox<small>нужно войти заново</small></span></span></td>
                   <td>Копия</td><td class="num">4,2&nbsp;МБ</td><td class="num">12 мая</td></tr>
@@ -1535,6 +1596,23 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <p class="note">Строки: копия на ПК (заблокирована, метка вместо чекбокса) · наведение · фокус строки с клавиатуры · недоступна.
             <span class="kbd">↑</span>&nbsp;<span class="kbd">↓</span> по строкам, <span class="kbd">Delete</span> отметить, <span class="kbd">Пробел</span> следующая группа.
             Путь — второй строкой под местом (Т8).</p>
+
+          <p class="dt-label" id="dt-shot-l"><strong>Вкладка «Тот же кадр хуже качеством» · IMG_2041.jpg</strong><span>ничего не выбрано: решаете вы</span></p>
+          <div class="dt-wrap">
+            <table class="dtable" aria-labelledby="dt-shot-l">
+              <thead><tr><th scope="col">Удалить</th><th scope="col">Где</th><th scope="col">Качество</th><th scope="col">Размер</th><th scope="col">Когда</th></tr></thead>
+              <tbody>
+                <tr><td><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Оставляем</span></td>
+                  <td><span class="place"><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span><span>ПК «Дом» · архив<small class="mono">D:\Фото\Pixroost\2026\05</small></span></span></td>
+                  <td><span class="badge b-better">Лучше качеством</span> 4032×3024</td><td class="num">4,2&nbsp;МБ</td><td class="num">12 мая</td></tr>
+                <tr><td><label class="cb"><input type="checkbox" aria-label="Удалить копию хуже качеством из OneDrive"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></label></td>
+                  <td><span class="place"><span class="src src-32" aria-hidden="true">O</span><span>OneDrive<small>/Pictures/Сжатые</small></span></span></td>
+                  <td>Хуже: 1600×1200</td><td class="num">1,1&nbsp;МБ</td><td class="num">14 мая</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Подсказка — метка «Лучше качеством» у оригинала, а не отметка «Удалить» у худшей версии. Чекбокс снят, пока
+            пользователь сам его не отметит; похожие серии — так же, ничего не отмечено.</p>
         </div>
       </div>
     </div>
@@ -1543,8 +1621,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
   <!-- ======================= КАРТОЧКИ ======================= -->
   <section class="doc-section" id="cards" aria-labelledby="h-cards">
     <h2 id="h-cards">Карточки</h2>
-    <p class="lead">Карточки — «Бумага» с декоративной рамкой «Линия», без теней; скругление 20 на телефоне и 8 на Windows
-      <span class="choice">выбор</span>. Цифры — из одного сценария: Яндекс Диск 4,1&nbsp;ГБ + OneDrive 2,2&nbsp;ГБ = 6,3&nbsp;ГБ,
+    <p class="lead">Карточки — «Бумага» с декоративной рамкой «Линия», без теней; скругление 20 на телефоне и 4 на Windows. Цифры — из одного сценария: Яндекс Диск 4,1&nbsp;ГБ + OneDrive 2,2&nbsp;ГБ = 6,3&nbsp;ГБ,
       1&nbsp;240 файлов; Dropbox ждёт входа и в уборке не участвует (К1).</p>
     <div class="stage" data-theme="light">
       <div class="plat">
@@ -1578,7 +1655,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                     <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">86 файлов · 412&nbsp;МБ</span></span>
                   <svg class="ic" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg>
                 </div>
-                <p style="font-size:var(--t-a-cap)">Решаете вы: покажем обе версии рядом</p>
+                <p style="font-size:var(--t-a-cap)">Ничего не выбрано: покажем обе версии рядом</p>
               </a></div>
 
             <div class="state"><span class="cap">CleanupGroupCard · фокус</span>
@@ -1589,7 +1666,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                     <span style="display:block;color:var(--text2);font-size:var(--t-a-cap)">31 серия · 640 фото</span></span>
                   <svg class="ic" aria-hidden="true" style="color:var(--text2)"><use href="#i-chevron"/></svg>
                 </div>
-                <p style="font-size:var(--t-a-cap)">Решаете вы: лучшие кадры отмечены</p>
+                <p style="font-size:var(--t-a-cap)">Ничего не выбрано: решаете вы</p>
               </a></div>
 
             <div class="state"><span class="cap">CleanupGroupCard · нечего удалять</span>
@@ -1708,7 +1785,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <div class="bar paused" role="progressbar" aria-label="Отправка на ПК «Дом», пауза" aria-valuemin="0" aria-valuemax="212" aria-valuenow="128"><span class="fill" style="width:60%"></span><span class="rest"></span><span class="stop"></span></div>
               <p class="sub">Продолжим, когда телефон будет дома</p></div>
             <div class="prog"><div class="top"><strong>Передача остановилась на 64%</strong></div>
-              <div class="bar paused" role="progressbar" aria-label="Отправка на ПК «Дом», остановлена" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span class="fill" style="width:62%"></span><span class="rest"></span><span class="stop"></span></div>
+              <div class="bar paused" role="progressbar" aria-label="Отправка на ПК «Дом», остановлена" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span class="fill" style="width:64%"></span><span class="rest"></span><span class="stop"></span></div>
               <p class="sub">Продолжится, когда ПК снова будет в сети</p></div>
             <div class="prog"><div class="top"><strong>Проверяем файлы Яндекс Диска</strong><span>найдено 8&nbsp;412</span></div>
               <div class="bar indet" role="progressbar" aria-label="Проверка файлов Яндекс Диска"><span class="fill"></span></div>
@@ -1725,13 +1802,13 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <div class="cards-grid">
             <div class="card"><div class="usage">
               <div class="head-row"><span class="src src-40" aria-hidden="true">Я</span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Яндекс Диск</span><span style="color:var(--text2);font-size:var(--t-a-cap)">9,6 из 10&nbsp;ГБ</span></span><span class="badge b-danger">Почти заполнен</span></div>
-              <div class="ubar" role="img" aria-label="Яндекс Диск: занято 9,6 из 10 ГБ, из них можно освободить 4,1 ГБ"><i class="used full" style="width:55%"></i><i class="free" style="width:41%"></i><i class="gap"></i></div>
-              <ul class="legend"><li><i class="k-full"></i>Занято 9,6&nbsp;ГБ</li><li><i class="k-free"></i>Можно освободить 4,1&nbsp;ГБ</li></ul>
+              <div class="ubar" role="img" aria-label="Яндекс Диск: занято 9,6 из 10 ГБ: остальные файлы 5,5 ГБ, можно освободить 4,1 ГБ, свободно 0,4 ГБ"><i class="used full" style="width:55%"></i><i class="free" style="width:41%"></i><i class="gap"></i></div>
+              <ul class="legend"><li><i class="k-full"></i>Остальные файлы 5,5&nbsp;ГБ</li><li><i class="k-free"></i>Можно освободить 4,1&nbsp;ГБ</li><li>Свободно 0,4&nbsp;ГБ</li></ul>
               <div><button class="btn btn-lamp sl fc hit">Разобрать</button></div></div></div>
             <div class="card"><div class="usage">
               <div class="head-row"><span class="src src-40" aria-hidden="true">O</span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">OneDrive</span><span style="color:var(--text2);font-size:var(--t-a-cap)">3,4 из 5&nbsp;ГБ</span></span></div>
-              <div class="ubar" role="img" aria-label="OneDrive: занято 3,4 из 5 ГБ, из них можно освободить 2,2 ГБ"><i class="used" style="width:24%"></i><i class="free" style="width:44%"></i><i class="gap"></i></div>
-              <ul class="legend"><li><i class="k-used"></i>Занято 3,4&nbsp;ГБ</li><li><i class="k-free"></i>Можно освободить 2,2&nbsp;ГБ</li></ul></div></div>
+              <div class="ubar" role="img" aria-label="OneDrive: занято 3,4 из 5 ГБ: остальные файлы 1,2 ГБ, можно освободить 2,2 ГБ, свободно 1,6 ГБ"><i class="used" style="width:24%"></i><i class="free" style="width:44%"></i><i class="gap"></i></div>
+              <ul class="legend"><li><i class="k-used"></i>Остальные файлы 1,2&nbsp;ГБ</li><li><i class="k-free"></i>Можно освободить 2,2&nbsp;ГБ</li><li>Свободно 1,6&nbsp;ГБ</li></ul></div></div>
             <div class="card"><div class="usage">
               <div class="head-row"><span class="src src-40" aria-hidden="true">D</span><span class="txt"><span class="h" style="display:block;font-size:var(--t-a-body)">Dropbox</span><span style="color:var(--text2);font-size:var(--t-a-cap)">Нужно войти заново</span></span></div>
               <p style="margin:0">Данные на 12 октября. Остальные хранилища работают.</p>
@@ -1972,7 +2049,10 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     <p class="lead"><code>MediaThumbnail</code>: метки мест в левом нижнем углу (лежат на фото и с темой не меняются), длительность видео —
       13 на затемнении 72% (Д13) в правом верхнем углу <span class="choice">выбор</span>: внизу она наезжает на метки на превью 76–84, выбор — галочка «Сумерки». Имя для скринридера — дата и список мест: «Фото, 12 мая, 14:20.
       Лежит: ПК „Дом“, Яндекс Диск». Порядок меток (ПК первым, дальше облака, телефон последним) и правило «не больше трёх меток, третья — +N» —
-      <span class="choice">выбор</span>: четыре метки не помещаются на превью 84.</p>
+      <span class="choice">выбор</span>: четыре метки не помещаются на превью 84. Метки, длительность и подпись состояния лежат на превью фиксированного размера и набраны фиксированно: 13 на Android, 12 на Windows,
+      «+N» тем же размером. С размером шрифта они не растут, иначе не поместятся на превью 84; всё, что в них есть, дублирует имя превью и «Где лежит»
+      <span class="choice">выбор</span>. Пока превью грузится — тональная заливка и метки мест (места известны из индекса, до загрузки
+      картинки); если превью недоступно — иконка и короткая причина, подробности и «Повторить» — в «Где лежит».</p>
     <div class="stage" data-theme="light">
       <div class="plat">
         <div class="a">
@@ -1997,6 +2077,19 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                 <button class="thumb" aria-label="Видео, 3 минуты 05 секунд, 9 мая. Лежит: телефон"><svg class="photo" aria-hidden="true"><use href="#ph-kid"/></svg>
                   <span class="marks" aria-hidden="true"><span class="src src-20"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span></span><span class="dur" aria-hidden="true">3:05</span></button>
               </div></div>
+            <div class="state"><span class="cap">Загружается · недоступно: облако не отвечает · файл удалён в источнике</span>
+              <div class="thumbs">
+                <button class="thumb loading" aria-label="Фото, 8 мая. Превью загружается. Лежит: Яндекс Диск, OneDrive">
+                  <span class="marks" aria-hidden="true"><span class="src src-20">Я</span><span class="src src-20">O</span></span></button>
+                <button class="thumb unavail" aria-label="Фото, 8 мая. Превью недоступно: Яндекс Диск не отвечает. Лежит: Яндекс Диск"><span class="ph-state" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg>Нет связи</span>
+                  <span class="marks" aria-hidden="true"><span class="src src-20">Я</span></span></button>
+                <button class="thumb unavail" aria-label="Фото, 7 мая. Удалено в OneDrive, других копий нет"><span class="ph-state" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Удалено</span>
+                  <span class="marks" aria-hidden="true"><span class="src src-20">O</span></span></button>
+                <button class="thumb loading is-focus" aria-label="Видео, 7 мая. Превью загружается. Лежит: ПК «Дом»">
+                  <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span></span></button>
+              </div>
+              <p class="note" style="max-width:360px">Загрузка без текста: превью приходят десятками, подписи мелькали бы. Пульсация заливки — только
+                без «Уменьшить движение». «Удалено» видно до следующей сверки с источником, потом фото пропадает из ленты. Последнее — фокус.</p></div>
             <div class="state"><span class="cap">Режим выбора: 2 из 4 выбраны, фокус на выбранном</span>
               <div class="thumbs" role="group" aria-label="Выбор фото">
                 <button class="thumb selected" aria-pressed="true" aria-label="Фото, 12 мая, 14:20. Лежит: ПК «Дом», Яндекс Диск"><svg class="photo" aria-hidden="true"><use href="#ph-sea"/></svg><span class="selc" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button>
@@ -2020,7 +2113,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                 </div>
                 <div class="fast" aria-hidden="true"><span class="bubble">Май 2026</span><span class="handle"></span></div>
               </div>
-              <p class="note" style="max-width:360px">Быстрый скроллер появляется при прокрутке, если фото больше нескольких экранов; пузырь
+              <p class="note" style="max-width:360px">Пузырь скроллера — без тени: он и так отделён инверсным цветом. Быстрый скроллер появляется при прокрутке, если фото больше нескольких экранов; пузырь
                 показывает месяц и год <span class="choice">выбор</span>. Для скринридера путь по датам — заголовки дат, ручка от него скрыта.</p></div>
           </div>
         </div>
@@ -2037,6 +2130,15 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <span class="marks" aria-hidden="true"><span class="src src-20 src-lamp"><svg class="lamp-svg" width="13" height="13"><use href="#lamp"/></svg></span></span></button>
           </div>
           <p class="note">Выбрано (открыто в панели справа) · нажато · фокус · по умолчанию.</p>
+          <div class="thumbs" style="margin-top:16px">
+            <button class="thumb loading" aria-label="Фото, 8 мая. Превью загружается. Лежит: Яндекс Диск">
+              <span class="marks" aria-hidden="true"><span class="src src-20">Я</span></span></button>
+            <button class="thumb unavail" aria-label="Фото, 8 мая. Превью недоступно: Яндекс Диск не отвечает. Лежит: Яндекс Диск"><span class="ph-state" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg>Нет связи</span>
+              <span class="marks" aria-hidden="true"><span class="src src-20">Я</span></span></button>
+            <button class="thumb unavail" aria-label="Фото, 7 мая. Удалено в OneDrive, других копий нет"><span class="ph-state" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Удалено в OneDrive</span>
+              <span class="marks" aria-hidden="true"><span class="src src-20">O</span></span></button>
+          </div>
+          <p class="note">Загружается · облако не отвечает · файл удалён в источнике. На превью 112 причина помещается целиком.</p>
         </div>
       </div>
     </div>
@@ -2046,7 +2148,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
   <section class="doc-section" id="nav" aria-labelledby="h-nav">
     <h2 id="h-nav">Навигация</h2>
     <p class="lead"><code>MainNavigationBar</code> (Android) — компактная нижняя панель, четыре раздела: Лента, Хранилища, Уборка, Устройства;
-      настройки — в верхней панели. <code>SelectionToolbar</code> — плавающая панель действий с выбранными. <code>NavigationPane</code>
+      настройки — в верхней панели. <code>SelectionToolbar</code> — плавающая панель действий с выбранными; число выбранных — в верхней
+      панели режима выбора, как в Material 3. Планшет — <code>MainNavigationRail</code>, <a href="#rail">ниже</a>. <code>NavigationPane</code>
       (Windows) — слева, со статусом приёма внизу; «Архив» есть только на ПК. Ширина панели и вид статуса приёма — <span class="choice">выбор</span>.</p>
     <div class="stage" data-theme="light">
       <div class="plat">
@@ -2084,18 +2187,21 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               </nav></div>
           </div>
 
-          <h3 class="plat-title mt">Android · SelectionToolbar</h3>
+          <h3 class="plat-title mt">Android · режим выбора: верхняя панель и SelectionToolbar</h3>
           <div class="states">
-            <div class="state" style="width:360px;max-width:100%">
-              <p class="cap" style="margin:0" id="sel-hint">9 из 12 ещё нет на ПК «Дом»</p>
-              <div role="toolbar" aria-label="Действия с выбранными: 12 фото" aria-describedby="sel-hint" style="display:flex;align-items:center;gap:4px;padding:4px 4px 4px 4px;background:var(--surface);border-radius:999px;box-shadow:var(--shadow);border:1px solid var(--line)">
+            <div class="state" style="width:360px;max-width:100%"><span class="cap">Вверху экрана: число выбранных и «Снять выбор»</span>
+              <div class="appbar sub scrolled">
                 <button class="icon-btn sl fc hit" aria-label="Снять выбор"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
-                <span style="flex:1;font-size:var(--t-a-body);font-weight:600">12 выбрано</span>
+                <h4 class="ttl">12 выбрано<small id="sel-hint">9 из 12 ещё нет на ПК «Дом»</small></h4></div></div>
+            <div class="state" style="width:360px;max-width:100%"><span class="cap">Внизу экрана, над навигацией: плавающая панель</span>
+              <div role="toolbar" aria-label="Действия с выбранными: 12 фото" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:4px;background:var(--surface);border-radius:999px;box-shadow:var(--shadow);border:1px solid var(--line);width:max-content;max-width:100%;margin:0 auto;flex-wrap:wrap">
                 <button class="icon-btn sl fc hit" aria-label="Где лежит"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg></button>
-                <button class="btn btn-primary sl fc hit compact"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>На ПК</button>
+                <button class="btn btn-primary sl fc hit" aria-label="Отправить на ПК 12 фото" aria-describedby="sel-hint"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Отправить на ПК</button>
               </div></div>
           </div>
-          <p class="note">«На ПК» — короткая подпись в тесной панели; имя для скринридера то же, что у кнопки «Отправить на ПК» <span class="choice">выбор</span>.</p>
+          <p class="note">Подпись — из словаря действий: «Отправить на ПК» (<code>information-architecture.md</code>). Чтобы она поместилась
+            целиком, число выбранных ушло в верхнюю панель. Имя кнопки для скринридера — «Отправить на ПК 12 фото»: видимая подпись входит
+            в него (2.5.3), подсказка «9 из 12 ещё нет на ПК» — описание.</p>
         </div>
         <div class="w">
           <h3 class="plat-title">Windows · TitleBar и NavigationPane</h3>
@@ -2143,6 +2249,61 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           </div>
           <p class="note">Слева направо: по умолчанию · наведение · нажата · фокус · недоступна («Разобрать копии» — пока нет проверенных
             копий). Команды без фона, состояние — слоем, как у кнопок Windows.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ПЛАНШЕТ ======================= -->
+  <section class="doc-section" id="rail" aria-labelledby="h-rail">
+    <h2 id="h-rail">Планшет: MainNavigationRail</h2>
+    <p class="lead"><code>MainNavigationRail</code> — навигация планшета Android на всех экранах: те же четыре раздела, что в нижней панели
+      телефона, настройки внизу, сверху кнопка «Отправить на ПК» (<code>components.md</code>). Справа вместо нижнего листа — панель
+      «Где лежит» (<code>WherePane</code>, появится в макете ленты). Ширина 96 и пункт 88×64 — по rail Material 3 Expressive
+      <span class="choice">выбор</span>; индикатор, цвета и слои — как у <code>MainNavigationBar</code>. Кнопка — скругление 16, как плашки.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <h3 class="plat-title">Android, планшет · лента</h3>
+          <div class="tablet">
+            <nav class="rail" aria-label="Разделы">
+              <button class="fab-wrap hit"><span class="fab"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg></span>Отправить на ПК</button>
+                  <a href="#" aria-current="page"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-photos"/></svg></span>Лента</a>
+                  <a href="#"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-storage"/></svg></span>Хранилища</a>
+                  <a href="#"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-cleanup"/></svg></span>Уборка</a>
+                  <a href="#"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-devices"/></svg></span>Устройства</a>
+                  <span class="spacer"></span>
+                  <a href="#"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></span>Настройки</a>
+            </nav>
+            <div class="t-main">
+              <div class="appbar"><h4 class="ttl">Лента</h4>
+                <button class="icon-btn sl fc hit" aria-label="Поиск по фото"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button></div>
+              <h4 class="date-h">12 мая, вторник <span>14 фото</span></h4>
+              <div class="thumbs" aria-hidden="true">
+                <span class="thumb"><svg class="photo"><use href="#ph-sea"/></svg></span><span class="thumb selected"><svg class="photo"><use href="#ph-hills"/></svg></span>
+                <span class="thumb"><svg class="photo"><use href="#ph-kid"/></svg></span><span class="thumb"><svg class="photo"><use href="#ph-snow"/></svg></span>
+                <span class="thumb"><svg class="photo"><use href="#ph-city"/></svg></span><span class="thumb"><svg class="photo"><use href="#ph-sea"/></svg></span>
+                <span class="thumb"><svg class="photo"><use href="#ph-kid"/></svg></span><span class="thumb"><svg class="photo"><use href="#ph-hills"/></svg></span>
+              </div>
+            </div>
+            <aside class="t-pane" aria-label="Где лежит, образец"><p class="h">Где лежит</p>ПК «Дом» · Яндекс Диск<br>Панель
+              <code>WherePane</code> — в макете ленты.</aside>
+          </div>
+
+          <h3 class="plat-title mt">Состояния: Хранилища выбраны · кнопка нажата · наведение на Уборке · фокус на Устройствах</h3>
+          <div class="tablet" style="width:auto;max-width:max-content;height:auto">
+            <nav class="rail" aria-label="Разделы, образец состояний">
+              <button class="fab-wrap hit is-pressed"><span class="fab"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg></span>Отправить на ПК</button>
+                  <a href="#"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-photos"/></svg></span>Лента</a>
+                  <a href="#" aria-current="page"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-storage"/></svg></span>Хранилища</a>
+                  <a href="#" class="is-hover"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-cleanup"/></svg></span>Уборка</a>
+                  <a href="#" class="is-focus"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-devices"/></svg></span>Устройства</a>
+                  <span class="spacer"></span>
+                  <a href="#"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></span>Настройки</a>
+            </nav>
+          </div>
+          <p class="note">Подписи у пунктов видны всегда — как у нижней панели телефона. Наведение есть на планшете с мышью или тачпадом.
+            Что делает кнопка «Отправить на ПК», когда ничего не выбрано, документы не задают: здесь она всегда доступна, вопрос в отчёте.</p>
         </div>
       </div>
     </div>
@@ -2210,7 +2371,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           </div>
         </div>
         <div class="w">
-          <h3 class="plat-title">Windows · ContentDialog, скругление 8</h3>
+          <h3 class="plat-title">Windows · ContentDialog, скругление 4</h3>
           <div class="states" style="gap:24px">
             <div class="state" style="flex:1;min-width:300px;max-width:560px"><span class="cap">Подтверждение · фокус на «Отмена»</span>
               <div class="win-modal">
@@ -2256,7 +2417,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                 <div class="qr"><svg role="img" aria-label="QR-код для добавления телефона"><use href="#qr-sample"/></svg></div>
                 <div class="pair-txt">
                   <p>Наведите камеру телефона: Pixroost → Устройства → Добавить ПК. Или введите код:</p>
-                  <p class="code" aria-label="Код 4 8 2 1 7 1">482&nbsp;171</p>
+                  <p class="code"><span aria-hidden="true">482&nbsp;171</span><span class="sr-only">Код 4 8 2 1 7 1</span></p>
                   <p>Код действует ещё 3:42</p>
                   <div><button class="btn btn-link sl fc hit compact" style="padding-left:0">Где взять код</button></div>
                 </div>
@@ -2334,7 +2495,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 <tr><td>Графика</td><td>Кольцо фокуса тёмной темы на белой подложке QR</td><td class="num">3:1</td><td>—</td><td class="num">—</td><td class="">—</td><td><span class="sw-cell"><span class="sw" style="background:#FFFFFF;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#9DB0F0"></span></span>#9DB0F0 / #FFFFFF</span></td><td class="num">2,12:1</td><td class="bad">не проходит<br><span style="font-weight:400;color:var(--text2)">решено: подложка QR в ролях светлой темы, кольцо «Сумерки» 12,8:1</span></td></tr>
 <tr><td>Исключения</td><td>Рамка карточки «Линия» на поверхности</td><td class="num">3:1</td><td><span class="sw-cell"><span class="sw" style="background:#FFFFFF;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#DDE2EB"></span></span>#DDE2EB / #FFFFFF</span></td><td class="num">1,30:1</td><td class="">исключение</td><td><span class="sw-cell"><span class="sw" style="background:#182038;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#2A3350"></span></span>#2A3350 / #182038</span></td><td class="num">1,30:1</td><td class="">исключение</td></tr>
 <tr><td>Исключения</td><td>Тональная кнопка на поверхности</td><td class="num">3:1</td><td><span class="sw-cell"><span class="sw" style="background:#FFFFFF;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#E4E8F3"></span></span>#E4E8F3 / #FFFFFF</span></td><td class="num">1,23:1</td><td class="">исключение</td><td><span class="sw-cell"><span class="sw" style="background:#182038;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#26345E"></span></span>#26345E / #182038</span></td><td class="num">1,33:1</td><td class="">исключение</td></tr>
-<tr><td>Исключения</td><td>Кнопка «Лампа» на поверхности</td><td class="num">3:1</td><td><span class="sw-cell"><span class="sw" style="background:#FFFFFF;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#F2A93B"></span></span>#F2A93B / #FFFFFF</span></td><td class="num">2,00:1</td><td class="">исключение</td><td><span class="sw-cell"><span class="sw" style="background:#182038;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#F2A93B"></span></span>#F2A93B / #182038</span></td><td class="num">8,07:1</td><td class="">исключение</td></tr>
+<tr><td>Исключения</td><td>Кнопка «Лампа» на поверхности</td><td class="num">3:1</td><td><span class="sw-cell"><span class="sw" style="background:#FFFFFF;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#F2A93B"></span></span>#F2A93B / #FFFFFF</span></td><td class="num">2,00:1</td><td class="bad">не проходит<br><span style="font-weight:400;color:var(--text2)">новое: по образцу исключения 3</span></td><td><span class="sw-cell"><span class="sw" style="background:#182038;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#F2A93B"></span></span>#F2A93B / #182038</span></td><td class="num">8,07:1</td><td class="ok">проходит</td></tr>
         </tbody>
       </table>
     </div>
@@ -2360,7 +2521,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <tr><td>Заполненность, светлая тема</td><td>«Лампа» на дорожке «Линия»</td><td class="num">1,54:1</td>
             <td>Уже решено тёмной кромкой (Д7). Без кромки нужен был бы <code>#B3710C</code>.</td></tr>
           <tr><td>Рамки карточек, тональные кнопки, кнопка «Лампа»</td><td>к «Бумаге»</td><td class="num">1,2–2,0:1</td>
-            <td>Осознанные исключения 2 и 3: рамки декоративные, кнопки узнают по подписи. Ближайшие значения с 3:1, если понадобится:
+            <td>Рамки и тональные кнопки — осознанные исключения 2 и 3: рамки декоративные, кнопки узнают по подписи. Для кнопки
+              «Лампа» в светлой теме такого исключения в документах нет — предлагаем записать его по образцу исключения 3. Ближайшие значения с 3:1, если понадобится:
               линия <code>#8395B6</code>, тональный <code>#8194C7</code>.</td></tr>
         </tbody>
       </table>
@@ -2380,6 +2542,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <tr><td>Превью</td><td>84 / 112</td><td class="num">84</td><td class="num">112</td></tr>
           <tr><td>Строки списков</td><td>72 / 56</td><td class="num">72</td><td class="num">56</td></tr>
           <tr><td>Кнопки верхней панели Android</td><td>48</td><td class="num">48</td><td class="num">—</td></tr>
+          <tr><td>Rail планшета: кнопка и пункты</td><td>кнопка 56, индикатор 56×32</td><td class="num">56 / 88×64</td><td class="num">—</td></tr>
           <tr><td>Команды CommandBar, крошки</td><td>32</td><td class="num">—</td><td class="num">32</td></tr>
         </tbody>
       </table>
@@ -2421,10 +2584,20 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
       root.setAttribute('data-theme', r.value === 'dark' ? 'dark' : 'light');
     });
   });
-  // Начальная тема — как в системе
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    var dr = document.querySelector('input[name="view"][value="dark"]');
-    dr.checked = true; dr.dispatchEvent(new Event('change'));
+  // Тема — как в системе, пока пользователь не выбрал её сам
+  var userPicked = false;
+  document.querySelectorAll('input[name="view"]').forEach(function (r) {
+    r.addEventListener('click', function () { userPicked = true; });
+  });
+  function followSystem(dark) {
+    var r = document.querySelector('input[name="view"][value="' + (dark ? 'dark' : 'light') + '"]');
+    r.checked = true; r.dispatchEvent(new Event('change'));
+  }
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.matches) followSystem(true);
+    var onSystem = function (e) { if (!userPicked) followSystem(e.matches); };
+    if (mq.addEventListener) mq.addEventListener('change', onSystem); else if (mq.addListener) mq.addListener(onSystem);
   }
   document.getElementById('text-200').addEventListener('change', function (e) { root.classList.toggle('text-200', e.target.checked); });
   document.getElementById('show-targets').addEventListener('change', function (e) { root.classList.toggle('show-targets', e.target.checked); });
