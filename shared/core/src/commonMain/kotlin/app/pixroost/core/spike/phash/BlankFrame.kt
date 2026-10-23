@@ -11,5 +11,4 @@ fun greyDeviation(grey: FloatArray): Double {
 }
 
 /** Whether a grey image with this [deviation] is a blank frame, one with no picture to match by. */
-fun isBlankFrame(deviation: Double, threshold: Double = PhashConstants.BLANK_DEVIATION): Boolean =
-    deviation < threshold
+fun isBlankFrame(deviation: Double, threshold: Double = PhashConstants.BLANK_DEVIATION): Boolean = deviation < threshold
