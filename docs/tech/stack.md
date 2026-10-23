@@ -38,7 +38,7 @@
 | OAuth | системный браузер + PKCE: Custom Tabs (`androidx.browser`, Android), `ASWebAuthenticationSession` (iOS), loopback-редирект на `HttpServer` из JDK (desktop). Общий код входа — на Ktor Client в `commonMain`, около 300 строк (спайк S-05) | AppAuth |
 | Фоновая работа | WorkManager (Android), BGTaskScheduler + background URLSession (iOS) | — |
 | Безопасное хранение | Keychain, Android Keystore (AES-GCM), DPAPI через JNA `Crypt32Util` (Windows), Secret Service (Linux). Не java-keyring: не обновляется с 2023 года, а Credential Manager держит не больше 2,5 КБ на запись | — |
-| Perceptual hash | своя реализация dHash/pHash на общем Kotlin | — |
+| Perceptual hash | своя реализация pHash (DCT 32×32, 64 бита) на общем Kotlin; dHash отвергнут: на копиях другого размера заметно хуже ([S-06](../architecture/data-model.md#как-считаем-phash)) | — |
 
 ## Качество
 
