@@ -699,6 +699,16 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .sizes { display: flex; align-items: flex-end; gap: 16px; }
 .app-icon { width: 96px; height: 96px; border-radius: 22px; background: #22305C; display: flex; align-items: center; justify-content: center; }
 
+
+/* Сетка «вариант × состояние» */
+.sg-wrap { overflow-x: auto; padding: 6px 4px 8px; margin: 0 -4px; }
+.sg { display: grid; gap: 14px 16px; align-items: center; justify-items: start; }
+.sg.c4 { grid-template-columns: 132px repeat(4, max-content); }
+.sg.c5 { grid-template-columns: 132px repeat(5, max-content); }
+.sg .hd { font-size: .75rem; color: var(--text2); font-weight: 600; }
+.sg .vn { font-size: .8125rem; font-weight: 600; line-height: 1.3; }
+.sg .vn small { display: block; font-weight: 400; color: var(--text2); font-size: .75rem; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; }
+
 @media (max-width: 720px) {
   main { padding: 16px 12px 64px; }
   .page-head-in, .toc { padding-left: 12px; padding-right: 12px; }
@@ -978,6 +988,289 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
         </div>
         <p class="note">Знак в интерфейсе скрыт от скринридера: рядом всегда есть текст («Проверено», «ПК „Дом“»). На тёмной теме контур
           сливается с фоном, но сам жёлтый даёт 8,1:1 к поверхности — знак читается.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= КНОПКИ ======================= -->
+  <section class="doc-section" id="buttons" aria-labelledby="h-buttons">
+    <h2 id="h-buttons">Кнопки</h2>
+    <p class="lead">Шесть вариантов, каждый — отдельная функция: <code>PrimaryButton</code>, <code>TonalButton</code>,
+      <code>SecondaryButton</code>, <code>DangerButton</code>, <code>LinkButton</code>, <code>LampButton</code>. На экране — одно главное
+      действие; красная — только удаление. Наведение и нажатие — слой цвета подписи поверх фона: Android 8 и 10%, Windows 6 и 10%.
+      Недоступная — подпись 38% и фон 12% от цвета текста. Это <span class="choice">выбор</span> по образцу Material 3 и Fluent.</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android <span class="tag">· высота 44, зона касания 48, полное скругление, Onest 600 15</span></p>
+          <div class="sg-wrap"><div class="sg c4">
+            <span class="hd">Вариант</span><span class="hd">По умолчанию</span><span class="hd">Нажата</span><span class="hd">Фокус</span><span class="hd">Недоступна</span>
+
+            <span class="vn">Главная<small>PrimaryButton</small></span>
+            <button class="btn btn-primary sl fc hit"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Отправить на ПК</button>
+            <button class="btn btn-primary sl fc hit is-pressed"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Отправить на ПК</button>
+            <button class="btn btn-primary sl fc hit is-focus"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Отправить на ПК</button>
+            <button class="btn btn-primary sl fc hit" disabled><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Отправить на ПК</button>
+
+            <span class="vn">Тональная<small>TonalButton</small></span>
+            <button class="btn btn-tonal sl fc hit">Подключить</button>
+            <button class="btn btn-tonal sl fc hit is-pressed">Подключить</button>
+            <button class="btn btn-tonal sl fc hit is-focus">Подключить</button>
+            <button class="btn btn-tonal sl fc hit" disabled>Подключить</button>
+
+            <span class="vn">Контурная<small>SecondaryButton</small></span>
+            <button class="btn btn-secondary sl fc hit">Выбрать фото</button>
+            <button class="btn btn-secondary sl fc hit is-pressed">Выбрать фото</button>
+            <button class="btn btn-secondary sl fc hit is-focus">Выбрать фото</button>
+            <button class="btn btn-secondary sl fc hit" disabled>Выбрать фото</button>
+
+            <span class="vn">Опасная<small>DangerButton</small></span>
+            <button class="btn btn-danger sl fc hit">Удалить 1&nbsp;240 копий</button>
+            <button class="btn btn-danger sl fc hit is-pressed">Удалить 1&nbsp;240 копий</button>
+            <button class="btn btn-danger sl fc hit is-focus">Удалить 1&nbsp;240 копий</button>
+            <button class="btn btn-danger sl fc hit" disabled>Удалить 1&nbsp;240 копий</button>
+
+            <span class="vn">Текстовая<small>LinkButton</small></span>
+            <button class="btn btn-link sl fc hit">Как установить на ПК</button>
+            <button class="btn btn-link sl fc hit is-pressed">Как установить на ПК</button>
+            <button class="btn btn-link sl fc hit is-focus">Как установить на ПК</button>
+            <button class="btn btn-link sl fc hit" disabled>Как установить на ПК</button>
+
+            <span class="vn">«Лампа»<small>LampButton</small></span>
+            <button class="btn btn-lamp sl fc hit">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit is-pressed">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit is-focus">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit" disabled>Разобрать</button>
+
+            <span class="vn">Кнопка-иконка<small>LabeledIconButton</small></span>
+            <button class="icon-btn sl fc hit" aria-label="Назад"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
+            <button class="icon-btn sl fc hit is-pressed" aria-label="Поиск по фото"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
+            <button class="icon-btn sl fc hit is-focus" aria-label="Сведения о фото"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg></button>
+            <button class="icon-btn sl fc hit" disabled aria-label="Ещё действия"><svg class="ic" aria-hidden="true"><use href="#i-more"/></svg></button>
+          </div></div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows <span class="tag">· высота 32, скругление 4, Onest 400 14</span></p>
+          <div class="sg-wrap"><div class="sg c5">
+            <span class="hd">Вариант</span><span class="hd">По умолчанию</span><span class="hd">Наведение</span><span class="hd">Нажата</span><span class="hd">Фокус</span><span class="hd">Недоступна</span>
+
+            <span class="vn">Главная<small>PrimaryButton</small></span>
+            <button class="btn btn-primary sl fc hit">Добавить телефон</button>
+            <button class="btn btn-primary sl fc hit is-hover">Добавить телефон</button>
+            <button class="btn btn-primary sl fc hit is-pressed">Добавить телефон</button>
+            <button class="btn btn-primary sl fc hit is-focus">Добавить телефон</button>
+            <button class="btn btn-primary sl fc hit" disabled>Добавить телефон</button>
+
+            <span class="vn">Тональная<small>TonalButton</small></span>
+            <button class="btn btn-tonal sl fc hit">Импорт Takeout</button>
+            <button class="btn btn-tonal sl fc hit is-hover">Импорт Takeout</button>
+            <button class="btn btn-tonal sl fc hit is-pressed">Импорт Takeout</button>
+            <button class="btn btn-tonal sl fc hit is-focus">Импорт Takeout</button>
+            <button class="btn btn-tonal sl fc hit" disabled>Импорт Takeout</button>
+
+            <span class="vn">Обычная<small>SecondaryButton</small></span>
+            <button class="btn btn-secondary sl fc hit">Показать в проводнике</button>
+            <button class="btn btn-secondary sl fc hit is-hover">Показать в проводнике</button>
+            <button class="btn btn-secondary sl fc hit is-pressed">Показать в проводнике</button>
+            <button class="btn btn-secondary sl fc hit is-focus">Показать в проводнике</button>
+            <button class="btn btn-secondary sl fc hit" disabled>Показать в проводнике</button>
+
+            <span class="vn">Опасная<small>DangerButton</small></span>
+            <button class="btn btn-danger sl fc hit">Удалить в корзину</button>
+            <button class="btn btn-danger sl fc hit is-hover">Удалить в корзину</button>
+            <button class="btn btn-danger sl fc hit is-pressed">Удалить в корзину</button>
+            <button class="btn btn-danger sl fc hit is-focus">Удалить в корзину</button>
+            <button class="btn btn-danger sl fc hit" disabled>Удалить в корзину</button>
+
+            <span class="vn">Текстовая<small>LinkButton</small></span>
+            <button class="btn btn-link sl fc hit">Где взять код</button>
+            <button class="btn btn-link sl fc hit is-hover">Где взять код</button>
+            <button class="btn btn-link sl fc hit is-pressed">Где взять код</button>
+            <button class="btn btn-link sl fc hit is-focus">Где взять код</button>
+            <button class="btn btn-link sl fc hit" disabled>Где взять код</button>
+
+            <span class="vn">«Лампа»<small>LampButton</small></span>
+            <button class="btn btn-lamp sl fc hit">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit is-hover">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit is-pressed">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit is-focus">Разобрать</button>
+            <button class="btn btn-lamp sl fc hit" disabled>Разобрать</button>
+
+            <span class="vn">Кнопка-иконка<small>LabeledIconButton</small></span>
+            <button class="icon-btn sl fc hit" aria-label="Обновить"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+            <span class="tip-wrap"><button class="icon-btn sl fc hit is-hover" aria-label="Обновить" aria-describedby="tip-refresh"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button><span class="tooltip" role="tooltip" id="tip-refresh">Обновить <span class="kbd">F5</span></span></span>
+            <button class="icon-btn sl fc hit is-pressed" aria-label="Обновить"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+            <button class="icon-btn sl fc hit is-focus" aria-label="Обновить"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+            <button class="icon-btn sl fc hit" disabled aria-label="Обновить"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+          </div></div>
+          <p class="note">Подсказка клавиши (<code>KeyHint</code>): <span class="kbd">Delete</span> отметить копию, <span class="kbd">Пробел</span> следующая группа,
+            <span class="kbd">Ctrl</span>&nbsp;<span class="kbd">Z</span> снять отметку. Кнопка-иконка на Windows показывает подсказку с названием при наведении.</p>
+        </div>
+      </div>
+    </div>
+    <p class="note">«Лампа» по документам — только «сохранено дома», а кнопка «Разобрать» на ней стоит в «Хранилищах» рядом с суммой,
+      которую можно освободить благодаря копиям на ПК. Вопрос к мейнтейнеру — в отчёте. Тональная кнопка на «Бумаге» — 1,2:1, её
+      узнают по подписи (осознанное исключение 3); то же для «Лампы» на «Бумаге» — 2,0:1.</p>
+  </section>
+
+  <!-- ======================= ЧИПЫ И ВКЛАДКИ ======================= -->
+  <section class="doc-section" id="chips" aria-labelledby="h-chips">
+    <h2 id="h-chips">Фильтры ленты и вкладки</h2>
+    <p class="lead"><code>LibraryFilters</code>: «Все», «Нет на ПК», «Только в облаках», «Видео» — выбирается один. На Android это
+      чипы 36 с зоной касания 48 (D4), скругление 8 <span class="choice">выбор</span>; на Windows — кнопки-переключатели 32.
+      <code>SelectorBar</code> на Windows переключает виды дублей в уборке. Ряд чипов на телефоне прокручивается и обрезан справа
+      (осознанное исключение 5).</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · рабочий образец (нажимается)</p>
+          <div class="chips" role="group" aria-label="Фильтр ленты" data-single>
+            <button class="chip sl fc hit" aria-pressed="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Все</button>
+            <button class="chip sl fc hit" aria-pressed="false">Нет на ПК</button>
+            <button class="chip sl fc hit" aria-pressed="false">Только в облаках</button>
+            <button class="chip sl fc hit" aria-pressed="false">Видео</button>
+          </div>
+          <div class="sg-wrap" style="margin-top:16px"><div class="sg c4">
+            <span class="hd">Состояние</span><span class="hd">По умолчанию</span><span class="hd">Нажат</span><span class="hd">Фокус</span><span class="hd">Недоступен</span>
+            <span class="vn">Не выбран</span>
+            <button class="chip sl fc hit demo" aria-pressed="false">Нет на ПК</button>
+            <button class="chip sl fc hit demo is-pressed" aria-pressed="false">Нет на ПК</button>
+            <button class="chip sl fc hit demo is-focus" aria-pressed="false">Нет на ПК</button>
+            <button class="chip sl fc hit demo" aria-pressed="false" disabled>Видео</button>
+            <span class="vn">Выбран</span>
+            <button class="chip sl fc hit demo" aria-pressed="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Все</button>
+            <button class="chip sl fc hit demo is-pressed" aria-pressed="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Все</button>
+            <button class="chip sl fc hit demo is-focus" aria-pressed="true"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Все</button>
+            <button class="chip sl fc hit demo" aria-pressed="true" disabled><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Все</button>
+          </div></div>
+          <p class="note">Недоступен: «Видео», пока индексация не закончилась — рядом в ленте подпись «Проверяем файлы: 8&nbsp;412 из 20&nbsp;000».</p>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · рабочий образец</p>
+          <div class="chips" role="group" aria-label="Фильтр ленты" data-single>
+            <button class="wchip sl fc hit" aria-pressed="true">Все</button>
+            <button class="wchip sl fc hit" aria-pressed="false">Нет на ПК</button>
+            <button class="wchip sl fc hit" aria-pressed="false">Только в облаках</button>
+            <button class="wchip sl fc hit" aria-pressed="false">Видео</button>
+          </div>
+          <div class="sg-wrap" style="margin-top:16px"><div class="sg c5">
+            <span class="hd">Состояние</span><span class="hd">По умолчанию</span><span class="hd">Наведение</span><span class="hd">Нажата</span><span class="hd">Фокус</span><span class="hd">Недоступна</span>
+            <span class="vn">Не выбрана</span>
+            <button class="wchip sl fc hit demo" aria-pressed="false">Нет на ПК</button>
+            <button class="wchip sl fc hit demo is-hover" aria-pressed="false">Нет на ПК</button>
+            <button class="wchip sl fc hit demo is-pressed" aria-pressed="false">Нет на ПК</button>
+            <button class="wchip sl fc hit demo is-focus" aria-pressed="false">Нет на ПК</button>
+            <button class="wchip sl fc hit demo" aria-pressed="false" disabled>Видео</button>
+            <span class="vn">Выбрана</span>
+            <button class="wchip sl fc hit demo" aria-pressed="true">Все</button>
+            <button class="wchip sl fc hit demo is-hover" aria-pressed="true">Все</button>
+            <button class="wchip sl fc hit demo is-pressed" aria-pressed="true">Все</button>
+            <button class="wchip sl fc hit demo is-focus" aria-pressed="true">Все</button>
+            <button class="wchip sl fc hit demo" aria-pressed="true" disabled>Все</button>
+          </div></div>
+
+          <h4 style="margin-top:24px">SelectorBar · виды дублей в уборке</h4>
+          <div class="selbar" role="tablist" aria-label="Виды дублей">
+            <button role="tab" class="sl fc" aria-selected="true" tabindex="0">Точные копии <span class="count">1&nbsp;240</span></button>
+            <button role="tab" class="sl fc" aria-selected="false" tabindex="-1">Тот же кадр хуже качеством <span class="count">86</span></button>
+            <button role="tab" class="sl fc" aria-selected="false" tabindex="-1">Похожие серии <span class="count">31</span></button>
+          </div>
+          <div class="sg-wrap" style="margin-top:12px"><div class="sg c4">
+            <span class="hd">Вкладка</span><span class="hd">Наведение</span><span class="hd">Нажата</span><span class="hd">Фокус</span><span class="hd">Выбрана + фокус</span>
+            <span class="vn">SelectorBar</span>
+            <div class="selbar" role="tablist" aria-label="Образец вкладки" style="border:0"><button role="tab" aria-selected="false" class="sl fc demo is-hover" tabindex="-1">Похожие серии</button></div>
+            <div class="selbar" role="tablist" aria-label="Образец вкладки" style="border:0"><button role="tab" aria-selected="false" class="sl fc demo is-pressed" tabindex="-1">Похожие серии</button></div>
+            <div class="selbar" role="tablist" aria-label="Образец вкладки" style="border:0"><button role="tab" aria-selected="false" class="sl fc demo is-focus" tabindex="-1">Похожие серии</button></div>
+            <div class="selbar" role="tablist" aria-label="Образец вкладки" style="border:0"><button role="tab" class="sl fc demo is-focus" aria-selected="true" tabindex="-1">Точные копии</button></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= МЕТКИ И СТАТУСЫ ======================= -->
+  <section class="doc-section" id="badges" aria-labelledby="h-badges">
+    <h2 id="h-badges">Метки и статусы</h2>
+    <p class="lead"><code>StatusBadge</code> — шесть меток из документов. Цвета «Проверено» (лампа), «Почти заполнен» (опасность) заданы;
+      «Автоархив», «Отмечено», «Копия», «Хуже» — <span class="choice">выбор</span>. <code>SourceMark</code> — круглая метка места, скрыта
+      от скринридера, рядом всегда название. <code>ArchiveStatus</code> — плашка статуса архива, ведёт в «Устройства».</p>
+    <div class="stage" data-theme="light">
+      <div class="plat">
+        <div class="a">
+          <p class="plat-title">Android · StatusBadge, Onest 600 13</p>
+          <div class="chips">
+            <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Проверено</span>
+            <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span>
+            <span class="badge b-tonal"><svg class="ic" aria-hidden="true"><use href="#i-send"/></svg>Автоархив</span>
+            <span class="badge b-marked"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Отмечено</span>
+            <span class="badge b-neutral">Копия</span>
+            <span class="badge b-neutral">Хуже</span>
+            <span class="badge b-danger">Почти заполнен</span>
+          </div>
+          <p class="note">Метки не нажимаются: состояний наведения и фокуса у них нет.</p>
+
+          <h4 style="margin-top:20px">SourceMark · места</h4>
+          <div class="chips" style="gap:16px">
+            <span class="state"><span class="src src-40" aria-hidden="true">Я</span><span class="cap">Яндекс Диск</span></span>
+            <span class="state"><span class="src src-40" aria-hidden="true">D</span><span class="cap">Dropbox</span></span>
+            <span class="state"><span class="src src-40" aria-hidden="true">O</span><span class="cap">OneDrive</span></span>
+            <span class="state"><span class="src src-40" aria-hidden="true">W</span><span class="cap">WebDAV</span></span>
+            <span class="state"><span class="src src-40" aria-hidden="true">G</span><span class="cap">Google Фото</span></span>
+            <span class="state"><span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="cap">Телефон</span></span>
+            <span class="state"><span class="src src-40" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-laptop"/></svg></span><span class="cap">Ноутбук</span></span>
+            <span class="state"><span class="src src-40 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="22" height="22"><use href="#lamp"/></svg></span><span class="cap">ПК «Дом»</span></span>
+          </div>
+          <p class="note">Буквы, а не логотипы сервисов: логотипы — только по брендбукам, это отдельная задача. Цвет меток облаков
+            одинаковый (тональный), выделяется только ПК — <span class="choice">выбор</span>.</p>
+
+          <h4 style="margin-top:20px">ArchiveStatus</h4>
+          <div class="row-gap" style="max-width:380px">
+            <a href="#" class="status s-saved sl fc"><svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg>
+              <span class="grow"><strong>Всё сохранено на ПК «Дом»</strong><small>Проверено в 14:20</small></span>
+              <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+            <a href="#" class="status s-wait sl fc"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-clock"/></svg>
+              <span class="grow"><strong>Ждёт ПК «Дом»: 34 фото</strong><small>Отправятся сами, когда ПК будет в сети</small></span>
+              <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+            <a href="#" class="status s-pause sl fc"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-wifi-off"/></svg>
+              <span class="grow"><strong>Пауза: нет Wi-Fi</strong><small>212 фото отправятся дома</small></span>
+              <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+            <a href="#" class="status s-wait sl fc"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-send"/></svg>
+              <span class="grow"><strong>Отправляем на ПК «Дом»: 128 из 212</strong>
+                <span class="mini-bar" role="progressbar" aria-label="Отправка на ПК «Дом»" aria-valuemin="0" aria-valuemax="212" aria-valuenow="128"><i style="width:60%"></i></span></span>
+              <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+            <p class="cap" style="margin:8px 0 0">Нажата · фокус · много фото</p>
+            <a href="#" class="status s-saved sl fc is-pressed"><svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg>
+              <span class="grow"><strong>Всё сохранено на ПК «Дом»</strong><small>Проверено в 14:20</small></span>
+              <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+            <a href="#" class="status s-wait sl fc is-focus"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-clock"/></svg>
+              <span class="grow"><strong>Ждёт ПК «Дом»: 12&nbsp;480 фото и видео</strong><small>ПК не в сети 9 дней · 38,6&nbsp;ГБ</small></span>
+              <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
+          </div>
+        </div>
+        <div class="w">
+          <p class="plat-title">Windows · Onest 600 12</p>
+          <div class="chips">
+            <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Проверено</span>
+            <span class="badge b-tonal">Автоархив</span>
+            <span class="badge b-marked"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Отмечено</span>
+            <span class="badge b-neutral">Копия</span>
+            <span class="badge b-neutral">Хуже</span>
+            <span class="badge b-danger">Почти заполнен</span>
+          </div>
+          <div class="chips" style="gap:12px;margin-top:16px">
+            <span class="src src-32" aria-hidden="true">Я</span><span class="src src-32" aria-hidden="true">O</span><span class="src src-32" aria-hidden="true">D</span>
+            <span class="src src-32" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>
+            <span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span>
+          </div>
+          <div class="row-gap" style="max-width:420px;margin-top:16px">
+            <a href="#" class="status s-saved sl fc"><svg class="lamp-svg" width="20" height="20" aria-hidden="true"><use href="#lamp"/></svg>
+              <span class="grow"><strong>Приём включён: всё сохранено</strong><small>Последнее фото — с Pixel 8 Лены в 14:20</small></span></a>
+            <a href="#" class="status s-wait sl fc is-hover"><svg class="ic ic-lead ic-20" aria-hidden="true"><use href="#i-download"/></svg>
+              <span class="grow"><strong>Принимаем с Pixel 8 Лены: 128 из 212</strong><small>Наведение</small></span></a>
+            <a href="#" class="status s-pause sl fc is-focus"><svg class="ic ic-lead ic-20" aria-hidden="true"><use href="#i-pause"/></svg>
+              <span class="grow"><strong>Приём на паузе</strong><small>Фокус · возобновится в 19:00</small></span></a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
