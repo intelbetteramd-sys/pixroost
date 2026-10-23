@@ -1046,8 +1046,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     <code>TrayPanel</code>, уведомления Android — появятся в макетах своих сценариев:
     они собираются из того, что есть на этой странице.</p>
   <p class="intro">Всё на странице задано в <code>docs/design/README.md</code>, в том числе роли, состояния, скругления и осознанные
-    исключения. Метка <span class="choice">выбор</span> осталась только там, где решения ещё нет: значение выбрано при сборке и ждёт
-    подтверждения. Метка <span class="flag">не проходит</span> — пара не проходит WCAG AA, рядом — решение или исключение.</p>
+    исключения. Метка <span class="choice">выбор</span> осталась только у пропорций знака «свет в окне»: их решим вместе с логотипом
+    на шаге 2.2. Метка <span class="flag">не проходит</span> — пара не проходит WCAG AA, рядом — решение или исключение.</p>
 
   <!-- ======================= ЦВЕТА ======================= -->
   <section class="doc-section" id="colors" aria-labelledby="h-colors">
@@ -1176,10 +1176,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
         </div>
         <p class="note">Телефон: поля экрана 16 (жёлтые полосы), блоки через 24, лента — 4 колонки превью от края до края с зазором 2.
           Windows: навигация 248, контент с полями 24, превью 112 с зазором 4, панель деталей 320.</p>
-        <p class="note">Превью в ленте Android — без скругления <span class="choice">выбор</span>: сетка от края до края с зазором 2 читается
+        <p class="note">Превью в ленте Android — без скругления, осознанное исключение 9: сетка от края до края с зазором 2 читается
           как одно полотно, как в системной галерее, а скругление 8 на превью 84 срезает углы кадра и дробит сетку на плитки.
-          Скругление 8 остаётся у отдельных превью: выбранное фото в ленте, превью в карточках уборки и в «Где лежит», вся сетка Windows.
-          Если решим следовать README буквально, меняется одно значение.</p>
+          Скругление 8 остаётся у отдельных превью: выбранное фото в ленте, превью в карточках уборки и в «Где лежит»; сетка Windows — 4.</p>
         <p class="note">Окно Windows 11 и его рамку рисует система, у неё своё скругление (8): на макетах окно скруглено на 8, а всё внутри —
           на 4, включая диалоги, превью и метки. Скругление 8 у диалогов и всплывающих панелей WinUI (<code>OverlayCornerRadius</code>)
           не берём. Круглые по форме элементы — метки мест, радиокнопки, дорожка переключателя — остаются круглыми.</p>
@@ -1202,7 +1201,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     <h2 id="h-mark">Знак «свет в окне»</h2>
     <p class="lead">Окно с переплётом, залитое «Лампой», с тёмным контуром «Чернила». Отмечает только то, что уже лежит на ПК
       пользователя и проверено: метку места на превью, статус «Всё сохранено», строку «ПК „Дом“» в списке копий, итог уборки.
-      Жёлтый на белом — 2,0:1, поэтому контур обязателен. Пропорции переплёта (крестом, верхняя створка короче) — <span class="choice">выбор</span>.</p>
+      Жёлтый на белом — 2,0:1, поэтому контур обязателен. Пропорции переплёта (крестом, верхняя створка короче) — <span class="choice">выбор</span>: решим вместе с логотипом на шаге 2.2
+      «Логотип и иконка».</p>
     <div class="pair">
       <div class="stage" data-theme="light">
         <div class="logo-grid">
@@ -1790,10 +1790,10 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
   <!-- ======================= ТОТ ЖЕ КАДР, ДРУГОЕ КАЧЕСТВО ======================= -->
   <section class="doc-section" id="sameshot" aria-labelledby="h-sameshot">
     <h2 id="h-sameshot">Тот же кадр, другое качество</h2>
-    <p class="lead">Группа <code>SAME_SHOT</code> внутри <code>CleanupGroupCard</code> (решение — ADR 0011). Чекбоксов нет, заранее ничего
-      не выбрано. У каждой копии нейтрально: где лежит, разрешение, формат, размер и что есть только у неё («есть геометка», «есть видео»).
+    <p class="lead">Группа <code>SAME_SHOT</code> внутри <code>CleanupGroupCard</code> (решение — <a href="https://github.com/intelbetteramd-sys/pixroost/blob/main/docs/architecture/adr/0011-cleanup-safety-rule.md">ADR 0011</a>). Чекбоксов нет, заранее ничего
+      не выбрано. У каждой копии нейтрально: где лежит, разрешение, формат, размер и что есть только у неё («есть геолокация», «с видео»).
       Метка «Лучшее качество» — только если копия больше по обеим сторонам, а у другой нет ничего своего. Действия: «Отправить на ПК» —
-      у любой копии, которой на ПК нет; «Убрать из Яндекс Диска» (из своего источника) — только у копии, которая уже сохранена на ПК, и
+      у любой копии, которой на ПК нет (на Windows — «Сохранить в архив»); «Удалить из Яндекс Диска» (из своего источника) — только у копии, которая уже сохранена на ПК, и
       ведёт в обычное подтверждение удаления; «Это разные кадры» — у всей группы. Подсказок удалить копию похуже нет.
       Без добавленного ПК остаётся только «Это разные кадры».</p>
     <div class="stage" data-theme="light">
@@ -1807,21 +1807,21 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <p>Один кадр в копиях разного качества. Ничего не выбрано: решаете вы.</p>
               <ul class="shots">
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-sea"/></svg>
-                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true">Я</span>Яндекс Диск</span><span class="spec">4032×3024 · HEIC · 4,2&nbsp;МБ</span><span class="tags"><span class="badge b-better">Лучшее качество</span><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span></span></div><div class="act"><button class="btn btn-secondary sl fc hit" aria-label="Убрать из Яндекс Диска копию 4032×3024">Убрать из Яндекс Диска</button></div></li>
+                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true">Я</span>Яндекс Диск</span><span class="spec">4032×3024 · HEIC · 4,2&nbsp;МБ</span><span class="tags"><span class="badge b-better">Лучшее качество</span><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span></span></div><div class="act"><button class="btn btn-secondary sl fc hit" aria-label="Удалить из Яндекс Диска копию 4032×3024">Удалить из Яндекс Диска</button></div></li>
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-sea"/></svg>
                 <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true">O</span>OneDrive</span><span class="spec">1600×1200 · JPEG · 1,1&nbsp;МБ</span><span class="state-txt">На ПК этой копии нет</span></div><div class="act"><button class="btn btn-tonal sl fc hit" aria-label="Отправить на ПК копию из OneDrive, 1600×1200">Отправить на ПК</button></div></li>
               </ul>
               <div class="gf"><span></span><button class="btn btn-link sl fc hit compact">Это разные кадры</button></div>
             </section></div>
-            <div class="state"><span class="cap">ПК добавлен · у меньшей копии есть своё — метки «Лучшее качество» нет · нажата «Убрать», фокус на «Отправить»</span>
+            <div class="state"><span class="cap">ПК добавлен · у меньшей копии есть своё — метки «Лучшее качество» нет · нажата «Удалить», фокус на «Отправить»</span>
             <section class="card shot-group" aria-labelledby="ss-b">
               <h4 class="gh" id="ss-b">IMG_3310 · 2 июня, 19:05</h4>
               <p>Один кадр в копиях разного качества. Ничего не выбрано: решаете вы.</p>
               <ul class="shots">
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-hills"/></svg>
-                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true">D</span>Dropbox</span><span class="spec">4032×3024 · JPEG · 3,9&nbsp;МБ</span><span class="tags"><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span></span></div><div class="act"><button class="btn btn-secondary sl fc hit is-pressed" aria-label="Убрать из Dropbox копию 4032×3024">Убрать из Dropbox</button></div></li>
+                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true">D</span>Dropbox</span><span class="spec">4032×3024 · JPEG · 3,9&nbsp;МБ</span><span class="tags"><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span></span></div><div class="act"><button class="btn btn-secondary sl fc hit is-pressed" aria-label="Удалить из Dropbox копию 4032×3024">Удалить из Dropbox</button></div></li>
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-hills"/></svg>
-                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>Телефон</span><span class="spec">3024×2268 · HEIC · 2,0&nbsp;МБ</span><span class="state-txt">На ПК этой копии нет</span><span class="tags"><span class="badge b-neutral">есть геометка</span><span class="badge b-neutral">есть видео</span></span></div><div class="act"><button class="btn btn-tonal sl fc hit is-focus" aria-label="Отправить на ПК копию с телефона, 3024×2268">Отправить на ПК</button></div></li>
+                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span>Телефон</span><span class="spec">3024×2268 · HEIC · 2,0&nbsp;МБ</span><span class="state-txt">На ПК этой копии нет</span><span class="tags"><span class="badge b-neutral">есть геолокация</span><span class="badge b-neutral">с видео</span></span></div><div class="act"><button class="btn btn-tonal sl fc hit is-focus" aria-label="Отправить на ПК копию с телефона, 3024×2268">Отправить на ПК</button></div></li>
               </ul>
               <div class="gf"><span></span><button class="btn btn-link sl fc hit compact">Это разные кадры</button></div>
             </section></div>
@@ -1835,22 +1835,22 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-sea"/></svg>
                 <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true">O</span>OneDrive</span><span class="spec">1600×1200 · JPEG · 1,1&nbsp;МБ</span></div></li>
               </ul>
-              <div class="gf"><p class="cap">Отправлять копии на ПК и убирать их из облаков можно, когда добавлен ПК.</p><button class="btn btn-link sl fc hit compact">Это разные кадры</button></div>
+              <div class="gf"><p class="cap">Отправлять копии на ПК и удалять их из облаков можно, когда добавлен ПК.</p><button class="btn btn-link sl fc hit compact">Это разные кадры</button></div>
             </section></div>
           </div>
-          <p class="note">Кнопки нейтральные: «Отправить на ПК» — тональная, «Убрать из …» — контурная. Красная только опасная кнопка в
-            подтверждении удаления, куда «Убрать из …» ведёт с одним файлом. Имена для скринридера называют копию: «Отправить на ПК копию
+          <p class="note">Кнопки нейтральные: «Отправить на ПК» — тональная, «Удалить из …» — контурная. Красная только опасная кнопка в
+            подтверждении удаления, куда «Удалить из …» ведёт с одним файлом. Имена для скринридера называют копию: «Отправить на ПК копию
             из OneDrive, 1600×1200» — видимая подпись входит в имя (2.5.3).</p>
         </div>
         <div class="w">
-          <h3 class="plat-title">Windows · фокус на «Убрать», наведение на «Сохранить», третья копия сохраняется</h3>
+          <h3 class="plat-title">Windows · фокус на «Удалить», наведение на «Сохранить», третья копия сохраняется</h3>
           <div style="max-width:640px">
             <section class="card shot-group" aria-labelledby="ss-w">
               <h4 class="gh" id="ss-w">IMG_2041 · 12 мая, 14:20</h4>
               <p>Один кадр в копиях разного качества. Ничего не выбрано: решаете вы.</p>
               <ul class="shots">
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-sea"/></svg>
-                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true" style="width:24px;height:24px;font-size:var(--t-w-cap)">Я</span>Яндекс Диск</span><span class="spec">4032×3024 · HEIC · 4,2&nbsp;МБ</span><span class="tags"><span class="badge b-better">Лучшее качество</span><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span></span></div><div class="act"><button class="btn btn-secondary sl fc hit is-focus" aria-label="Убрать из Яндекс Диска копию 4032×3024">Убрать из Яндекс Диска</button></div></li>
+                <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true" style="width:24px;height:24px;font-size:var(--t-w-cap)">Я</span>Яндекс Диск</span><span class="spec">4032×3024 · HEIC · 4,2&nbsp;МБ</span><span class="tags"><span class="badge b-better">Лучшее качество</span><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Сохранено дома</span></span></div><div class="act"><button class="btn btn-secondary sl fc hit is-focus" aria-label="Удалить из Яндекс Диска копию 4032×3024">Удалить из Яндекс Диска</button></div></li>
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-sea"/></svg>
                 <div class="body"><span class="src-line"><span class="src src-32" aria-hidden="true" style="width:24px;height:24px;font-size:var(--t-w-cap)">O</span>OneDrive</span><span class="spec">1600×1200 · JPEG · 1,1&nbsp;МБ</span><span class="state-txt">В архиве этой копии нет</span></div><div class="act"><button class="btn btn-secondary sl fc hit is-hover" aria-label="Сохранить в архив копию из OneDrive, 1600×1200">Сохранить в архив</button></div></li>
               <li class="shot"><svg class="pv" viewBox="0 0 100 100" aria-hidden="true"><use href="#ph-sea"/></svg>
@@ -1859,9 +1859,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <div class="gf"><span></span><button class="btn btn-link sl fc hit compact">Это разные кадры</button></div>
             </section>
           </div>
-          <p class="note">ПК — это и есть архив, поэтому на Windows «Отправить на ПК» звучит как «Сохранить в архив» <span class="choice">выбор</span>,
+          <p class="note">ПК — это и есть архив, поэтому на Windows «Отправить на ПК» звучит как «Сохранить в архив» (осознанное исключение 10, на телефоне — «Отправить на ПК»),
             метка остаётся «Сохранено дома», как везде. Состояния «ПК не добавлен» на Windows нет. Пока копия сохраняется, кнопки у неё нет —
-            вместо неё строка прогресса; когда копия сохранится, появится «Убрать из WebDAV».</p>
+            вместо неё строка прогресса; когда копия сохранится, появится «Удалить из WebDAV».</p>
         </div>
       </div>
     </div>
@@ -2150,7 +2150,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
       Лежит: ПК „Дом“, Яндекс Диск». Порядок меток — ПК первым, дальше облака, телефон последним; не больше трёх меток, третья — «+N»:
       четыре метки не помещаются на превью 84. Метки, длительность и подпись состояния лежат на превью фиксированного размера и набраны фиксированно: 13 на Android, 12 на Windows,
       «+N» тем же размером. С размером шрифта они не растут, иначе не поместятся на превью 84; всё, что в них есть, дублирует имя превью и «Где лежит»
-      <span class="choice">выбор</span>. Пока превью грузится — тональная заливка и метки мест (места известны из индекса, до загрузки
+      (осознанное исключение 11). Пока превью грузится — тональная заливка и метки мест (места известны из индекса, до загрузки
       картинки); если превью недоступно — иконка и короткая причина, подробности и «Повторить» — в «Где лежит».</p>
     <div class="stage" data-theme="light">
       <div class="plat">
@@ -2249,8 +2249,8 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
     <p class="lead"><code>MainNavigationBar</code> (Android) — компактная нижняя панель, четыре раздела: Лента, Хранилища, Уборка, Устройства;
       настройки — в верхней панели. <code>SelectionToolbar</code> — плавающая панель действий с выбранными; число выбранных — в верхней
       панели режима выбора, как в Material 3. Планшет — <code>MainNavigationRail</code>, <a href="#rail">ниже</a>. <code>NavigationPane</code>
-      (Windows) — слева, со статусом приёма внизу; «Архив» есть только на ПК. Ширина панели — 248; вид статуса приёма внизу
-      панели <span class="choice">выбор</span>.</p>
+      (Windows) — слева, со статусом приёма внизу; «Архив» есть только на ПК. Ширина панели — 248. Статус приёма внизу — нейтральная плашка
+      «Бумага» с рамкой «Линия» и точкой «Сумерки», без «Лампы»: приём — ещё не «сохранено дома». Это только статус, без своего действия.</p>
     <div class="stage" data-theme="light">
       <div class="plat">
         <div class="a">
@@ -2361,8 +2361,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
       телефона, настройки внизу, сверху кнопка «Отправить на ПК» (<code>components.md</code>). Пока ничего не выбрано, кнопка
       недоступна, но остаётся в фокусе с клавиатуры и в TalkBack: её имя объясняет почему — «Отправить на ПК. Сначала выберите фото».
       Когда фото выбраны, кнопка доступна, в имени — сколько уйдёт: «Отправить на ПК 3 фото». Справа вместо нижнего листа — панель
-      «Где лежит» (<code>WherePane</code>, появится в макете ленты). Ширина 96 и пункт 88×64 — по rail Material 3 Expressive
-      <span class="choice">выбор</span>; индикатор, цвета и слои — как у <code>MainNavigationBar</code>. Кнопка — скругление 16, как плашки.</p>
+      «Где лежит» (<code>WherePane</code>, появится в макете ленты). Ширина 96 и пункт 88×64 — по rail Material 3; индикатор, цвета и слои — как у <code>MainNavigationBar</code>. Кнопка — скругление 16, как плашки.</p>
     <div class="stage" data-theme="light">
       <div class="plat">
         <div class="a">
@@ -2598,7 +2597,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 <tr><td>Метки</td><td>«Проверено»: текст на «Лампе светлой»</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#FDF1DC;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#172036"></span></span>#172036 / #FDF1DC</span></td><td class="num">14,50:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#372C18;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#E8ECF4"></span></span>#E8ECF4 / #372C18</span></td><td class="num">11,55:1</td><td class="ok">проходит</td></tr>
 <tr><td>Метки</td><td>«Почти заполнен»: «Опасность» на светлом красном</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#FBE9E7;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#B42318"></span></span>#B42318 / #FBE9E7</span></td><td class="num">5,61:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#3D1C22;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#FF8A7A"></span></span>#FF8A7A / #3D1C22</span></td><td class="num">6,61:1</td><td class="ok">проходит</td></tr>
 <tr><td>Метки</td><td>«Автоархив»: текст на тональном</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#E4E8F3;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#22305C"></span></span>#22305C / #E4E8F3</span></td><td class="num">10,41:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#26345E;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#E8ECF4"></span></span>#E8ECF4 / #26345E</span></td><td class="num">10,22:1</td><td class="ok">проходит</td></tr>
-<tr><td>Метки</td><td>«Копия», «есть геометка»: вторичный на фоне</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#F3F5F9;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#5B657A"></span></span>#5B657A / #F3F5F9</span></td><td class="num">5,36:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#0F1528;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#A3ADC2"></span></span>#A3ADC2 / #0F1528</span></td><td class="num">8,04:1</td><td class="ok">проходит</td></tr>
+<tr><td>Метки</td><td>«Копия», «есть геолокация»: вторичный на фоне</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#F3F5F9;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#5B657A"></span></span>#5B657A / #F3F5F9</span></td><td class="num">5,36:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#0F1528;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#A3ADC2"></span></span>#A3ADC2 / #0F1528</span></td><td class="num">8,04:1</td><td class="ok">проходит</td></tr>
 <tr><td>Метки</td><td>Ошибка поля: «Опасность» на фоне экрана</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#F3F5F9;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#B42318"></span></span>#B42318 / #F3F5F9</span></td><td class="num">6,02:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#0F1528;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#FF8A7A"></span></span>#FF8A7A / #0F1528</span></td><td class="num">7,92:1</td><td class="ok">проходит</td></tr>
 <tr><td>Метки</td><td>Уведомление: текст на инверсии</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#172036;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#FFFFFF"></span></span>#FFFFFF / #172036</span></td><td class="num">16,20:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#E8ECF4;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#172036"></span></span>#172036 / #E8ECF4</span></td><td class="num">13,68:1</td><td class="ok">проходит</td></tr>
 <tr><td>Метки</td><td>Уведомление: действие на инверсии</td><td class="num">4,5:1</td><td><span class="sw-cell"><span class="sw" style="background:#172036;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#9DB0F0"></span></span>#9DB0F0 / #172036</span></td><td class="num">7,64:1</td><td class="ok">проходит</td><td><span class="sw-cell"><span class="sw" style="background:#E8ECF4;width:28px;height:20px;display:inline-flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:2px;background:#22305C"></span></span>#22305C / #E8ECF4</span></td><td class="num">10,78:1</td><td class="ok">проходит</td></tr>
