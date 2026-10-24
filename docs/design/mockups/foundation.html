@@ -558,6 +558,13 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .banner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 16px; border-radius: var(--r-plate);
   background: var(--tonal); color: var(--text); font-size: var(--t-a-body); }
 .banner p { margin: 0; flex: 1; min-width: 180px; }
+/* LimitedAccessBanner: закрыть нельзя, главной кнопки нет — «Выбрать ещё фото» и контурная «Открыть доступ ко всем».
+   Фон «Бумага» с рамкой: на тональном фоне тональная кнопка не видна. */
+.banner.lim { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); align-items: flex-start; flex-wrap: nowrap; }
+.banner.lim > .ic { color: var(--primary); flex: none; margin-top: 1px; }
+.banner.lim > div { flex: 1; min-width: 0; }
+.lim-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.lim-btns .btn { white-space: normal; }
 
 .empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 32px 24px;
   max-width: 340px; }
@@ -1509,7 +1516,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <h4 style="margin-top:20px">ArchiveStatus</h4>
           <div class="row-gap" style="max-width:380px">
             <a href="#" class="status s-saved sl fc"><svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg>
-              <span class="grow"><strong>Всё сохранено на ПК «Дом»</strong><small>Проверено в 14:20</small></span>
+              <span class="grow"><strong>Фото с телефона — на ПК «Дом»</strong><small>Проверено в 14:20</small></span>
               <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
             <a href="#" class="status s-wait sl fc"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-clock"/></svg>
               <span class="grow"><strong>Ждёт ПК «Дом»: 34 фото</strong><small>Отправятся сами, когда ПК будет в сети</small></span>
@@ -1526,7 +1533,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
             <p class="cap" style="margin:8px 0 0">Нажата · фокус · много фото</p>
             <a href="#" class="status s-saved sl fc is-pressed"><svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg>
-              <span class="grow"><strong>Всё сохранено на ПК «Дом»</strong><small>Проверено в 14:20</small></span>
+              <span class="grow"><strong>Фото с телефона — на ПК «Дом»</strong><small>Проверено в 14:20</small></span>
               <svg class="ic chev" aria-hidden="true"><use href="#i-chevron"/></svg></a>
             <a href="#" class="status s-wait sl fc is-focus"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-clock"/></svg>
               <span class="grow"><strong>Ждёт ПК «Дом»: 12&nbsp;480 фото и видео</strong><small>ПК не в сети 9 дней · 38,6&nbsp;ГБ</small></span>
@@ -2134,7 +2141,9 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                 <div><p>Google даёт доступ только к выбранным фото. Всю библиотеку можно перенести через Google Takeout на ПК.</p>
                   <button class="btn btn-link sl fc hit" style="padding-left:0;margin-top:4px">Как перенести всё</button></div></div></div>
             <div class="state"><span class="cap">LimitedAccessBanner</span>
-              <div class="banner"><p>Видны 120 фото, которые вы выбрали</p><button class="btn btn-primary sl fc hit compact">Открыть доступ ко всем</button></div></div>
+              <div class="banner lim" role="region" aria-label="Доступ к части фото"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>
+                <div><p>Видны 120 фото, которые вы выбрали. Новые снимки добавляйте сами.</p>
+                <div class="lim-btns"><button class="btn btn-tonal sl fc hit compact">Выбрать ещё фото</button><button class="btn btn-secondary sl fc hit compact">Открыть доступ ко всем</button></div></div></div></div>
             <div class="state"><span class="cap">ErrorSnackbar</span>
               <div class="snack" role="status"><p>Яндекс Диск не отвечает. Повторим через 5 минут</p><button class="btn btn-link sl fc hit compact">Повторить сейчас</button></div>
               <div class="snack" role="status"><p>Отправлено на ПК «Дом»</p></div></div>
