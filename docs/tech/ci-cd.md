@@ -10,6 +10,7 @@ GitHub Actions. Для **публичных** репозиториев мину�
 | [`ci.yml`](../../.github/workflows/ci.yml) | проверки и сборка на каждый PR и push в `main`, [подробно ниже](#ciyml--на-каждый-pr-и-push-в-main) |
 | [`pr-title.yml`](../../.github/workflows/pr-title.yml) | проверяет, что заголовок PR соответствует [Conventional Commits](../process/conventions.md#2-коммиты) |
 | [`labels.yml`](../../.github/workflows/labels.yml) | создаёт и обновляет лейблы из [`.github/labels.yml`](../../.github/labels.yml) |
+| [`screenshots.yml`](../../.github/workflows/screenshots.yml) | вручную: записывает эталоны скриншот-тестов на Linux и кладёт их в артефакт `screenshots` ([как обновить](../process/conventions.md#скриншот-тесты)) |
 | [`roadmap-setup.yml`](../../.github/workflows/roadmap-setup.yml) | вручную: привязывает эпики к вехам и лейблам |
 | [`dependabot.yml`](../../.github/dependabot.yml) | раз в неделю обновляет GitHub Actions и зависимости Gradle: Kotlin с Compose и AndroidX — группами; AGP — только патч-версии, минорные поднимаем вручную, когда их поддерживает стабильная Android Studio |
 
@@ -21,6 +22,10 @@ GitHub Actions. Для **публичных** репозиториев мину�
 | `Build (windows-latest)` | Windows | то же на Windows: ловит проблемы путей и окончаний строк |
 | `iOS` | macOS | тесты общего кода на симуляторе, фреймворк `PixroostKit`, сборка приложения из Xcode-проекта для симулятора без подписи |
 
+- На Linux после `check` отдельным шагом идёт сверка скриншотов: `desktopTest` с `-Proborazzi.test.verify=true`.
+  Эталоны лежат в репозитории (`shared/designsystem/src/desktopTest/screenshots`), записаны на Linux; на Windows
+  скриншоты не сверяются (шрифты и сглаживание отличаются). При расхождении картинки лежат в артефакте
+  `reports-ubuntu-latest`, в `shared/designsystem/build/outputs/roborazzi`.
 - Actions закреплены по SHA коммита, версия — в комментарии; обновляет их Dependabot. Права — только чтение.
 - Кэш Gradle — `gradle/actions/setup-gradle` с открытым провайдером `basic`, кэш Kotlin/Native — `~/.konan`.
   Кэш Gradle пополняют только сборки `main`, PR его только читают.

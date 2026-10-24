@@ -6,9 +6,6 @@ name: Record screenshots
 
 on:
   workflow_dispatch:
-  # TEMPORARY: records the first golden images of PR #90; removed in the next commit.
-  push:
-    branches: [feat/90-theme-tokens]
 
 permissions:
   contents: read
