@@ -20,6 +20,13 @@ object AppLogging {
         Logger.setTag(LoggingConstants.DEFAULT_TAG)
     }
 
+    /**
+     * Reads a severity from a setting such as a system property: "debug" or "info", case-insensitive.
+     * Anything else, including `null`, gives [Severity.Info], so a release never logs more by accident.
+     */
+    fun severityFrom(value: String?): Severity =
+        if (value.equals("debug", ignoreCase = true)) Severity.Debug else Severity.Info
+
     /** A logger with [tag], usually the class name. */
     fun logger(tag: String): Logger = Logger.withTag(tag)
 }
