@@ -47,7 +47,8 @@ Claude Code roles for this repository live in `.claude/agents/`: `developer`, `r
 and `architect-skeptic` (debate decisions that are hard to reverse), `designer`, `tester`, `researcher`.
 A lead session hands out issues to them and reports to the maintainer. Builds and checks run in CI only.
 Everything the maintainer has to check by hand on devices is kept in the pinned issue #83 «Что проверить
-мейнтейнеру»: the lead adds new checks there and ticks them off after the maintainer reports.
+мейнтейнеру»: the lead adds new checks there, ticks them off after the maintainer reports, and moves finished sections
+into an archive comment of the issue so that the description lists only open checks.
 
 ## Building in a cloud session
 
