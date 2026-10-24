@@ -1301,6 +1301,9 @@ html.text-200 .seltb { border-radius: 28px; }
 .w select.combo:disabled { color: color-mix(in srgb, var(--text) 38%, transparent); background: transparent; }
 .dialog .syncq { background: var(--surface); }
 .decisions, .lead code { overflow-wrap: anywhere; }
+.stepper .skipped { color: var(--text2); }
+.stepper .skipped .n { box-shadow: inset 0 0 0 1px var(--outline); }
+.stepper .skipped .sk { font-size: var(--t-w-cap); }
 
 
 </style>
@@ -1589,7 +1592,7 @@ html.text-200 .seltb { border-radius: 28px; }
                 <ul class="list">
                   <li><div class="row"><span class="src src-40" aria-hidden="true">Я</span><span class="txt"><span class="t1">Яндекс Диск</span><span class="t2"><span class="ok">Подключён</span> · проверяем файлы: 3&nbsp;120 из 9&nbsp;870</span>
                     <span class="mini-bar" role="progressbar" aria-label="Проверка файлов Яндекс Диска" aria-valuemin="0" aria-valuemax="9870" aria-valuenow="3120"><i style="width:32%"></i></span></span></div></li>
-                  <li><div class="row"><span class="src src-40" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2 err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Вход не завершён: окно браузера закрыли</span></span>
+                  <li><div class="row"><span class="src src-40" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2 err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Вход не завершён. Нажмите «Повторить» — откроется браузер</span></span>
                     <span class="trail"><button class="icon-btn sl fc hit" aria-label="Повторить вход в Dropbox"><svg class="ic" aria-hidden="true"><use href="#i-retry"/></svg></button></span></div></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить OneDrive. Все фото и видео"><span class="src src-40" aria-hidden="true">O</span><span class="txt"><span class="t1">OneDrive</span><span class="t2">Все фото и видео</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить WebDAV. Nextcloud, NAS, платное Облако Mail.ru"><span class="src src-40" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, платное Облако Mail.ru</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
@@ -1654,7 +1657,7 @@ html.text-200 .seltb { border-radius: 28px; }
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
 
-          <div class="state"><span class="cap">2. Сканер (<code>QrScanner</code>): камера с рамкой и запасной ввод кода. Изображение камеры с темой не меняется</span>
+          <div class="state"><span class="cap">2. Сканер (<code>QrScanner</code>): камера с рамкой и запасной ввод кода. Изображение камеры с темой не меняется, кольцо фокуса на нём белое (исключение 12)</span>
             <div class="scr cam-scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="cam-top"><button class="icon-btn sl fc hit" aria-label="Назад"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
                 <h4 class="ttl">Добавить ПК</h4>
@@ -1740,7 +1743,8 @@ html.text-200 .seltb { border-radius: 28px; }
   <section class="doc-section" id="a-done" aria-labelledby="h-a-done">
     <h2 id="h-a-done">Android: готово</h2>
     <p class="lead">Последний экран — сводка: что подключено и что ещё проверяется. Галочка — тональная, без «Лампы»: проверенных копий
-      дома ещё нет. Автоархив здесь же, но выключен: без вашей команды Pixroost ничего не отправляет. Когда его включают, Android 13+
+      дома ещё нет. Автоархив здесь же, но выключен: без вашей команды Pixroost ничего не отправляет; если его не включили, лента показывает
+      «Автоархив выключен» с кнопкой «Включить». Когда его включают, Android 13+
       спрашивает разрешение на уведомления — в них виден ход отправки <span class="choice">выбор</span>. Только по <span class="nw">Wi-Fi</span> (E7.2). Если всё пропустили — лента с галереей и подсказка, где добавить облака и ПК.</p>
     <div class="stage" data-theme="light">
       <div class="a">
@@ -1925,7 +1929,7 @@ html.text-200 .seltb { border-radius: 28px; }
                     <div class="folder"><div class="fbox"><svg class="ic ic-16" aria-hidden="true" style="color:var(--text2)"><use href="#i-folder"/></svg><input id="arch4" class="mono" value="E:\Архив фото" aria-describedby="arch4-h"></div><button class="btn btn-secondary sl fc hit">Выбрать…</button></div>
                     <span class="fhelp" id="arch4-h">Свободно 1,4&nbsp;ТБ на диске E:</span></div>
                   <div class="infobar" role="status"><svg class="ic ic-lead" aria-hidden="true"><use href="#i-info"/></svg>
-                    <div class="body"><strong>В папке уже 18&nbsp;412 фото и видео</strong><span>Pixroost проверит их и добавит в архив. С телефонов они повторно не скопируются.</span></div></div>
+                    <div class="body"><strong>В папке уже 18&nbsp;412 фото и видео</strong><span>Pixroost проверит их и добавит в архив. Те же файлы с телефонов повторно не скопируются.</span></div></div>
                 </div>
                 <div class="wiz-foot"><button class="btn btn-secondary sl fc hit left">Назад</button><button class="btn btn-primary sl fc hit">Далее</button></div>
               </div>
@@ -2014,7 +2018,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <ul class="list">
                     <li><div class="row"><span class="src src-32" aria-hidden="true">Я</span><span class="txt"><span class="t1">Яндекс Диск</span><span class="t2" role="status">Ждём вход в браузере…</span>
                       <span class="bar indet" aria-hidden="true" style="margin-top:6px"><span class="fill"></span></span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Отменить вход в Яндекс Диск">Отмена</button></span></div></li>
-                    <li><div class="row"><span class="src src-32" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2 err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Вход не завершён: окно браузера закрыли</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Повторить вход в Dropbox">Повторить</button></span></div></li>
+                    <li><div class="row"><span class="src src-32" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2 err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Вход не завершён. Нажмите «Повторить» — откроется браузер</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Повторить вход в Dropbox">Повторить</button></span></div></li>
                     <li><div class="row"><span class="src src-32" aria-hidden="true">O</span><span class="txt"><span class="t1">OneDrive</span><span class="t2"><span class="ok">Подключён</span> · проверяем файлы: 1&nbsp;240 из 4&nbsp;310</span>
                       <span class="mini-bar" role="progressbar" aria-label="Проверка файлов OneDrive" aria-valuemin="0" aria-valuemax="4310" aria-valuenow="1240"><i style="width:29%"></i></span></span></div></li>
                     <li><div class="row"><span class="src src-32" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, платное Облако Mail.ru</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить WebDAV">Подключить</button></span></div></li>
@@ -2199,12 +2203,12 @@ html.text-200 .seltb { border-radius: 28px; }
               </div>
             </div></div>
 
-          <div class="state"><span class="cap">2. Телефон и облака пропущены</span>
+          <div class="state"><span class="cap">2. Телефон и облака пропущены: пропущенный этап — без галочки</span>
             <div class="win wiz">
               <div class="titlebar"><span class="appname"><svg class="lamp-svg" width="16" height="16" aria-hidden="true"><use href="#lamp"/></svg>Pixroost — настройка</span><span class="caption-btns" aria-hidden="true"><span>—</span><span>☐</span><span>✕</span></span></div>
               <div class="wiz-body">
                 <ol class="stepper" aria-label="Этапы настройки">
-                  <li class="done"><span class="n"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Папка архива</li><li class="done"><span class="n"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Папки и облака</li><li class="done"><span class="n"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Телефон</li><li aria-current="step"><span class="n">4</span>Готово</li>
+                  <li class="done"><span class="n"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Папка архива</li><li class="done"><span class="n"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Папки и облака</li><li class="skipped"><span class="n" aria-hidden="true">—</span>Телефон<span class="sr-only">, пропущен</span><span class="sk" aria-hidden="true">· пропущен</span></li><li aria-current="step"><span class="n">4</span>Готово</li>
                 </ol>
                 <div class="wiz-main">
                   <div class="done-ic"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
@@ -2241,7 +2245,7 @@ html.text-200 .seltb { border-radius: 28px; }
       <li><b>Окно настройки Windows — мастер с этапами и кнопками внизу справа.</b> Так устроены установщики и мастера Windows; этапы видны сразу.</li>
       <li><b>Шаг «Папка архива» не пропускается; предложена папка <code>Pixroost</code> на внутреннем несъёмном диске с наибольшим свободным местом вне папок синхронизации, иначе <code>Изображения\Pixroost</code>.</b> Съёмный, сетевой диск или папка облака не годятся для архива по умолчанию.</li>
       <li><b>Найденная папка «Изображения» отмечена, папки синхронизации облаков и внешние диски — нет.</b> Папки синхронизации повторяют облака, которые лучше подключить напрямую; внешний диск может быть отключён.</li>
-      <li><b>Папка архива, в которой уже есть фото, принимается с подсказкой «повторно не скопируются».</b> Частый случай переустановки; хэши защищают от дублей (E6.6).</li>
+      <li><b>Папка архива, в которой уже есть фото, принимается с подсказкой «те же файлы с телефонов повторно не скопируются».</b> Частый случай переустановки; хэши защищают от дублей (E6.6).</li>
       <li><b>Вопрос «Это папка синхронизации облака?» — прямо на шаге папки архива и в диалоге «Добавить папку»; облако выбирается списком.</b> Правило 3 из <code>data-model.md</code>; одна строка объясняет, зачем спрашиваем.</li>
       <li><b>При подтверждении телефона отмечено только «Отправлять фото в архив».</b> Меньше всего прав по умолчанию (E5.7, пример с телефоном бабушки).</li>
       <li><b>«Запускать вместе с Windows» отмечено сразу.</b> Приём работает только при запущенном Pixroost (E8.1).</li>
