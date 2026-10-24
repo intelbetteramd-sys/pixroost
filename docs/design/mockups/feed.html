@@ -984,6 +984,52 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 /* Ширина таблицы по содержимому, на узком экране — прокрутка внутри обёртки */
 .dt-wrap { overflow-x: auto; }
 .dt-wrap .dtable { min-width: 560px; }
+/* Визуальная проверка макетов (#29): на 360 px и при тексте 200% текст не обрезается, не вылезает и не наезжает */
+.kbd { height: auto; min-height: 20px; }
+.a .fbox label { top: 0; transform: translateY(-50%); line-height: 1.385; } /* 18 при 13: середина подписи на рамке и при крупном шрифте */
+html.text-200 .a .field .fbox { margin-top: 9px; }
+.note-box > p { min-width: 0; overflow-wrap: break-word; }
+html.text-200 .note-box > p { hyphens: auto; }
+.titlebar .search, .w .fbox { min-width: 0; }
+html.text-200 .titlebar .search { max-width: 720px; } /* подсказка поиска при крупном шрифте видна целиком на ПК */
+.win-content h4, .phone .under .ph-title { overflow-wrap: break-word; hyphens: auto; }
+/* Подписи нижней панели переносятся по слогам, с дефисом, а не посреди слова без него */
+.navbar a { overflow-wrap: normal; hyphens: auto; }
+html.text-200 .sheet .places li, html.text-200 .dialog .places li { flex-wrap: wrap; }
+html.text-200 .sheet .places .num, html.text-200 .dialog .places .num { margin-left: auto; white-space: normal; text-align: right; }
+html.text-200 .sheet .btns, html.text-200 .dialog .d-foot { flex-wrap: wrap; }
+html.text-200 .sheet .btns .btn, html.text-200 .dialog .d-foot .btn { flex: 1 1 auto; }
+html.text-200 .kv { grid-template-columns: auto minmax(0, 1fr); }
+html.text-200 .kv .r { grid-column: 2; text-align: left; }
+html.text-200 .card .head-row { flex-wrap: wrap; }
+html.text-200 .card .head-row > .txt, html.text-200 .card .head-row > .big-num { flex: 1 1 0; min-width: min(100%, 7em); }
+html.text-200 .navpane a { flex-wrap: wrap; padding-top: 4px; padding-bottom: 4px; }
+/* Крупный шрифт: заголовок раздела — отдельной строкой под действиями, как в большой верхней панели Material 3 */
+html.text-200 .appbar:not(.sub) { flex-wrap: wrap; justify-content: flex-end; }
+html.text-200 .appbar:not(.sub) .ttl { order: 1; flex: 1 1 100%; }
+html.text-200 .qr.expired { height: auto; min-height: 168px; }
+html.text-200 .qr.expired svg { position: absolute; left: 12px; top: 12px; width: calc(100% - 24px); height: calc(100% - 24px); }
+html.text-200 .qr.expired .over { position: relative; inset: auto; min-height: 144px; padding: 0; }
+html.text-200 .row { flex-wrap: wrap; }
+html.text-200 .row .txt { flex: 1 1 140px; }
+html.text-200 .row > .trail, html.text-200 .row > .add { margin-left: auto; }
+html.text-200 .navbar a { font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
+.type-row .sample { overflow-wrap: break-word; hyphens: auto; }
+/* Пути переносятся после «\» (<wbr> в разметке), а не посреди имени папки */
+.mono, .w-path, .radio .rtxt small { overflow-wrap: break-word; }
+html.text-200 .row .txt, html.text-200 .radio .rtxt { hyphens: auto; }
+.mono, .w-path { hyphens: manual; }
+.pair-txt .code { overflow-wrap: normal; }
+.dt-wrap .dtable { min-width: 35rem; } /* 560 при 100%; при 200% таблица шире, колонки не сжимаются до слога */
+.sg.c4 { grid-template-columns: max-content repeat(4, max-content); }
+.sg.c5 { grid-template-columns: max-content repeat(5, max-content); }
+.sg .vn, .sg .hd:first-child { min-width: 132px; }
+.intro code, .lead code, .note code, .decisions code { overflow-wrap: break-word; }
+.gd-win .np, .gd-win .pn { hyphens: auto; }
+@media (max-width: 720px) {
+  /* Превью Windows не сжимаются меньше 96: подпись состояния и метки мест не наезжают друг на друга */
+  .w .thumbs:not(.wthumbs) { grid-template-columns: repeat(auto-fill, minmax(96px, 112px)); }
+}
 </style>
 <style>
 /* ============================================================
@@ -1288,7 +1334,7 @@ html.text-200 .scr .row .txt { flex: 1 1 140px; }
 html.text-200 .scr .row > .add, html.text-200 .scr .row > .trail { margin-left: auto; }
 .thumb, .thumb .src { font-family: var(--f-ui); }
 .empty .h { color: var(--text); }
-html.text-200 .scr .navbar a { overflow-wrap: anywhere; hyphens: auto; font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
+html.text-200 .scr .navbar a { overflow-wrap: normal; hyphens: auto; font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
 html.text-200 .seltb { border-radius: 28px; }
 .syncq { padding: 12px 16px; border-radius: var(--r-win); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); gap: 2px; }
 .syncq legend { float: left; width: 100%; margin-bottom: 2px; }
@@ -1384,6 +1430,12 @@ html.text-200 .seltb { flex-wrap: wrap; }
 .limbar span { flex: 1; min-width: 0; }
 .a .limbar:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
 
+/* Визуальная проверка (#29), текст 200% */
+html.text-200 .date-h.sel { flex-wrap: wrap; }
+html.text-200 .pm { flex-wrap: wrap; }
+html.text-200 .status.s-off { flex-wrap: wrap; }
+html.text-200 .status.s-off .grow { flex: 1 1 calc(100% - 36px); }
+html.text-200 .status.s-off .btn { margin-left: 36px; }
 </style>
 </head>
 <body>
@@ -1489,7 +1541,7 @@ html.text-200 .seltb { flex-wrap: wrap; }
 
 <main id="main">
   <p class="intro">Сценарий «Лента» на Android (телефон и планшет) и Windows. Собран из токенов и компонентов
-    <a href="foundation.html">основы</a> по <code>docs/design/information-architecture.md</code>, требованиям E3, E6 и E7 и
+    <a href="foundation.html">основы</a> по <code>docs/<wbr>design/<wbr>information-architecture.md</code>, требованиям E3, E6 и E7 и
     <a href="../../architecture/adr/0011-cleanup-safety-rule.md">ADR 0011</a>. Цифры — из одного сценария: в ленте 52&nbsp;340 фото
     и видео (телефон, Яндекс Диск, OneDrive, Dropbox и архив на ПК «Дом»), в первые дни — 20&nbsp;412 фото галереи. «Сегодня» на
     макете — суббота, 24 октября 2026 года.</p>
@@ -1977,7 +2029,7 @@ html.text-200 .seltb { flex-wrap: wrap; }
               <div><p class="fname">IMG_2041.HEIC</p><p class="meta">Сегодня, 12:48 · Pixel 8 Лены · 4032 × 3024</p></div>
               <ul class="list">
                 <li><div class="row"><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span>
-                  <span class="txt"><span class="t1">Архив на этом ПК <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Проверено</span></span><span class="t2"><span class="w-path">D:\Фото\Pixroost\2026\2026-10\IMG_2041.HEIC</span> · 4,2&nbsp;МБ</span></span></div></li>
+                  <span class="txt"><span class="t1">Архив на этом ПК <span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Проверено</span></span><span class="t2"><span class="w-path">D:\<wbr>Фото\<wbr>Pixroost\<wbr>2026\<wbr>2026-10\<wbr>IMG_2041.HEIC</span> · 4,2&nbsp;МБ</span></span></div></li>
                 <li><div class="row"><span class="src src-32" aria-hidden="true">Я</span>
                   <span class="txt"><span class="t1">Яндекс Диск <span class="badge b-neutral">Копия</span></span><span class="t2">Тот же файл · Фото/Камера · 4,2&nbsp;МБ</span></span></div></li>
               </ul>
@@ -2055,7 +2107,7 @@ html.text-200 .seltb { flex-wrap: wrap; }
                   <div class="empty">
                     <div class="art"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></div>
                     <p class="h" role="heading" aria-level="5">Архив пока пуст</p>
-                    <p>Добавьте телефон — фото будут сами складываться в <span class="w-path">D:\Фото\Pixroost</span>.</p>
+                    <p>Добавьте телефон — фото будут сами складываться в <span class="w-path">D:\<wbr>Фото\<wbr>Pixroost</span>.</p>
                     <button class="btn btn-primary sl fc hit">Добавить телефон</button></div>
                 </div>
               </div>
