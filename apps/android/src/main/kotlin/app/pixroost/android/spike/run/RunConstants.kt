@@ -9,6 +9,10 @@ object RunConstants {
 
     const val CHECK_LIMIT = 500
     const val HEIC_LIMIT = 100
+
+    /** Mismatched photos whose EXIF thumbnail is looked at, and photos used for the speed lines. */
+    const val EXIF_SAMPLES = 5
+    const val SPEED_SAMPLE = 200
     const val MILLIS_IN_MINUTE = 60_000.0
     const val MILLIS_IN_SECOND = 1000.0
 }

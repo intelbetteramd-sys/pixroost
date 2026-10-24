@@ -5,8 +5,18 @@ import app.pixroost.android.spike.run.HeicSample
 import app.pixroost.android.spike.run.PairSample
 import app.pixroost.core.spike.phash.orientationSwapsSides
 
-/** Text of the preview check: numbers only. [asked] photos were taken, [pairs] holds the ones that opened. */
-fun checkReport(asked: Int, pairs: List<PairSample>, heicAsked: Int, heic: List<HeicSample>, seconds: Long): String {
+/**
+ * Text of the preview check: numbers only. [asked] photos were taken, [pairs] holds the ones that opened, [extra]
+ * lines go after the orientation part.
+ */
+fun checkReport(
+    asked: Int,
+    pairs: List<PairSample>,
+    heicAsked: Int,
+    heic: List<HeicSample>,
+    seconds: Long,
+    extra: List<String> = emptyList(),
+): String {
     val lines = mutableListOf("== Превью против оригинала (последние $asked фото), $seconds с")
     lines += "Обработано ${pairs.size}, не открылось ${asked - pairs.size}"
     lines += "Пустых кадров: в превью ${pairs.count { it.thumbBlank }}, в оригинале ${pairs.count { it.originalBlank }}"
@@ -14,6 +24,7 @@ fun checkReport(asked: Int, pairs: List<PairSample>, heicAsked: Int, heic: List<
     val solid = pairs.filter { !it.thumbBlank && !it.originalBlank }
     lines += "Без пустых кадров: " + DistanceStats.of(solid.map { it.distance }).line()
     lines += orientationLines(pairs)
+    lines += extra
     lines += heicLines(heicAsked, heic)
     return lines.joinToString("\n")
 }

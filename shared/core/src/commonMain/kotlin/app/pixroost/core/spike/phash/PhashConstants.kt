@@ -46,4 +46,12 @@ object PhashConstants {
     const val BYTE_MASK = 0xFF
     const val RED_SHIFT = 16
     const val GREEN_SHIFT = 8
+
+    /** Letterbox bars: a flat line (spread up to this) that is darker than DARK or lighter than LIGHT. */
+    const val BAR_SPREAD = 12f
+    const val BAR_DARK = 28f
+    const val BAR_LIGHT = 228f
+
+    /** No more than this share of each side counts as bars. */
+    const val BAR_MAX_SHARE = 0.4
 }

@@ -49,6 +49,10 @@ class SpikeModel(private val context: Context) {
         val pairs = mapPhotos(photos, workers, { done, _ -> state = state.copy(done = done) }) {
             comparePhoto(resolver, it)
         }
+        val pairList = pairs.filterNotNull()
+        val extra = checkExtras(resolver, photos, pairList, workers) { stage ->
+            state = state.copy(message = stage)
+        }
         val heicPhotos = withContext(Dispatchers.IO) {
             queryGallery(resolver, RunConstants.HEIC_LIMIT, heicOnly = true)
         }
@@ -57,7 +61,7 @@ class SpikeModel(private val context: Context) {
             recodePhoto(resolver, it)
         }
         val seconds = (SystemClock.elapsedRealtime() - started) / MILLIS
-        val text = checkReport(photos.size, pairs.filterNotNull(), heicPhotos.size, heic.filterNotNull(), seconds)
+        val text = checkReport(photos.size, pairList, heicPhotos.size, heic.filterNotNull(), seconds, extra)
         store.saveCheckText(text)
         state = state.copy(message = text)
     }

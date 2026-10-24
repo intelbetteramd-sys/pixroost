@@ -7,6 +7,9 @@ object ImageConstants {
     /** The original is decoded down to a side of at least this many pixels, by a power-of-two sample size. */
     const val ORIGINAL_TARGET_SIDE = 1024
 
+    /** Variant (e): the original decoded down to about this side instead of using a thumbnail. */
+    const val DECODE_SIDE = 512
+
     const val JPEG_QUALITY = 80
 
     const val MIRROR_SCALE = -1f

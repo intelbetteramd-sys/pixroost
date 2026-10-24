@@ -13,4 +13,6 @@ data class PairSample(
     val originalBlank: Boolean,
     val thumbShape: Int,
     val originalShape: Int,
+    val shape: PhotoShape,
+    val variants: VariantSet,
 )
