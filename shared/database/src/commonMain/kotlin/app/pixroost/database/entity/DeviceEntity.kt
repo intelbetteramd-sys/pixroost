@@ -12,7 +12,7 @@ import app.pixroost.database.model.DeviceRole
     tableName = "device",
 )
 data class DeviceEntity(
-    @PrimaryKey(autoGenerate = true) val id: String,
+    @PrimaryKey val id: String,
     val name: String,
     val platform: DevicePlatform,
     val role: DeviceRole,
