@@ -88,6 +88,7 @@ APK подписан тем же отладочным ключом, что и с
 | `APPLE_DEVELOPER_ID_CERT_P12`, `APPLE_DEVELOPER_ID_CERT_PASSWORD` | подпись macOS |
 | `APPLE_NOTARY_*` | нотаризация |
 | `MS_STORE_*` | загрузка в Microsoft Store |
+| секрет клиента Google для ПК (имя задаём при подключении) | подставляется в сборку desktop для входа в Google Photos Picker; Google такой секрет секретом не считает ([безопасность](../architecture/security-privacy.md)). В CI пока не подключён: появится вместе с входом в Google на шаге с облаками |
 
 Секреты появляются по мере регистрации в сторах ([distribution.md](../release/distribution.md)).
 

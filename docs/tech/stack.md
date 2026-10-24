@@ -51,9 +51,9 @@
 | S-02, галерея Android | индекс MediaStore в нашей БД (полный проход при запуске и по сигналу, изменения по `GENERATION_MODIFIED` на Android 11+, удалённые сравнением ID), лента из БД через Paging 3; превью — `ContentResolver.loadThumbnail` через свой загрузчик Coil 3, оригиналы в сетке не декодируем. Постраничное чтение MediaStore не нужно | [отчёт #22](https://github.com/intelbetteramd-sys/pixroost/issues/22) |
 | S-03, передача на ПК | Ktor Server (Netty) с самоподписанным ECDSA P-256 на ПК, Ktor Client (OkHttp) с пиннингом отпечатка на Android, докачка в духе tus с идентификатором загрузки SHA-256 | [ADR 0005](../architecture/adr/0005-lan-transport.md#итоги-спайка), [передача](../architecture/devices-and-transfer.md#что-показал-спайк-s-03) |
 | S-04, поиск ПК | основной путь — прямой (mDNS и HTTPS-сервер на ПК, нужно правило брандмауэра), запасной — развёрнутый (рассылка и соединение от ПК); с VPN не работает ни один | [путь соединения](../architecture/devices-and-transfer.md#путь-соединения) |
-| S-05, вход в облака | системный браузер и PKCE на своём коде поверх Ktor Client в `commonMain`, без AppAuth и без секретов в коде (кроме несекретного секрета Google Desktop-клиента из секретов CI). Android: Custom Tabs и своя схема; ПК: loopback-редирект. Яндекс Диск, Dropbox, Google Photos Picker, OneDrive проверены на Android 12 и Windows 11. Токены — Android Keystore (AES-GCM) и DPAPI. Начатый вход и сессию Picker храним и продолжаем после перезапуска: MIUI выгружает приложение, пока открыт браузер | [облака](../product/sources.md), [правило уборки для общих папок Яндекса](../architecture/adr/0011-cleanup-safety-rule.md) |
+| S-05, вход в облака | системный браузер и PKCE на своём коде поверх Ktor Client в `commonMain`, без AppAuth и без секретов в коде (кроме секрета Google Desktop-клиента, который Google секретом не считает; сборка подставит его из секретов CI, в репозитории его нет; в CI он пока не подключён). Android: Custom Tabs и своя схема; ПК: loopback-редирект. Яндекс Диск, Dropbox, Google Photos Picker, OneDrive проверены на Android 12 и Windows 11. Токены — Android Keystore (AES-GCM) и DPAPI. Начатый вход и сессию Picker храним и продолжаем после перезапуска: MIUI выгружает приложение, пока открыт браузер | [облака](../product/sources.md), [правило уборки для общих папок Яндекса](../architecture/adr/0011-cleanup-safety-rule.md) |
 | S-06, похожие фото | pHash (DCT 32×32, 64 бита, сжатие по площади), только по изображению всего кадра: пропорции превью сверяем с оригиналом и при расхождении больше 1 % декодируем оригинал до ~512 px | [data-model](../architecture/data-model.md#как-считаем-phash) |
-| S-07, установщик Windows | Microsoft Store (MSIX) — основной канал; `.exe` на Inno Setup — сайт и GitHub Releases; `.msi` только для корпоративной раздачи. Правило брандмауэра для всех профилей сети ставит установщик; в релизе — мьютекс приложения вместо `taskkill` | [distribution](../release/distribution.md#windows) |
+| S-07, установщик Windows | Microsoft Store (MSIX) — основной канал; `.exe` на Inno Setup — сайт и GitHub Releases; `.msi` только для корпоративной раздачи. Правило брандмауэра для всех профилей сети ставит установщик; для релизного установщика — мьютекс приложения вместо `taskkill` из спайка ([порядок остановки](../release/distribution.md#windows)) | [distribution](../release/distribution.md#windows) |
 
 Не проверено и вынесено в следующие шаги:
 
@@ -61,7 +61,7 @@
 - Скорость передачи: в сети спайка 4–5 МБ/с, оба устройства на Wi-Fi; цель ≥ 20 МБ/с не проверена.
 - Частичный доступ к галерее Android 14+ и превью на Android 8–9 (S-02; шаги 3.7 и 3.10).
 - pHash: ориентация EXIF на телефонах, где она записана, копии HEIC → JPEG, iPhone (S-06).
-- Установка `.msi`; повторная проверка обновления и удаления `.exe` при запущенном приложении после перехода на мьютекс (S-07). Решение
+- Установка `.msi`; повторная проверка обновления и удаления `.exe` при запущенном приложении в сборке спайка (`taskkill`; пункт 3.4 в #83). Мьютекс нужен только релизному установщику. Решение
   это не меняет.
 
 ## Качество
