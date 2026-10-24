@@ -7,6 +7,6 @@ import kotlinx.coroutines.Dispatchers
 object DefaultDispatcherProvider : DispatcherProvider {
     // Read lazily: on desktop Dispatchers.Main exists only once a UI toolkit dispatcher is on the classpath.
     override val main: CoroutineDispatcher get() = Dispatchers.Main
-    override val io: CoroutineDispatcher get() = Dispatchers.IO
+    override val io: CoroutineDispatcher get() = ioDispatcher()
     override val default: CoroutineDispatcher get() = Dispatchers.Default
 }

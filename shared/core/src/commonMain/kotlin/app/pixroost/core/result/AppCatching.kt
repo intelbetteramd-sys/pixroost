@@ -10,13 +10,11 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 // This is the one place that maps any failure to an AppError.
 @Suppress("TooGenericExceptionCaught")
-inline fun <T> appCatching(
-    mapError: (Throwable) -> AppError = { UnexpectedError(it) },
-    block: () -> T,
-): AppResult<T> = try {
-    AppResult.Success(block())
-} catch (e: CancellationException) {
-    throw e
-} catch (e: Throwable) {
-    AppResult.Failure(mapError(e))
-}
+inline fun <T> appCatching(mapError: (Throwable) -> AppError = { UnexpectedError(it) }, block: () -> T): AppResult<T> =
+    try {
+        AppResult.Success(block())
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Throwable) {
+        AppResult.Failure(mapError(e))
+    }

@@ -14,10 +14,7 @@ object AppLogging {
      * Installs [writers] (the system log by default) and drops everything below [minSeverity].
      * Call once at app start; debug builds pass [Severity.Debug], release builds [Severity.Info].
      */
-    fun install(
-        minSeverity: Severity,
-        writers: List<LogWriter> = listOf(platformLogWriter()),
-    ) {
+    fun install(minSeverity: Severity, writers: List<LogWriter> = listOf(platformLogWriter())) {
         Logger.setLogWriters(writers)
         Logger.setMinSeverity(minSeverity)
         Logger.setTag(LoggingConstants.DEFAULT_TAG)
