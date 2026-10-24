@@ -17,7 +17,7 @@
 
 | Задача | Выбор | Альтернатива |
 |---|---|---|
-| Асинхронность | kotlinx.coroutines + Flow | — |
+| Асинхронность | kotlinx.coroutines 1.11 + Flow; диспетчеры берём через `DispatcherProvider`, в тестах — один тестовый | — |
 | Сериализация | kotlinx.serialization (JSON) | — |
 | Сеть (клиент) | **Ktor Client 3** (OkHttp на Android и desktop, Darwin на iOS) | — |
 | Сеть (сервер приёма на ПК, relay) | **Ktor Server 3**, движок Netty (проверено в S-03) | — |
@@ -31,7 +31,7 @@
 | Криптография | cryptography-kotlin (JDK, Apple, OpenSSL-провайдеры) | libsodium-kmp |
 | TLS-сертификат ПК | самоподписанный ECDSA P-256, BouncyCastle (`bcpkix`) на JVM: в JDK нет API для создания сертификатов; телефон пиннит отпечаток (спайк S-03) | — |
 | Работа с файлами | kotlinx-io | Okio |
-| Логи | Kermit | — |
+| Логи | Kermit 2.2: только системный журнал, без удалённых писателей (правило приватности); минимальная важность задаётся при старте | — |
 | QR: генерация | qrcode-kotlin | ZXing |
 | QR: сканирование | CameraX + ZXing (Android), AVFoundation / VisionKit (iOS) | ML Kit — не берём: проприетарный, мешает F-Droid |
 | Поиск устройств | mDNS: NsdManager (Android), Network.framework (iOS), JmDNS (desktop). Для развёрнутого подключения без правила брандмауэра — UDP-рассылка «кто тут?» на широковещательные адреса (S-04) | системная служба mDNS Windows (DNS-SD API) не понадобилась |
@@ -39,6 +39,22 @@
 | Фоновая работа | WorkManager (Android), BGTaskScheduler + background URLSession (iOS) | — |
 | Безопасное хранение | Keychain, Android Keystore (AES-GCM), DPAPI через JNA `Crypt32Util` (Windows), Secret Service (Linux). Не java-keyring: не обновляется с 2023 года, а Credential Manager держит не больше 2,5 КБ на запись | — |
 | Perceptual hash | своя реализация pHash (DCT 32×32, 64 бита) на общем Kotlin; dHash отвергнут: на копиях другого размера заметно хуже ([S-06](../architecture/data-model.md#как-считаем-phash)) | — |
+
+## Основа `shared/core`
+
+Шаг 3.3 плана. Что лежит в модуле и почему так:
+
+- **Ошибки и результат.** Свой `AppResult<T>` (`Success` / `Failure`) с типизированными `AppError`: сеть, вход,
+  доступ, «не найдено», хранилище, неожиданная. Вместо `kotlin.Result`: ошибка типизирована и проверяется в `when`
+  на полноту, UI по виду ошибки показывает разный текст. `appCatching { … }` превращает исключение в `Failure`, но
+  `CancellationException` пробрасывает: иначе ломается структурная конкурентность.
+- **Время.** Отдельный слой не нужен: в Kotlin 2.4 стабильны `kotlin.time.Clock` и `Instant`. Код принимает `Clock`
+  параметром, в приложении — `Clock.System`, в тестах — фейк. `kotlinx-datetime` добавим, когда понадобятся часовые пояса
+  и календарные даты.
+- **Диспетчеры.** `DispatcherProvider` (`main`, `io`, `default`) и `DefaultDispatcherProvider`; прямой доступ к
+  `Dispatchers.*` в прикладном коде не используем.
+- **Логи.** `AppLogging.install(minSeverity)` один раз при старте приложения; в журнал не пишем токены, пути и имена
+  файлов на уровнях INFO и выше.
 
 ## Итоги спайков Фазы 1
 
