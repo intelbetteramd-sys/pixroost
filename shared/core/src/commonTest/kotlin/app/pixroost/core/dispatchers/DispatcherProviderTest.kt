@@ -12,7 +12,7 @@ import kotlin.time.Duration.Companion.hours
 
 class DispatcherProviderTest {
     @Test
-    fun testProviderRunsWorkOnTheTestScheduler() = runTest {
+    fun `test provider runs work on the test scheduler`() = runTest {
         val dispatchers = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
 
         withContext(dispatchers.io) { delay(1.hours) }
@@ -22,7 +22,7 @@ class DispatcherProviderTest {
     }
 
     @Test
-    fun defaultProviderUsesStandardDispatchers() {
+    fun `default provider uses standard dispatchers`() {
         assertSame(Dispatchers.Default, DefaultDispatcherProvider.default)
     }
 }

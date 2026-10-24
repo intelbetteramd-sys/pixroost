@@ -6,12 +6,12 @@ import kotlin.test.assertTrue
 
 class AppInfoTest {
     @Test
-    fun appNameIsPixroost() {
+    fun `app name is Pixroost`() {
         assertEquals("Pixroost", AppInfo.NAME)
     }
 
     @Test
-    fun platformNameIsNotBlank() {
+    fun `platform name is not blank`() {
         assertTrue(platformName().isNotBlank())
     }
 }

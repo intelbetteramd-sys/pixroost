@@ -10,12 +10,15 @@ enum class NavigationStyle {
 
     /** Wide left pane with labels on a computer. */
     Pane,
-}
+    ;
 
-/** Picks the [NavigationStyle] for [platform] and a window [widthDp] wide. */
-fun navigationStyleFor(platform: AppPlatform, widthDp: Int): NavigationStyle = when (platform) {
-    AppPlatform.Desktop -> NavigationStyle.Pane
+    companion object {
+        /** Picks the style for [platform] and a window [widthDp] wide. */
+        fun forWindow(platform: AppPlatform, widthDp: Int): NavigationStyle = when (platform) {
+            AppPlatform.Desktop -> Pane
 
-    AppPlatform.Mobile ->
-        if (widthDp < NavigationConstants.COMPACT_WIDTH_DP) NavigationStyle.BottomBar else NavigationStyle.Rail
+            AppPlatform.Mobile ->
+                if (widthDp < NavigationConstants.COMPACT_WIDTH_DP) BottomBar else Rail
+        }
+    }
 }

@@ -7,12 +7,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import app.pixroost.app.navigation.AppDestination
 
 /** Stand-in for a section until its feature is built. */
 @Composable
 internal fun PlaceholderScreen(destination: AppDestination, modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(destination.title(), style = MaterialTheme.typography.headlineMedium)
+    Box(
+        modifier.fillMaxSize().testTag(NavigationTestTags.content(destination)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(sectionTitle(destination), style = MaterialTheme.typography.headlineMedium)
     }
 }

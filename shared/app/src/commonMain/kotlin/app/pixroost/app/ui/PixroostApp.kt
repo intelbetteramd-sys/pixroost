@@ -10,31 +10,33 @@ import app.pixroost.app.navigation.AppDestination
 import app.pixroost.app.navigation.AppPlatform
 import app.pixroost.app.navigation.AppSections
 import app.pixroost.app.navigation.NavigationStyle
-import app.pixroost.app.navigation.navigationStyleFor
 import app.pixroost.app.ui.component.AppNavigationHost
 import app.pixroost.app.ui.component.BottomBarLayout
 import app.pixroost.app.ui.component.PaneLayout
 import app.pixroost.app.ui.component.RailLayout
-import org.koin.compose.koinInject
 
-/**
- * Root of the app on every platform: picks the navigation style for the window and shows the current section.
- * Needs the Koin container from [app.pixroost.app.di.startPixroostKoin].
- */
+/** The app on every platform: picks the navigation style for the window and shows the current section. */
 @Composable
-fun PixroostApp(modifier: Modifier = Modifier) {
-    val sections = koinInject<AppSections>()
-    val platform = koinInject<AppPlatform>()
+fun PixroostApp(sections: AppSections, platform: AppPlatform, modifier: Modifier = Modifier) {
     val state = rememberNavigationState(sections)
-    val current by state.current.collectAsState()
+    val backStack by state.backStack.collectAsState()
+    val current = backStack.last()
     val onSelect: (AppDestination) -> Unit = { state.navigateTo(it) }
 
     MaterialTheme {
         BoxWithConstraints(modifier) {
-            val content: @Composable () -> Unit = { AppNavigationHost(state) }
-            when (navigationStyleFor(platform, maxWidth.value.toInt())) {
-                NavigationStyle.BottomBar -> BottomBarLayout(sections, current, onSelect, content = content)
+            val content: @Composable () -> Unit = { AppNavigationHost(backStack, onBack = { state.back() }) }
+            when (NavigationStyle.forWindow(platform, maxWidth.value.toInt())) {
+                NavigationStyle.BottomBar -> BottomBarLayout(
+                    sections = sections,
+                    current = current,
+                    selected = state.selectedPrimary,
+                    onSelect = onSelect,
+                    content = content,
+                )
+
                 NavigationStyle.Rail -> RailLayout(sections, current, onSelect, content = content)
+
                 NavigationStyle.Pane -> PaneLayout(sections, current, onSelect, content = content)
             }
         }

@@ -81,7 +81,9 @@ pixroost/
 
 ```mermaid
 flowchart TB
-  APPS["apps/*"] --> FEATURE["shared/feature/*"]
+  APPS["apps/*"] --> APP["shared/app"]
+  APP --> FEATURE["shared/feature/*"]
+  APP --> CORE
   FEATURE --> DS["shared/designsystem"]
   FEATURE --> DOMAIN["library · dedupe · devices · transfer · archive"]
   DOMAIN --> SOURCES["shared/sources/*"]

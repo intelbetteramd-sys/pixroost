@@ -5,8 +5,14 @@ package app.pixroost.app.navigation
  *
  * [primary] are the main sections in display order; the first one is the start destination.
  * [secondary] are reachable from navigation too, but shown apart (the settings).
+ * With [returnsToStart], "back" from a primary section leads to the start section, as on a phone; computers
+ * keep one section on the stack because their sections are equal items of the side pane.
  */
-class AppSections(val primary: List<AppDestination>, val secondary: List<AppDestination>) {
+class AppSections(
+    val primary: List<AppDestination>,
+    val secondary: List<AppDestination>,
+    val returnsToStart: Boolean,
+) {
     init {
         require(primary.isNotEmpty()) { "At least one primary section is required" }
     }
@@ -31,6 +37,7 @@ class AppSections(val primary: List<AppDestination>, val secondary: List<AppDest
                     AppDestination.Devices,
                 ),
                 secondary = listOf(AppDestination.Settings),
+                returnsToStart = true,
             )
 
             AppPlatform.Desktop -> AppSections(
@@ -42,6 +49,7 @@ class AppSections(val primary: List<AppDestination>, val secondary: List<AppDest
                     AppDestination.Devices,
                 ),
                 secondary = listOf(AppDestination.Settings),
+                returnsToStart = false,
             )
         }
     }

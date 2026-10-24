@@ -6,12 +6,27 @@ plugins {
 }
 
 kotlin {
+    // Compose resources (the section names) need Android resources in a KMP library.
+    android {
+        androidResources { enable = true }
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(project(":shared:core"))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.navigation3.ui)
+            implementation(libs.compose.components.resources)
+        }
+        getByName("desktopTest").dependencies {
+            implementation(compose.uiTest)
+            implementation(compose.desktop.currentOs)
         }
     }
+}
+
+compose.resources {
+    packageOfResClass = "app.pixroost.app.resources"
+    publicResClass = false
 }

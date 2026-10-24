@@ -7,7 +7,7 @@ import kotlin.test.assertNull
 
 class AppSectionsTest {
     @Test
-    fun phoneHasFourMainSections() {
+    fun `phone has four main sections`() {
         val sections = AppSections.forPlatform(AppPlatform.Mobile)
 
         assertEquals(
@@ -18,7 +18,7 @@ class AppSectionsTest {
     }
 
     @Test
-    fun computerHasFiveMainSectionsWithArchive() {
+    fun `computer has five main sections with Archive`() {
         val sections = AppSections.forPlatform(AppPlatform.Desktop)
 
         assertEquals(
@@ -34,14 +34,14 @@ class AppSectionsTest {
     }
 
     @Test
-    fun idsAreUnique() {
+    fun `ids are unique`() {
         val ids = AppSections.forPlatform(AppPlatform.Desktop).all.map { it.id }
 
         assertEquals(ids.size, ids.toSet().size)
     }
 
     @Test
-    fun findReturnsOnlyKnownSections() {
+    fun `find returns only known sections`() {
         val sections = AppSections.forPlatform(AppPlatform.Mobile)
 
         assertEquals(AppDestination.Settings, sections.find("settings"))
@@ -49,7 +49,7 @@ class AppSectionsTest {
     }
 
     @Test
-    fun emptyPrimaryListIsRejected() {
-        assertFailsWith<IllegalArgumentException> { AppSections(emptyList(), emptyList()) }
+    fun `empty primary list is rejected`() {
+        assertFailsWith<IllegalArgumentException> { AppSections(emptyList(), emptyList(), returnsToStart = true) }
     }
 }

@@ -7,47 +7,64 @@ import kotlinx.coroutines.flow.asStateFlow
 /**
  * Where the user is in the app. No UI types here, so a native shell (SwiftUI on iOS) can drive it too.
  *
- * Follows the "exit through home" pattern: the start section is always at the bottom of the back stack, and
- * back from any other section returns to it. Back from the start section is not handled: the system closes
- * the app.
+ * With [AppSections.returnsToStart] (a phone) the start section is always at the bottom of the back stack and
+ * back from another section returns to it ("exit through home"). The settings open on top of the section the
+ * user came from, so back returns there. On a computer the stack holds the one visible section and [back]
+ * does nothing: the sections are equal items of the side pane, and Esc must not switch them.
  */
 class NavigationState(private val sections: AppSections, initial: AppDestination = sections.start) {
-    private val _current = MutableStateFlow(initial.takeIf { it in sections.all } ?: sections.start)
+    private val _backStack = MutableStateFlow(listOf(sections.start))
 
-    /** The visible section. */
-    val current: StateFlow<AppDestination> = _current.asStateFlow()
+    /** The back stack, oldest first; the last element is the visible destination. */
+    val backStack: StateFlow<List<AppDestination>> = _backStack.asStateFlow()
 
-    /** The back stack that ends with the visible section, oldest first. */
-    val backStack: List<AppDestination>
-        get() = backStackFor(_current.value)
+    /** The visible destination. */
+    val current: AppDestination get() = _backStack.value.last()
+
+    /** The main section to highlight: the visible one, or the one under the settings. */
+    val selectedPrimary: AppDestination
+        get() = _backStack.value.lastOrNull { it in sections.primary } ?: sections.start
 
     /** Whether [back] would change anything. */
-    val canGoBack: Boolean get() = _current.value != sections.start
+    val canGoBack: Boolean get() = _backStack.value.size > 1
 
-    /** The back stack that ends with [destination]. */
-    fun backStackFor(destination: AppDestination): List<AppDestination> =
-        if (destination == sections.start) listOf(sections.start) else listOf(sections.start, destination)
+    init {
+        navigateTo(initial)
+    }
 
     /** Opens [destination]. Returns `false` and does nothing if this platform has no such section. */
     fun navigateTo(destination: AppDestination): Boolean {
         val known = destination in sections.all
-        if (known) _current.value = destination
+        if (known) _backStack.value = stackFor(destination)
         return known
     }
 
-    /** Goes back to the start section. Returns `false` if already there, so the caller can leave the app. */
+    /** Goes one step back. Returns `false` if there is nothing to go back to, so the caller can leave the app. */
     fun back(): Boolean {
         val handled = canGoBack
-        if (handled) _current.value = sections.start
+        if (handled) _backStack.value = _backStack.value.dropLast(1)
         return handled
     }
 
-    /** The current position as a string for saved instance state. */
-    fun save(): String = _current.value.id
+    /** The whole position as a string for saved instance state. */
+    fun save(): String = _backStack.value.joinToString(SEPARATOR) { it.id }
+
+    private fun stackFor(destination: AppDestination): List<AppDestination> = when {
+        !sections.returnsToStart -> listOf(destination)
+        destination == sections.start -> listOf(sections.start)
+        destination in sections.primary -> listOf(sections.start, destination)
+        // A secondary destination goes on top of the main section that is visible now.
+        else -> _backStack.value.filter { it in sections.primary }.let { it + destination }
+    }
 
     companion object {
-        /** Restores the state saved by [save]; an unknown or stale id opens the start section. */
-        fun restore(sections: AppSections, saved: String?): NavigationState =
-            NavigationState(sections, saved?.let(sections::find) ?: sections.start)
+        private const val SEPARATOR = ","
+
+        /** Restores the state saved by [save]; unknown or stale ids are skipped, so the worst case is the start. */
+        fun restore(sections: AppSections, saved: String?): NavigationState {
+            val state = NavigationState(sections)
+            saved.orEmpty().split(SEPARATOR).mapNotNull(sections::find).forEach(state::navigateTo)
+            return state
+        }
     }
 }

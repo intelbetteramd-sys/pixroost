@@ -8,14 +8,14 @@ import kotlin.time.Instant
 
 class FakeClockTest {
     @Test
-    fun timeStandsStillUntilAdvanced() {
+    fun `time stands still until advanced`() {
         val clock: Clock = FakeClock(Instant.fromEpochMilliseconds(1_000))
 
         assertEquals(clock.now(), clock.now())
     }
 
     @Test
-    fun advanceByMovesTime() {
+    fun `advanceBy moves time`() {
         val clock = FakeClock(Instant.fromEpochMilliseconds(0))
 
         clock.advanceBy(2.minutes)

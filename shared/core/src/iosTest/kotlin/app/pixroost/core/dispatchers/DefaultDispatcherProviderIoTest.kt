@@ -7,7 +7,7 @@ import kotlin.test.assertSame
 
 class DefaultDispatcherProviderIoTest {
     @Test
-    fun ioIsTheIoDispatcher() {
+    fun `io is the IO dispatcher`() {
         assertSame(Dispatchers.IO, DefaultDispatcherProvider.io)
     }
 }
