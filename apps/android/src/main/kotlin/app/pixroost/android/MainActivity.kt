@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import app.pixroost.designsystem.PixroostPlaceholder
+import app.pixroost.app.ui.PixroostRoot
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        setContent { PixroostPlaceholder() }
+        setContent { PixroostRoot() }
     }
 }

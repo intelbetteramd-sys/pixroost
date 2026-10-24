@@ -1,0 +1,8 @@
+<resources>
+    <string name="nav_feed">Лента</string>
+    <string name="nav_storages">Хранилища</string>
+    <string name="nav_cleanup">Уборка</string>
+    <string name="nav_devices">Устройства</string>
+    <string name="nav_archive">Архив</string>
+    <string name="nav_settings">Настройки</string>
+</resources>

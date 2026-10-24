@@ -1,0 +1,8 @@
+<resources>
+    <string name="nav_feed">Feed</string>
+    <string name="nav_storages">Storages</string>
+    <string name="nav_cleanup">Cleanup</string>
+    <string name="nav_devices">Devices</string>
+    <string name="nav_archive">Archive</string>
+    <string name="nav_settings">Settings</string>
+</resources>

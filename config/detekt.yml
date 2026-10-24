@@ -4,3 +4,5 @@ naming:
   FunctionNaming:
     # Composable functions are named like types: LampMark, PixroostPlaceholder.
     ignoreAnnotated: ['Composable']
+    # Tests are named with sentences in backticks (conventions, section 6). The default excludes lack desktopTest.
+    excludes: ['**/test/**', '**/androidUnitTest/**', '**/commonTest/**', '**/desktopTest/**', '**/iosTest/**']

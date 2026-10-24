@@ -16,6 +16,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared:designsystem"))
+    implementation(project(":shared:app"))
+    implementation(project(":shared:core"))
     implementation(libs.androidx.activity.compose)
 }
