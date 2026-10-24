@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Spike S-07. The Publisher below is the special "unsigned" OID: the package installs locally with
+     Add-AppxPackage -AllowUnsigned (Windows 11, admin). For the Store, Partner Center gives the real Identity. -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2"
+  IgnorableNamespaces="uap uap10 rescap desktop desktop2">
+
+  <Identity Name="Pixroost.Spike"
+            Publisher="OID.2.25.311729368913984317654407730594956997722=1"
+            Version="@VERSION@"
+            ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Pixroost</DisplayName>
+    <PublisherDisplayName>Pixroost</PublisherDisplayName>
+    <Logo>Assets\Square150x150Logo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application Id="Pixroost" Executable="app\Pixroost.exe"
+                 uap10:RuntimeBehavior="packagedClassicApp" uap10:TrustLevel="mediumIL">
+      <uap:VisualElements DisplayName="Pixroost" Description="Pixroost installer spike"
+                          BackgroundColor="transparent"
+                          Square150x150Logo="Assets\Square150x150Logo.png"
+                          Square44x44Logo="Assets\Square44x44Logo.png" />
+      <Extensions>
+        <!-- Starts after the first launch; the user controls it in Settings > Apps > Startup. -->
+        <desktop:Extension Category="windows.startupTask" Executable="app\Pixroost.exe"
+                           EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="PixroostStartup" Enabled="true" DisplayName="Pixroost" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+
+  <Extensions>
+    <!-- Inbound TCP for any port of the launcher, on all network profiles (domain, private, public). -->
+    <desktop2:Extension Category="windows.firewallRules">
+      <desktop2:FirewallRules Executable="app\Pixroost.exe">
+        <desktop2:Rule Direction="in" IPProtocol="TCP" Profile="all" />
+      </desktop2:FirewallRules>
+    </desktop2:Extension>
+  </Extensions>
+</Package>

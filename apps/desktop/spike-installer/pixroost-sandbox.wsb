@@ -1,0 +1,15 @@
+<!-- Spike S-07. Put the built Pixroost-1.0.0.msi into C:\PixroostTest\ on the host, then open this file.
+     The folder is mapped read-only to C:\Test inside the sandbox; run-test.ps1 lives next to this file. -->
+<Configuration>
+  <Networking>Default</Networking>
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>C:\PixroostTest</HostFolder>
+      <SandboxFolder>C:\Test</SandboxFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+  <LogonCommand>
+    <Command>powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Test\run-test.ps1</Command>
+  </LogonCommand>
+</Configuration>

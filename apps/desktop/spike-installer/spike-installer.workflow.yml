@@ -1,0 +1,102 @@
+name: Spike S-07 installers
+
+# Spike branch only (issue #27): builds the Windows .msi and .msix and the Linux .deb and uploads them.
+on:
+  push:
+    branches: ['spike/27-*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  windows:
+    name: Windows (.msi, .msix)
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-provider: basic
+
+      - name: WiX Toolset and Windows SDK tools
+        shell: pwsh
+        run: |
+          Get-ChildItem "${env:ProgramFiles(x86)}\WiX Toolset v3*\bin" -ErrorAction SilentlyContinue | Select-Object FullName
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin\candle.exe")) { choco install wixtoolset -y --no-progress }
+          Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\makeappx.exe" | Select-Object FullName
+
+      - name: Build the .msi and the .msix
+        run: ./gradlew :apps:desktop:packageSpikeMsi :apps:desktop:packageSpikeMsix
+
+      - name: Inspect the .msi (CustomActions) and the .msix manifest
+        shell: pwsh
+        run: |
+          Get-ChildItem apps/desktop/build/spike-installers -Filter *.ms* | Select-Object Name, Length
+          $installer = New-Object -ComObject WindowsInstaller.Installer
+          $db = $installer.OpenDatabase((Get-ChildItem apps/desktop/build/spike-installers -Filter *.msi).FullName, 0)
+          $view = $db.OpenView('SELECT `Action`, `Target` FROM `CustomAction` WHERE `Action` LIKE ''Pixroost%''')
+          $view.Execute()
+          while ($r = $view.Fetch()) { $r.StringData(1) + ' -> ' + $r.StringData(3) }
+
+      - name: Upload the installers
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pixroost-windows-installers
+          path: |
+            apps/desktop/build/spike-installers/*.msi
+            apps/desktop/build/spike-installers/*.msix
+            apps/desktop/spike-installer/pixroost-sandbox.wsb
+            apps/desktop/spike-installer/run-test.ps1
+          retention-days: 14
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: spike-windows-logs
+          path: |
+            apps/desktop/build/spike-installers/jpackage-temp/
+            apps/desktop/build/reports/
+          retention-days: 7
+
+  linux:
+    name: Linux (checks, .deb)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-provider: basic
+
+      - name: Style, detekt and the .deb
+        run: ./gradlew spotlessCheck detektMain :apps:desktop:packageDeb
+
+      - name: Upload the .deb
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pixroost-linux-deb
+          path: apps/desktop/build/compose/binaries/main/deb/*.deb
+          retention-days: 14
