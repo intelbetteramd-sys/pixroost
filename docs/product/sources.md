@@ -16,13 +16,13 @@
 | **Яндекс Диск** | все | REST API + OAuth PKCE | ✅ | MD5, SHA-256 | в корзину Диска; из общих папок (поле `share`) — нет | ✅ |
 | **Dropbox** | все | API v2 + OAuth PKCE | ✅ | `content_hash` (своя схема) | в удалённые файлы; из общих папок и файлов, открытых людям напрямую, — нет | ✅ |
 | **OneDrive** | все | Microsoft Graph + OAuth PKCE | ✅ | quickXorHash | в корзину; из общих папок и ярлыков — нет | ✅ |
-| **WebDAV** (Nextcloud, NAS, платное Облако Mail.ru) | все | WebDAV | ✅ | обычно нет | в протоколе нет корзины — в v1.0 не удаляем | ✅ |
+| **WebDAV** (Nextcloud, NAS, Облако Mail.ru) | все | WebDAV | ✅ | обычно нет | в протоколе нет корзины — в v1.0 не удаляем | ✅ |
 | **Google Фото** | все | Picker API | ❌ только выбранное, до 2 000 за раз | нет | ❌ | ✅ |
 | **Google Takeout** (архив Google Фото) | desktop | импорт zip/папки | ✅ | считаем сами | — | ✅ |
 | **Папки и внешние диски** | desktop | файловая система | ✅ | считаем сами | в корзину ОС, только на томах с проверенной корзиной | ✅ |
 | Папки синхронизации облаков на ПК | desktop | файловая система | ✅ | считаем сами | в корзину ОС → удалится и в облаке | ✅ |
 | Google Диск через API | все | Drive API | ❌ | MD5 | — | ❌ → через папку на ПК |
-| Облако Mail.ru (бесплатное) | — | нет официального API | ❌ | — | — | ❌ → через папку на ПК |
+| Облако Mail.ru (бесплатное) | — | нет официального API; WebDAV на бесплатном тарифе ⚠️ | ❌ | — | — | ❌ → через папку на ПК |
 | iCloud Drive (файлы, не Фото) | iOS / desktop | выбор папки / папка на ПК | частично | считаем сами | — | v1.x |
 | Библиотека «Фото» на Mac | macOS | PhotoKit через нативный помощник | ✅ | считаем сами | — | v1.x |
 
@@ -55,12 +55,15 @@
   `DATE_EXPIRES` в MediaStore. Во многих галереях производителей корзина MediaStore не видна, поэтому вернуть
   файл предлагает сам Pixroost: «Восстановить» в журнале уборки (`createTrashRequest(uris, false)`, системный
   диалог).
-- Samsung Gallery синхронизируется с OneDrive, удаление и правки идут в обе стороны
-  (по данным [Samsung Support](https://www.samsung.com/latin_en/support/apps-services/can-i-sync-gallery-photos-with-onedrive/)).
-  Папку в OneDrive пользователи называют «Samsung Gallery», но официально её имя не описано (⚠️ проверить
-  в прототипе на телефоне Samsung). Поэтому до проверки на телефоне Samsung весь подключённый личный OneDrive
-  и галерея для правила безопасности — одно хранилище
-  ([домен хранения](../architecture/data-model.md#домен-хранения)), а имя папки — только дополнительный признак.
+- Samsung Gallery синхронизировалась с OneDrive, удаление и правки шли в обе стороны
+  (по данным [Samsung Support](https://www.samsung.com/latin_en/support/apps-services/can-i-sync-gallery-photos-with-onedrive/) и [Microsoft](https://support.microsoft.com/en-US/onedrive/using-samsung-gallery-with-onedrive)).
+  С 30 сентября 2026 Samsung Gallery перестаёт синхронизироваться с OneDrive, фото из OneDrive пропадают из
+  галереи, а в самом OneDrive остаются ([Microsoft](https://support.microsoft.com/en-US/onedrive/changes-to-samsung-gallery-sync-and-onedrive)). Папку в OneDrive Microsoft называет «Samsung Gallery» ([Microsoft](https://support.microsoft.com/en-US/onedrive/using-samsung-gallery-with-onedrive)).
+  Связь после этой даты не сохраняется, но Pixroost не может проверить, что синхронизация на конкретном телефоне
+  действительно выключена (старые версии Gallery и OneDrive, например, отложенное применение изменений), а ошибка стоит
+  потерянных файлов. Поэтому на телефоне Samsung весь подключённый личный OneDrive и галерея для правила
+  безопасности — одно хранилище ([домен хранения](../architecture/data-model.md#домен-хранения)); имя папки —
+  только дополнительный признак. Смягчить правило можно только отдельным решением с изменением ADR.
 
 ### Яндекс Диск
 
@@ -136,8 +139,13 @@
 ### WebDAV
 
 - Общий коннектор для Nextcloud, ownCloud, Synology/QNAP и других NAS.
-- Облако Mail.ru поддерживает WebDAV **только на платных тарифах** и с «паролем для внешнего приложения» —
-  такие пользователи подключаются через этот коннектор.
+- Облако Mail.ru отдаёт WebDAV по адресу `https://webdav.cloud.mail.ru` и требует «пароль для внешнего
+  приложения», основной пароль ящика не подходит ([справка Mail.ru](https://help.mail.ru/cloud_web/app/webdav);
+  по сведениям исследования, обязателен с 01.01.2022). Подключается через этот коннектор: только чтение, без
+  хэшей, корзины и дельты. Доступен ли WebDAV на бесплатном тарифе, справка не говорит (⚠️ проверить на бесплатном
+  аккаунте).
+- Koofr — тоже через этот коннектор (WebDAV с паролем приложения), с теми же ограничениями; специальной
+  поддержки не планируем.
 - Пароль приложения храним только в защищённом хранилище ОС (Keychain / Keystore / системный keyring).
 - Удаления в v1.0 нет: в протоколе WebDAV нет корзины, а удалять безвозвратно Pixroost не будет
   ([ADR 0011](../architecture/adr/0011-cleanup-safety-rule.md)).
@@ -214,9 +222,45 @@
 
 ### Облако Mail.ru
 
-- Официального публичного API нет, WebDAV — только на платных тарифах.
-- **Бесплатные пользователи:** папка синхронизации приложения «Облако Mail» на ПК → источник-папка.
+- Официального публичного API нет; WebDAV есть ([см. выше](#webdav)), но доступность на бесплатном тарифе не
+  подтверждена (⚠️ проверить на бесплатном аккаунте). ⚠️ По сообщению [Onliner](https://tech.onliner.by/2026/02/20/mail-ru) (2026-02-20), Mail.ru с 02.2026 тестирует
+  платный доступ к почте сторонних клиентов; для WebDAV Облака это не подтверждено.
+- **Если WebDAV недоступен:** папка синхронизации приложения «Облако Mail» на ПК → источник-папка.
 - Неофициальные API не используем: они ломаются и нарушают правила сервиса.
+
+### Кандидаты после v1.0
+
+Объём v1.0 и план не меняются. Порядок — по пользе и по тому, насколько ясен законный способ доступа.
+
+1. **Immich** — свой сервер фото. Открытый API (OpenAPI), ключ API, SHA-1 `checksum` у каждого файла, дельта
+   через `/sync/stream`, корзина с восстановлением ([API](https://api.immich.app/)). Первый кандидат.
+2. **Google Диск под `drive.file`** — только после спайка: даёт ли выбор папки в Picker доступ к её содержимому.
+   Без этого не берём ([Google](https://developers.google.com/workspace/drive/api/guides/api-specific-auth)).
+3. **S3-совместимые хранилища** (Yandex Object Storage, Backblaze B2 и др.) — ETag не равен MD5 при multipart-загрузке ([AWS](https://docs.aws.amazon.com/AmazonS3/latest/API/API_Object.html)),
+   корзины нет: удаление, как у WebDAV, не включаем ([Yandex Object Storage](https://yandex.cloud/ru/docs/storage/s3/)).
+4. **pCloud** — без секрета приложения — только implicit-поток OAuth
+   ([authorize](https://docs.pcloud.com/methods/oauth_2.0/authorize.html),
+   [oauth2_token](https://docs.pcloud.com/methods/oauth_2.0/oauth2_token.html)); хэши SHA-1 и MD5 (регион US),
+   SHA-256 (EU) ([checksumfile](https://docs.pcloud.com/methods/file/checksumfile.html)).
+5. **PhotoPrism** — свой сервер фото, REST API ([документация](https://docs.photoprism.app/developer-guide/api/)).
+
+### Не подключаем
+
+Ссылки — на первичные источники, где они есть. «Не проверено» значит, что вывод исследования не подтверждён
+первичным источником и перед любым решением перепроверяется.
+
+| Сервис | Причина | Источник |
+|---|---|---|
+| Сбер Диск, МТС «Вторая память», Билайн | нет публичного API | не проверено |
+| iCloud (вне PhotoKit), Amazon Photos | нет публичного API | не проверено |
+| Xiaomi Cloud, Samsung Cloud | нет API для сторонних приложений | не проверено |
+| Huawei Drive Kit | не изучен | не проверено |
+| TeraBox | нет законного API | не проверено |
+| Flickr | OAuth 1.0a с секретом приложения | [Flickr](https://www.flickr.com/services/api/auth.oauth.html) |
+| Telegram | хранение файлов вразрез с правилами сервиса | не проверено |
+| Box | PKCE не подтверждён | не проверено |
+| MEGA | C++ SDK с привязками Java (SWIG, пример для Android) и Objective-C; сквозное шифрование и тяжёлая нативная интеграция | [SDK](https://github.com/meganz/sdk) |
+| Proton Drive | пока нет готового SDK (срок, не раньше конца 2026, не проверен) | не проверено |
 
 ### Папки и диски на ПК
 
