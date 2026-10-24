@@ -558,6 +558,13 @@ html.show-targets .hit::after { background: rgba(200, 30, 150, .14); outline: 1p
 .banner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 16px; border-radius: var(--r-plate);
   background: var(--tonal); color: var(--text); font-size: var(--t-a-body); }
 .banner p { margin: 0; flex: 1; min-width: 180px; }
+/* LimitedAccessBanner: закрыть нельзя, главной кнопки нет — «Выбрать ещё фото» и контурная «Открыть доступ ко всем».
+   Фон «Бумага» с рамкой: на тональном фоне тональная кнопка не видна. */
+.banner.lim { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); align-items: flex-start; flex-wrap: nowrap; }
+.banner.lim > .ic { color: var(--primary); flex: none; margin-top: 1px; }
+.banner.lim > div { flex: 1; min-width: 0; }
+.lim-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.lim-btns .btn { white-space: normal; }
 
 .empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 32px 24px;
   max-width: 340px; }
@@ -1281,8 +1288,19 @@ html.text-200 .scr .row .txt { flex: 1 1 140px; }
 html.text-200 .scr .row > .add, html.text-200 .scr .row > .trail { margin-left: auto; }
 .thumb, .thumb .src { font-family: var(--f-ui); }
 .empty .h { color: var(--text); }
-html.text-200 .scr .navbar a { overflow-wrap: break-word; hyphens: auto; }
+html.text-200 .scr .navbar a { overflow-wrap: anywhere; hyphens: auto; font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
 html.text-200 .seltb { border-radius: 28px; }
+.syncq { padding: 12px 16px; border-radius: var(--r-win); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); gap: 2px; }
+.syncq legend { float: left; width: 100%; margin-bottom: 2px; }
+.syncq .wiz-free { margin: 0 0 4px; }
+.syncq-yes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.w select.combo { min-height: 32px; padding: 4px 28px 4px 10px; border-radius: var(--r-win); border: 0; background: var(--surface);
+  color: var(--text); font: 400 var(--t-w-body)/1.3 var(--f-ui); box-shadow: inset 0 0 0 1px var(--line), inset 0 -1px 0 var(--outline);
+  max-width: 100%; }
+.w select.combo:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.w select.combo:disabled { color: color-mix(in srgb, var(--text) 38%, transparent); background: transparent; }
+.dialog .syncq { background: var(--surface); }
+.decisions, .lead code { overflow-wrap: anywhere; }
 
 
 </style>
@@ -1361,6 +1379,7 @@ html.text-200 .seltb { border-radius: 28px; }
   <symbol id="ph-forest" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#DCE6E0"/><path d="M14 90l12-40 12 40zM40 92l14-52 14 52zM68 90l11-36 11 36z" fill="#3F6650"/><rect y="88" width="100" height="12" fill="#6E7F55"/></symbol>
   <symbol id="ph-screen" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#F4F5F8"/><rect x="10" y="10" width="80" height="10" rx="2" fill="#CDD3DE"/><rect x="10" y="28" width="56" height="6" rx="2" fill="#DCE0E8"/><rect x="10" y="40" width="70" height="6" rx="2" fill="#DCE0E8"/><rect x="10" y="56" width="80" height="30" rx="4" fill="#B9C7DE"/></symbol>
   <symbol id="ph-family" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#CFDCE8"/><rect y="70" width="100" height="30" fill="#93A86F"/><circle cx="34" cy="40" r="9" fill="#B98A6E"/><path d="M22 74c1-14 6-22 12-22s11 8 12 22z" fill="#4E6A8C"/><circle cx="62" cy="36" r="10" fill="#C99A7B"/><path d="M48 74c1-16 7-25 14-25s13 9 14 25z" fill="#A65A4E"/><circle cx="50" cy="56" r="6" fill="#D9B08E"/><path d="M43 76c1-9 4-13 7-13s6 4 7 13z" fill="#E2C25A"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5"/></symbol>
 
 </svg>
 
@@ -1448,7 +1467,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <li><span class="pi"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></span>
                     <span><strong>Копии на виду</strong><span class="s">Одно фото в трёх облаках — и сколько места оно занимает</span></span></li>
                   <li><span class="pi lampbg"><svg class="lamp-svg" width="24" height="24" aria-hidden="true"><use href="#lamp"/></svg></span>
-                    <span><strong>Оригиналы — дома</strong><span class="s">Фото уходят на ваш ПК. Копии удаляем, только когда оригинал там проверен</span></span></li>
+                    <span><strong>Оригиналы — дома</strong><span class="s">Фото уходят на ваш ПК. Удалить копию можно, только когда оригинал там проверен</span></span></li>
                 </ul>
                 <div class="ob-spacer"></div>
                 <p class="ob-free">Бесплатно и без подписки. Фото не уходят на наши серверы: у Pixroost их нет.</p>
@@ -1456,7 +1475,7 @@ html.text-200 .seltb { border-radius: 28px; }
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
 
-          <div class="state"><span class="cap">2. Зачем доступ — до системного диалога. «Продолжить без доступа» <span class="choice">выбор</span></span>
+          <div class="state"><span class="cap">2. Зачем доступ — до системного диалога. Третья строка — только на Android 14+: раньше выбрать часть фото нельзя. «Продолжить без доступа» <span class="choice">выбор</span></span>
             <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="scr-body"><div class="ob">
                 <div class="ob-steps"><span>Шаг 1 из 3 · Фото на телефоне</span><span class="segs" aria-hidden="true"><i class="on"></i><i></i><i></i></span></div>
@@ -1470,7 +1489,7 @@ html.text-200 .seltb { border-radius: 28px; }
                 <div class="ob-spacer"></div>
                 <div class="ob-foot">
                   <button class="btn btn-primary sl fc hit">Разрешить доступ</button>
-                  <button class="btn btn-link sl fc hit">Продолжить без доступа</button>
+                  <button class="btn btn-secondary sl fc hit">Продолжить без доступа</button>
                 </div>
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
@@ -1511,7 +1530,7 @@ html.text-200 .seltb { border-radius: 28px; }
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
 
-          <div class="state"><span class="cap">5. Доступ запрещён второй раз: Android больше не покажет диалог. После первого отказа — «Разрешить доступ»</span>
+          <div class="state"><span class="cap">5. Доступ запрещён второй раз: Android больше не покажет диалог. После первого отказа — «Разрешить доступ». Путь в настройках — по версии: 13+ «Фото и видео», 11–12 «Файлы и медиа», 8–10 «Хранилище»</span>
             <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="scr-body"><div class="ob">
                 <div class="ob-steps"><span>Шаг 1 из 3 · Фото на телефоне</span><span class="segs" aria-hidden="true"><i class="on"></i><i></i><i></i></span></div>
@@ -1522,7 +1541,7 @@ html.text-200 .seltb { border-radius: 28px; }
                 <div class="ob-spacer"></div>
                 <div class="ob-foot">
                   <button class="btn btn-primary sl fc hit">Открыть настройки</button>
-                  <button class="btn btn-link sl fc hit">Продолжить без доступа</button>
+                  <button class="btn btn-secondary sl fc hit">Продолжить без доступа</button>
                 </div>
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
@@ -1536,7 +1555,7 @@ html.text-200 .seltb { border-radius: 28px; }
     <h2 id="h-a-clouds">Android: облака</h2>
     <p class="lead">Шаг можно пропустить (E1.4). Вход — в браузере, на сайте сервиса (E2.1), доступ только на чтение (E2.5). Строка
       сервиса целиком — кнопка «Подключить» (<code>SourcePicker</code>): в узкой строке отдельная кнопка съедала бы название
-      <span class="choice">выбор</span>. Пока ничего не подключено, внизу — «Пропустить»; после первого облака — «Далее» <span class="choice">выбор</span>. Вверху — как идёт
+      <span class="choice">выбор</span>. Пока ничего не подключено (и без сети) внизу — контурная «Пропустить», как на всех шагах; после первого облака — «Далее» <span class="choice">выбор</span>. Вверху — как идёт
       проверка галереи: лента уже работает, человек видит, что приложение не стоит на месте.</p>
     <div class="stage" data-theme="light">
       <div class="a">
@@ -1581,7 +1600,7 @@ html.text-200 .seltb { border-radius: 28px; }
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
 
-          <div class="state"><span class="cap">3. Нет сети: подключить нельзя, шаг проходится дальше</span>
+          <div class="state"><span class="cap">3. Нет сети: подключить нельзя, тот же «Пропустить»</span>
             <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="scr-body"><div class="ob">
                 <div class="ob-steps"><span>Шаг 2 из 3 · Облака</span><span class="segs" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span></div>
@@ -1596,7 +1615,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <li><button class="row is-disabled" disabled><span class="src src-40" aria-hidden="true">G</span><span class="txt"><span class="t1">Google Фото</span><span class="t2">Нужна сеть</span></span></button></li>
                 </ul>
                 <div class="ob-spacer"></div>
-                <div class="ob-foot"><button class="btn btn-primary sl fc hit">Далее</button></div>
+                <div class="ob-foot"><button class="btn btn-secondary sl fc hit">Пропустить</button></div>
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
         </div>
@@ -1610,7 +1629,7 @@ html.text-200 .seltb { border-radius: 28px; }
     <h2 id="h-a-pc">Android: ПК</h2>
     <p class="lead">Шаг можно пропустить: лента и поиск копий работают без ПК (E1.3). Текст честно говорит, чего без ПК не будет: по правилу
       безопасности (E4.6) копии удаляются, только когда у фото есть проверенная копия в надёжном месте, а по умолчанию это архив на ПК.
-      Сопряжение — по QR с экрана ПК (E5.1), запасной путь — код (IA, «Ошибки»). Кнопка «Как установить на ПК» — из критики К9.</p>
+      Сопряжение — по QR с экрана ПК (E5.1), запасной путь — код (IA, «Ошибки»). Ошибки после сканирования — ПК не найден (с подсказкой про VPN, <code>devices-and-transfer.md</code>), ПК отклонил, код устарел — каждая с действием. Кнопка «Как установить на ПК» — из критики К9.</p>
     <div class="stage" data-theme="light">
       <div class="a">
         <div class="screens">
@@ -1621,16 +1640,16 @@ html.text-200 .seltb { border-radius: 28px; }
                 <h4 class="ob-title">Добавьте ПК</h4>
                 <p class="ob-lede">Фото будут сами складываться на ваш компьютер — по домашнему <span class="nw">Wi-Fi</span>, без облаков и аккаунтов.</p>
                 <ol class="numbered">
-                  <li><div>Установите Pixroost на ПК с Windows<button class="btn btn-link sl fc hit">Как установить на ПК</button></div></li>
+                  <li><div>Установите Pixroost на ПК с Windows — из Microsoft Store или с pixroost.ru<button class="btn btn-link sl fc hit">Как установить на ПК</button></div></li>
                   <li><div>На ПК нажмите «Добавить телефон»</div></li>
                   <li><div>Отсканируйте QR-код с экрана ПК</div></li>
                 </ol>
                 <div class="note-box n-info"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg>
-                  <p>Без ПК лента и поиск копий работают. Удалять копии Pixroost начнёт, когда у фото появится проверенная копия на ПК.</p></div>
+                  <p>Без ПК лента и поиск копий работают. Удалить копию вы сможете, когда у фото появится проверенная копия на ПК, — и только после подтверждения.</p></div>
                 <div class="ob-spacer"></div>
                 <div class="ob-foot">
                   <button class="btn btn-primary sl fc hit"><svg class="ic" aria-hidden="true"><use href="#i-qr"/></svg>Сканировать QR</button>
-                  <button class="btn btn-link sl fc hit">Пропустить</button>
+                  <button class="btn btn-secondary sl fc hit">Пропустить</button>
                 </div>
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
@@ -1678,6 +1697,40 @@ html.text-200 .seltb { border-radius: 28px; }
                 <div class="ob-foot"><button class="btn btn-primary sl fc hit">Подключить</button></div>
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
+          <div class="state"><span class="cap">5. ПК не найден в сети; на телефоне включён VPN — подсказка про него</span>
+            <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
+              <div class="appbar sub"><button class="icon-btn sl fc hit" aria-label="Назад"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><h4 class="ttl">Добавить ПК</h4></div>
+              <div class="scr-body"><div class="ob" role="alert">
+                <div class="done-ic" style="margin-top:16px"><svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg></div>
+                <p class="ob-title mt0" role="heading" aria-level="5">ПК не найден</p>
+                <p class="ob-lede">Телефон не видит ПК «Дом». Проверьте, что оба в одной сети <span class="nw">Wi-Fi</span> и Pixroost на ПК открыт.</p>
+                <div class="note-box n-info"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg><p>На телефоне включён VPN, а с ним устройства дома не видны. Выключите VPN или разрешите в нём доступ к локальной сети.</p></div>
+                <div class="ob-spacer"></div>
+                <div class="ob-foot"><button class="btn btn-primary sl fc hit">Повторить</button><button class="btn btn-secondary sl fc hit">Отмена</button></div>
+              </div></div><div class="gest" aria-hidden="true"><i></i></div>
+            </div></div>
+          <div class="state"><span class="cap">6. На ПК нажали «Отклонить»</span>
+            <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
+              <div class="appbar sub"><button class="icon-btn sl fc hit" aria-label="Назад"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><h4 class="ttl">Добавить ПК</h4></div>
+              <div class="scr-body"><div class="ob" role="alert">
+                <div class="done-ic" style="margin-top:16px"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg></div>
+                <p class="ob-title mt0" role="heading" aria-level="5">ПК не подключил телефон</p>
+                <p class="ob-lede">На ПК «Дом» нажали «Отклонить». Если это ошибка, нажмите на ПК «Добавить телефон» и отсканируйте новый код.</p>
+                <div class="ob-spacer"></div>
+                <div class="ob-foot"><button class="btn btn-primary sl fc hit">Сканировать снова</button><button class="btn btn-secondary sl fc hit">Отмена</button></div>
+              </div></div><div class="gest" aria-hidden="true"><i></i></div>
+            </div></div>
+          <div class="state"><span class="cap">7. Код на экране ПК устарел (живёт 5 минут)</span>
+            <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
+              <div class="appbar sub"><button class="icon-btn sl fc hit" aria-label="Назад"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><h4 class="ttl">Добавить ПК</h4></div>
+              <div class="scr-body"><div class="ob" role="alert">
+                <div class="done-ic" style="margin-top:16px"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg></div>
+                <p class="ob-title mt0" role="heading" aria-level="5">Код устарел</p>
+                <p class="ob-lede">Код на экране ПК действует 5 минут. Нажмите на ПК «Новый код» и отсканируйте его.</p>
+                <div class="ob-spacer"></div>
+                <div class="ob-foot"><button class="btn btn-primary sl fc hit">Сканировать снова</button></div>
+              </div></div><div class="gest" aria-hidden="true"><i></i></div>
+            </div></div>
         </div>
       </div>
     </div>
@@ -1687,12 +1740,12 @@ html.text-200 .seltb { border-radius: 28px; }
   <section class="doc-section" id="a-done" aria-labelledby="h-a-done">
     <h2 id="h-a-done">Android: готово</h2>
     <p class="lead">Последний экран — сводка: что подключено и что ещё проверяется. Галочка — тональная, без «Лампы»: проверенных копий
-      дома ещё нет. Автоархив включён сразу после добавления ПК, только по <span class="nw">Wi-Fi</span> (E7.2) <span class="choice">выбор</span> — переключатель здесь же, чтобы
-      решение было видно. Если всё пропустили — лента с галереей и подсказка, где добавить облака и ПК.</p>
+      дома ещё нет. Автоархив здесь же, но выключен: без вашей команды Pixroost ничего не отправляет. Когда его включают, Android 13+
+      спрашивает разрешение на уведомления — в них виден ход отправки <span class="choice">выбор</span>. Только по <span class="nw">Wi-Fi</span> (E7.2). Если всё пропустили — лента с галереей и подсказка, где добавить облака и ПК.</p>
     <div class="stage" data-theme="light">
       <div class="a">
         <div class="screens">
-          <div class="state"><span class="cap">1. Подключены облако и ПК</span>
+          <div class="state"><span class="cap">1. Подключены облако и ПК; автоархив ждёт вашего решения</span>
             <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="scr-body"><div class="ob">
                 <div class="done-ic" style="margin-top:24px"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
@@ -1703,15 +1756,33 @@ html.text-200 .seltb { border-radius: 28px; }
                   <li><div class="row"><span class="src src-40 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="22" height="22"><use href="#lamp"/></svg></span><span class="txt"><span class="t1">ПК «Дом»</span><span class="t2">Добавлен · в сети</span></span></div></li>
                 </ul>
                 <ul class="list">
-                  <li><div class="row"><span class="txt"><span class="t1" id="aa-t">Автоархив</span><span class="t2" id="aa-d">Новые фото сами уходят на ПК «Дом», когда телефон дома в <span class="nw">Wi-Fi</span></span></span>
-                    <button class="sw-a hit" role="switch" aria-checked="true" aria-labelledby="aa-t" aria-describedby="aa-d"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
+                  <li><div class="row"><span class="txt"><span class="t1" id="aa-t">Автоархив</span><span class="t2" id="aa-d">Включите, и новые фото будут сами уходить на ПК «Дом», когда телефон дома в <span class="nw">Wi-Fi</span></span></span>
+                    <button class="sw-a hit" role="switch" aria-checked="false" aria-labelledby="aa-t" aria-describedby="aa-d"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
                 </ul>
                 <div class="ob-spacer"></div>
                 <div class="ob-foot"><button class="btn btn-primary sl fc hit">Открыть ленту</button></div>
               </div></div><div class="gest" aria-hidden="true"><i></i></div>
             </div></div>
 
-          <div class="state"><span class="cap">2. Всё пропущено: только галерея телефона</span>
+          <div class="state"><span class="cap">2. Автоархив включили: Android 13+ спрашивает про уведомления (рисует система)</span>
+            <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
+              <div class="scr-body" aria-hidden="true"><div class="ob">
+                <div class="done-ic" style="margin-top:24px"><svg class="ic"><use href="#i-check"/></svg></div>
+                <p class="ob-title mt0">Всё готово</p>
+                <ul class="list">
+                  <li><div class="row"><span class="txt"><span class="t1">Автоархив</span><span class="t2">Новые фото сами уходят на ПК «Дом», когда телефон дома в <span class="nw">Wi-Fi</span>. Ход отправки — в уведомлении</span></span>
+                    <span class="sw-a" aria-checked="true" style="background:var(--primary);box-shadow:none"><span class="thumb" style="left:24px;top:4px;width:24px;height:24px;background:var(--on-primary)"></span></span></div></li>
+                </ul>
+              </div></div><div class="gest" aria-hidden="true"><i></i></div>
+              <div class="scrim" aria-hidden="true"></div>
+              <div class="sysdlg" role="img" aria-label="Системный диалог Android: Разрешить приложению «Pixroost» отправлять уведомления? Варианты: Разрешить, Не разрешать">
+                <svg class="ic ic-top" aria-hidden="true"><use href="#i-info"/></svg>
+                <p class="q" aria-hidden="true">Разрешить приложению «Pixroost» отправлять вам уведомления?</p>
+                <div class="opts" aria-hidden="true"><span>Разрешить</span><span>Не разрешать</span></div>
+              </div>
+            </div></div>
+
+          <div class="state"><span class="cap">3. Всё пропущено: только галерея телефона</span>
             <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="scr-body"><div class="ob">
                 <div class="done-ic" style="margin-top:24px"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
@@ -1747,7 +1818,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <ul class="wiz-points">
                     <li><span class="pi"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg></span><span>Телефоны сами отправляют фото сюда — по домашнему <span class="nw">Wi-Fi</span></span></li>
                     <li><span class="pi"><svg class="ic" aria-hidden="true"><use href="#i-photos"/></svg></span><span>Архив, папки и облака — в одной ленте</span></li>
-                    <li><span class="pi lampbg"><svg class="lamp-svg" width="20" height="20" aria-hidden="true"><use href="#lamp"/></svg></span><span>Копии в облаках удаляем, только когда оригинал лежит в архиве и проверен</span></li>
+                    <li><span class="pi lampbg"><svg class="lamp-svg" width="20" height="20" aria-hidden="true"><use href="#lamp"/></svg></span><span>Удалить копию в облаке можно, только когда оригинал лежит в архиве и проверен</span></li>
                   </ul>
                   <p class="wiz-free">Бесплатно и без подписки. Фото не уходят на наши серверы: у Pixroost их нет.</p>
                 </div>
@@ -1762,14 +1833,16 @@ html.text-200 .seltb { border-radius: 28px; }
   <!-- ======================= WINDOWS: ПАПКА АРХИВА ======================= -->
   <section class="doc-section" id="w-archive" aria-labelledby="h-w-archive">
     <h2 id="h-w-archive">Windows: папка архива и раскладка</h2>
-    <p class="lead">Папка предложена сразу — на диске, где больше всего места <span class="choice">выбор</span>; раскладка по умолчанию —
+    <p class="lead">Папка предложена сразу: <code>Pixroost</code> на внутреннем несъёмном диске, где больше всего места, вне папок синхронизации
+      облаков; если такого диска нет — <code>Изображения\Pixroost</code> <span class="choice">выбор</span>; раскладка по умолчанию —
       <code>{год}\{год}-{месяц}\{имя файла}</code> (E6.5). Пример пути показывает, как ляжет настоящее фото (<code>LayoutRulePicker</code>).
       Если папка внутри папки синхронизации облака, ПК предупреждает: удаление из этого облака удалит и копию в архиве (E8.2).
-      Подсказки не красные: это не удаление и не ошибка ввода.</p>
+      Если папку ПК не узнал, он спрашивает, не папка ли это синхронизации облака (правило 3 «Папки синхронизации на ПК» в
+      <code>data-model.md</code>): так же и при «Добавить папку» на следующем шаге. Подсказки не красные: это не удаление и не ошибка ввода.</p>
     <div class="stage" data-theme="light">
       <div class="w">
         <div class="wgrid">
-          <div class="state"><span class="cap">1. По умолчанию: D:, свободно 812&nbsp;ГБ</span>
+          <div class="state"><span class="cap">1. По умолчанию: внутренний диск D:, свободно 812&nbsp;ГБ</span>
             <div class="win wiz">
               <div class="titlebar"><span class="appname"><svg class="lamp-svg" width="16" height="16" aria-hidden="true"><use href="#lamp"/></svg>Pixroost — настройка</span><span class="caption-btns" aria-hidden="true"><span>—</span><span>☐</span><span>✕</span></span></div>
               <div class="wiz-body">
@@ -1857,6 +1930,30 @@ html.text-200 .seltb { border-radius: 28px; }
                 <div class="wiz-foot"><button class="btn btn-secondary sl fc hit left">Назад</button><button class="btn btn-primary sl fc hit">Далее</button></div>
               </div>
             </div></div>
+          <div class="state"><span class="cap">5. Папку ПК не узнал: вопрос, не папка ли это облака (ответа ещё нет)</span>
+            <div class="win wiz">
+              <div class="titlebar"><span class="appname"><svg class="lamp-svg" width="16" height="16" aria-hidden="true"><use href="#lamp"/></svg>Pixroost — настройка</span><span class="caption-btns" aria-hidden="true"><span>—</span><span>☐</span><span>✕</span></span></div>
+              <div class="wiz-body">
+                <ol class="stepper" aria-label="Этапы настройки">
+                  <li aria-current="step"><span class="n">1</span>Папка архива</li><li><span class="n">2</span>Папки и облака</li><li><span class="n">3</span>Телефон</li><li><span class="n">4</span>Готово</li>
+                </ol>
+                <div class="wiz-main">
+                  <h4 class="h-step">Куда складывать фото</h4>
+                  <div class="field" style="max-width:none"><label class="flabel" for="arch5">Папка архива</label>
+                    <div class="folder"><div class="fbox"><svg class="ic ic-16" aria-hidden="true" style="color:var(--text2)"><use href="#i-folder"/></svg><input id="arch5" class="mono" value="D:\Синхронизация\Фото" aria-describedby="arch5-h"></div><button class="btn btn-secondary sl fc hit">Выбрать…</button></div>
+                    <span class="fhelp" id="arch5-h">Свободно 812&nbsp;ГБ на диске D:</span></div>
+                  <fieldset class="layout-group syncq"><legend>Это папка синхронизации облака?</legend>
+                    <p class="wiz-free">Спрашиваем, потому что облако повторяет удаление: удалите файл в облаке — пропадёт и здесь.</p>
+                    <div class="syncq-yes"><label class="radio"><input type="radio" name="sq-arch"><span class="dot"></span><span class="rtxt">Да, это папка</span></label>
+                      <select class="combo" aria-label="Какого облака" disabled><option selected>Яндекс Диск</option><option>Google Диск</option><option>Облако Mail.ru</option><option>iCloud</option><option>Dropbox</option><option>OneDrive</option><option>другого облака</option></select></div>
+                    <label class="radio"><input type="radio" name="sq-arch"><span class="dot"></span><span class="rtxt">Нет, обычная папка</span></label>
+                    <label class="radio"><input type="radio" name="sq-arch"><span class="dot"></span><span class="rtxt">Не знаю</span></label>
+                  </fieldset>
+                  <p class="wiz-free">Пока ответа нет, для уборки в облаках этот архив опорой не служит. «Не знаю» — так же.</p>
+                </div>
+                <div class="wiz-foot"><button class="btn btn-secondary sl fc hit left">Назад</button><button class="btn btn-primary sl fc hit">Далее</button></div>
+              </div>
+            </div></div>
         </div>
       </div>
     </div>
@@ -1868,7 +1965,7 @@ html.text-200 .seltb { border-radius: 28px; }
     <p class="lead">Шаг можно пропустить. Найденные папки с фото предложены списком: «Изображения» отмечена сразу, папки синхронизации
       облаков и внешние диски — нет <span class="choice">выбор</span>, потому что они часто повторяют облака, которые лучше подключить напрямую. Подсказка про
       Яндекс Диск — из исследования: приложение Диска для ПК стало платным (IA, «Краевые случаи»). Google Фото на ПК — через импорт
-      Takeout, позже, в «Хранилищах».</p>
+      Takeout, позже, в «Хранилищах». Папку, которую ПК не узнал, «Добавить папку» уточняет вопросом про облако (состояние 4).</p>
     <div class="stage" data-theme="light">
       <div class="w">
         <div class="wgrid">
@@ -1947,6 +2044,33 @@ html.text-200 .seltb { border-radius: 28px; }
                 <div class="wiz-foot"><button class="btn btn-secondary sl fc hit left">Назад</button><button class="btn btn-link sl fc hit">Пропустить</button><button class="btn btn-primary sl fc hit">Далее</button></div>
               </div>
             </div></div>
+          <div class="state"><span class="cap">4. «Добавить папку»: ПК не узнал папку — тот же вопрос в диалоге</span>
+            <div class="win wiz">
+              <div class="titlebar"><span class="appname"><svg class="lamp-svg" width="16" height="16" aria-hidden="true"><use href="#lamp"/></svg>Pixroost — настройка</span><span class="caption-btns" aria-hidden="true"><span>—</span><span>☐</span><span>✕</span></span></div>
+              <div class="wiz-body">
+                <ol class="stepper" aria-hidden="true">
+                  <li class="done"><span class="n"><svg class="ic"><use href="#i-check"/></svg></span>Папка архива</li><li aria-current="step"><span class="n">2</span>Папки и облака</li><li><span class="n">3</span>Телефон</li><li><span class="n">4</span>Готово</li>
+                </ol>
+                <div class="wiz-main" aria-hidden="true"><p class="h-step">Что ещё показать в ленте</p><p>Папки и облака появятся в общей ленте.</p></div>
+                <div class="wiz-dialog-wrap">
+                  <div class="scrim" aria-hidden="true"></div>
+                  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="af-t">
+                    <div class="d-body">
+                      <h4 id="af-t">Добавить папку</h4>
+                      <p><span class="w-path">E:\Облако\Фото 2019–2023</span> · 4&nbsp;870 фото</p>
+                      <fieldset class="layout-group syncq"><legend>Это папка синхронизации облака?</legend>
+                    <p class="wiz-free">Спрашиваем, потому что облако повторяет удаление: удалите файл в облаке — пропадёт и здесь.</p>
+                    <div class="syncq-yes"><label class="radio"><input type="radio" name="sq-add" checked><span class="dot"></span><span class="rtxt">Да, это папка</span></label>
+                      <select class="combo" aria-label="Какого облака"><option>Яндекс Диск</option><option>Google Диск</option><option selected>Облако Mail.ru</option><option>iCloud</option><option>Dropbox</option><option>OneDrive</option><option>другого облака</option></select></div>
+                    <label class="radio"><input type="radio" name="sq-add"><span class="dot"></span><span class="rtxt">Нет, обычная папка</span></label>
+                    <label class="radio"><input type="radio" name="sq-add"><span class="dot"></span><span class="rtxt">Не знаю</span></label>
+                  </fieldset>
+                    </div>
+                    <div class="d-foot"><button class="btn btn-primary sl fc hit">Добавить</button><button class="btn btn-secondary sl fc hit">Отмена</button></div>
+                  </div>
+                </div>
+              </div>
+            </div></div>
         </div>
       </div>
     </div>
@@ -1975,7 +2099,7 @@ html.text-200 .seltb { border-radius: 28px; }
                     <div class="qr" data-theme="light" role="img" aria-label="QR-код для добавления телефона"><svg viewBox="-1 -1 27 27" aria-hidden="true"><use href="#qr-sample"/></svg></div>
                     <div class="pair-txt">
                       <ol class="numbered" style="margin:0">
-                        <li><div>Установите Pixroost на телефон из Google Play</div></li>
+                        <li><div>Установите Pixroost на телефон — из RuStore, IzzyOnDroid или с pixroost.ru<button class="btn btn-link sl fc hit">Как установить на телефон</button></div></li>
                         <li><div>Нажмите «Сканировать QR» или «Устройства» → «Добавить ПК»</div></li>
                         <li><div>Наведите камеру на этот код</div></li>
                       </ol>
@@ -2108,25 +2232,26 @@ html.text-200 .seltb { border-radius: 28px; }
     <h3>Решения</h3>
     <ol class="decisions">
       <li><b>Шаги «1 из 3» и полоска из трёх отрезков; приветствие не считается.</b> Человек видит, что настройка короткая: три шага, два из них можно пропустить.</li>
-      <li><b>Свой экран «Доступ к фото» до системного диалога.</b> Системный диалог не говорит, зачем доступ и что будет при частичном; без объяснения чаще отказывают.</li>
+      <li><b>Свой экран «Доступ к фото» до системного диалога, на всех версиях Android.</b> Системный диалог не говорит, зачем доступ; строка про часть фото — только на Android 14+.</li>
       <li><b>«Продолжить без доступа» на экране доступа.</b> Облака и ПК работают и без галереи (E1.3); отказ в системном диалоге ведёт туда же.</li>
-      <li><b>При выбранных фото главная кнопка — «Далее», «Открыть доступ ко всем» — контурная.</b> Объясняем, чего не будет видно (E1.2), но не давим: давление — тот самый тёмный паттерн, от которого уходим.</li>
+      <li><b>При выбранных фото главная кнопка — «Далее», «Открыть доступ ко всем» — контурная.</b> Объясняем, чего не будет видно (E1.2), но не давим.</li>
       <li><b>Строка облака целиком — кнопка «Подключить», с плюсом справа.</b> Отдельная кнопка в строке 360 px оставляла названию и подписи около 100 px.</li>
-      <li><b>«Пропустить», пока ничего не подключено, и «Далее» после первого облака.</b> Подпись честно говорит, что сейчас произойдёт.</li>
-      <li><b>Автоархив включается сразу после добавления ПК, только по <span class="nw">Wi-Fi</span>; переключатель — на экране «Готово».</b> Сергей хочет «связать и забыть»; решение видно и снимается одним касанием.</li>
+      <li><b>«Пропустить» — одинаковая контурная кнопка на всех шагах, в том числе без сети; «Далее» — после первого облака.</b> Одно действие выглядит одинаково, подпись говорит, что произойдёт.</li>
+      <li><b>Автоархив на экране «Готово» выключен; когда его включают, Android 13+ спрашивает разрешение на уведомления.</b> Без вашей команды Pixroost никуда не отправляет — как обещает экран доступа; разрешение просим в момент, когда оно понятно зачем.</li>
       <li><b>Окно настройки Windows — мастер с этапами и кнопками внизу справа.</b> Так устроены установщики и мастера Windows; этапы видны сразу.</li>
-      <li><b>Шаг «Папка архива» не пропускается, но папка уже предложена — на диске, где больше всего места.</b> Без папки ПК не принимает фото; готовое значение сводит шаг к одному нажатию.</li>
+      <li><b>Шаг «Папка архива» не пропускается; предложена папка <code>Pixroost</code> на внутреннем несъёмном диске с наибольшим свободным местом вне папок синхронизации, иначе <code>Изображения\Pixroost</code>.</b> Съёмный, сетевой диск или папка облака не годятся для архива по умолчанию.</li>
       <li><b>Найденная папка «Изображения» отмечена, папки синхронизации облаков и внешние диски — нет.</b> Папки синхронизации повторяют облака, которые лучше подключить напрямую; внешний диск может быть отключён.</li>
       <li><b>Папка архива, в которой уже есть фото, принимается с подсказкой «повторно не скопируются».</b> Частый случай переустановки; хэши защищают от дублей (E6.6).</li>
+      <li><b>Вопрос «Это папка синхронизации облака?» — прямо на шаге папки архива и в диалоге «Добавить папку»; облако выбирается списком.</b> Правило 3 из <code>data-model.md</code>; одна строка объясняет, зачем спрашиваем.</li>
       <li><b>При подтверждении телефона отмечено только «Отправлять фото в архив».</b> Меньше всего прав по умолчанию (E5.7, пример с телефоном бабушки).</li>
       <li><b>«Запускать вместе с Windows» отмечено сразу.</b> Приём работает только при запущенном Pixroost (E8.1).</li>
     </ol>
-    <h3>Вопросы</h3>
+    <h3>Ответы мейнтейнера</h3>
     <ol class="decisions">
-      <li>Где спрашивать разрешение на уведомления (Android 13+): при включении автоархива или при первой передаче? Без него прогресс передачи в уведомлении не виден.</li>
-      <li>Нужен ли на Android 8–12 тот же экран «Доступ к фото»: там системный диалог без выбора отдельных фото — текст про часть фото стоит убрать.</li>
-      <li>Если человек пропустил облака и ПК, как часто их предлагать снова? На макете ленты — одна карточка, «Не сейчас» прячет её на 30 дней.</li>
-      <li>Знак на приветствии — предложение иконки (лампа на «Сумерках»); логотип решаем на шаге 2.2.</li>
+      <li><b>Уведомления (Android 13+)</b> спрашиваем, когда включают автоархив.</li>
+      <li><b>Экран «Доступ к фото» на Android 8–13 остаётся</b>, выбор части фото — только на 14+. Путь в настройках: «Фото и видео» (13+), «Файлы и медиа» (11–12), «Хранилище» (8–10).</li>
+      <li><b>Пропущенные облака и ПК</b> предлагаем снова раз в 30 дней, не больше двух раз; после второго «Не сейчас» — только в «Хранилищах» и «Устройствах».</li>
+      <li><b>Знак на приветствии</b> — предложение иконки; логотип решаем на шаге 2.2.</li>
     </ol>
   </section>
 
