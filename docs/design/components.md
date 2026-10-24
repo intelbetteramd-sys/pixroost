@@ -9,13 +9,40 @@
 
 ## Токены
 
+Реализованы в шаге 3.1, пакет `app.pixroost.designsystem.theme`. Значения — из [README](README.md) и
+[основы](mockups/foundation.html); проверяются тестами (значения и контраст WCAG AA) и скриншотами.
+
 | Объект в коде | Что внутри | Источник |
 |---|---|---|
-| `PixroostColors` | светлая и тёмная палитры | [README](README.md#цвета) |
-| `PixroostTypography` | шкала телефона 28/18/15/13 и ПК 28/20/14/12, Unbounded и Onest; стили основного текста, строк списков, плашек и подписей нижней панели — с `Hyphens.Auto` | [README](README.md#шрифты) |
-| `PixroostSpacing` | 4, 8, 12, 16, 24, 32, 48 | [README](README.md#сетка-и-формы) |
-| `PixroostShapes` | телефон: 8, 16, 20, 28, полное скругление; Windows: 4 везде, включая диалоги | [README](README.md#сетка-и-формы) |
-| `PixroostTheme` | собирает всё выше; на Android — поверх `MaterialTheme` | — |
+| `PixroostColors` | роли цвета: `background`, `surface`, `text`, `textSecondary`, `line`, `primary`/`onPrimary`, `tonal`/`onTonal`, `lamp`/`onLamp` (не меняются с темой), `lampTint`, `danger`/`onDanger`, `dangerTint`, `inverse`/`onInverse`/`inverseAccent`, `outline`, `focus`, `scrim`, `shadowKey`, `shadowAmbient`; светлая и тёмная палитры | [README](README.md#цвета) |
+| `PixroostTypography` | `title`, `figure`, `heading`, `body`, `bodyStrong`, `label`, `caption`, `navigationLabel`; шкала телефона 28/18/15/13 и ПК 28/20/14/12, Unbounded 600 и Onest 400/600. `Hyphens.Auto` — у заголовков, `body`, `bodyStrong` (строки списков) и `navigationLabel`; плашки (`SafetyNote`, `InfoNote`) берут `body`. У `label` (кнопки) и `caption` (в том числе подписи rail) переносов по слогам нет | [README](README.md#шрифты) |
+| `PixroostSpacing` | `space4`, `space8`, `space12`, `space16`, `space24`, `space32`, `space48` | [README](README.md#сетка-и-формы) |
+| `PixroostShapes` | `small` 8, `plate` 16, `card` 20, `sheet` 28, `button` (на телефоне полное скругление), `field` 4, `round`; на ПК все, кроме `round`, — 4, включая диалоги | [README](README.md#сетка-и-формы) |
+| `PixroostFormFactor` | `Mobile` (телефон и планшет) или `Desktop`: выбирает шкалу шрифтов и скругления; по умолчанию — по платформе, можно передать в тему | — |
+| `PixroostTheme` | собирает всё выше и оборачивает `MaterialTheme` (цвета, шрифты и формы переданы в Material 3, динамический цвет не используется); светлая или тёмная тема следует за системой | — |
+| `PixroostTokens` | доступ к токенам ближайшей темы: `PixroostTokens.colors.primary` | — |
+
+Шрифты лежат в приложении (`composeResources/font`, [откуда они](../../shared/designsystem/FONTS.md)); текст лицензии
+SIL OFL 1.1 — в `NOTICE`. Каталог всех токенов для скриншот-тестов лежит в `desktopTest` модуля и в приложение не попадает.
+
+**Решения и ограничения токенов.**
+
+- **`Hyphens.Auto` действует только на Android.** На desktop и iOS Compose рисует через Skia, переносов по слогам там нет:
+  слово, которое не помещается, рвётся по буквам без дефиса (на эталонах 200% — «Освобож / дено»). Компоненты не делают колонок
+  с текстом уже самого длинного слова при максимальном масштабе: минимальная ширина в `sp` или ширина растёт с `fontScale`, как у rail.
+  `Hyphens.None` у `label` и `caption` только отключает переносы по слогам; чтобы подпись кнопки или rail оставалась целой,
+  компонент растёт или переносит между словами.
+- **Compose Desktop не берёт системный размер текста Windows**, `fontScale` там всегда 1: эталоны «200% desktop» — синтетический
+  случай. Передать масштаб текста Windows и сделать переносы для Skia — [#113](https://github.com/intelbetteramd-sys/pixroost/issues/113)
+  (шаг 7.2).
+- **Строки имеют полную высоту** (`LineHeightStyle` по центру, без обрезки первой и последней строки), как `line-height` в макетах.
+- **`figure` на ПК — 20/28.** В макете у `StatTile` `.big-num` — 20 по шкале ПК, строка ≈ 26 (наследует 1,29). Взято 28 из
+  шкалы (таблица в README даёт 20/28 для подзаголовка): высота строки кратна 4, как вся шкала. Если сверка с макетом покажет
+  расхождение, правим токен, а не компонент.
+- **Тема Material и компоненты 3.2.** Карточки Material берут `shapes.medium` (там `card`, 20), плашки — `large` (16). Кнопки Material
+  берут полное скругление из своих токенов: на ПК они передают `PixroostTokens.shapes.button` (4) явно. Подписи нижней панели
+  получают `navigationLabel` явно (Material берёт `labelMedium` = `caption` и для панели, и для rail). Листы и диалоги передают
+  `scrimColor = PixroostTokens.colors.scrim` (у Material 32%, по спеке 48% и 64%).
 
 ## Общие компоненты
 

@@ -4,8 +4,20 @@ naming:
   FunctionNaming:
     # Composable functions are named like types: LampMark, PixroostPlaceholder.
     ignoreAnnotated: ['Composable']
-    # Tests are named with sentences in backticks (conventions, section 6). The default excludes lack desktopTest.
-    excludes: ['**/test/**', '**/androidUnitTest/**', '**/commonTest/**', '**/desktopTest/**', '**/iosTest/**']
+    # Test names are sentences in backticks (docs/process/conventions.md); the defaults list every test source
+    # set except desktopTest.
+    excludes:
+      - '**/test/**'
+      - '**/androidTest/**'
+      - '**/commonTest/**'
+      - '**/jvmTest/**'
+      - '**/androidUnitTest/**'
+      - '**/androidInstrumentedTest/**'
+      - '**/jsTest/**'
+      - '**/iosTest/**'
+      - '**/desktopTest/**'
+      - '**/androidHostTest/**'
+      - '**/androidDeviceTest/**'
 
 style:
   MagicNumber:
@@ -18,6 +30,7 @@ style:
       - '**/androidUnitTest/**'
       - '**/androidInstrumentedTest/**'
       - '**/androidHostTest/**'
+      - '**/androidDeviceTest/**'
       - '**/desktopTest/**'
       - '**/jsTest/**'
       - '**/iosTest/**'

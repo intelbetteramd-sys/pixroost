@@ -28,8 +28,9 @@ class KmpLibraryConventionPlugin : Plugin<Project> {
                     // Android runs Java 17 bytecode regardless of the JDK used for the build.
                     jvmTarget.set(JvmTarget.JVM_17)
                 }
-                // Runs commonTest on the JVM against the Android variant too.
-                withHostTest {}
+                // Runs commonTest on the JVM against the Android variant too. Resources are included
+                // so tests that load Compose resources (fonts) work there as well.
+                withHostTest { isIncludeAndroidResources = true }
             }
 
             jvm("desktop")
