@@ -42,15 +42,9 @@ jobs:
       - name: Build the .msi and the .msix
         run: ./gradlew :apps:desktop:packageSpikeMsi :apps:desktop:packageSpikeMsix :apps:desktop:packageSpikeExe
 
-      - name: Inspect the .msi (CustomActions) and the .msix manifest
+      - name: List the installers
         shell: pwsh
-        run: |
-          Get-ChildItem apps/desktop/build/spike-installers -Filter *.ms* | Select-Object Name, Length
-          $installer = New-Object -ComObject WindowsInstaller.Installer
-          $db = $installer.OpenDatabase((Get-ChildItem apps/desktop/build/spike-installers -Filter *.msi).FullName, 0)
-          $view = $db.OpenView('SELECT `Action`, `Target` FROM `CustomAction` WHERE `Action` LIKE ''Pixroost%''')
-          $view.Execute()
-          while ($r = $view.Fetch()) { $r.StringData(1) + ' -> ' + $r.StringData(3) }
+        run: Get-ChildItem apps/desktop/build/spike-installers -File | Select-Object Name, Length
 
       - name: Upload the installers
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -93,7 +87,7 @@ jobs:
           cache-provider: basic
 
       - name: Style, detekt and the .deb
-        run: ./gradlew spotlessCheck detektMain :apps:desktop:packageDeb
+        run: ./gradlew spotlessCheck detekt :apps:desktop:packageDeb
 
       - name: Upload the .deb
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
