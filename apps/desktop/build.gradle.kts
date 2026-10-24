@@ -34,11 +34,14 @@ val installersDir = layout.buildDirectory.dir("spike-installers")
 val isWindowsHost = System.getProperty("os.name").startsWith("Windows")
 val gradleJavaHome: String = System.getProperty("java.home")
 
-fun powershellScript(script: String, vararg args: String): List<String> =
-    listOf(
-        "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
-        spikeDir.file(script).asFile.absolutePath,
-    ) + args
+fun powershellScript(script: String, vararg args: String): List<String> = listOf(
+    "powershell.exe",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    spikeDir.file(script).asFile.absolutePath,
+) + args
 
 tasks.register<Exec>("packageSpikeMsi") {
     group = "distribution"
@@ -77,4 +80,10 @@ tasks.register<Exec>("packageSpikeMsix") {
             "-Version", "$appVersion.0",
         ),
     )
+}
+
+// Spike only: lets the existing CI (which runs createDistributable) also prove that both installers build.
+// The CI token has no `workflow` scope, so a dedicated workflow could not be pushed.
+tasks.named("createDistributable") {
+    finalizedBy("packageSpikeMsi", "packageSpikeMsix")
 }
