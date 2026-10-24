@@ -1,12 +1,19 @@
 package app.pixroost.core.result
 
-import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class AppResultTest {
     @Test
@@ -15,7 +22,7 @@ class AppResultTest {
     }
 
     @Test
-    fun appCatchingMapsExceptionToUnknownByDefault() {
+    fun appCatchingMapsExceptionToUnexpectedErrorByDefault() {
         val boom = IllegalStateException("boom")
 
         val result = appCatching { throw boom }
@@ -37,6 +44,44 @@ class AppResultTest {
             appCatching { throw CancellationException("cancelled") }
         }
     }
+
+    @Test
+    fun appCatchingDoesNotCatchErrors() {
+        class TestError : Error()
+
+        assertFailsWith<TestError> { appCatching { throw TestError() } }
+    }
+
+    @Test
+    fun appCatchingTurnsTimeoutIntoFailure() = runTest {
+        val result = appCatching { withTimeout(1) { awaitCancellation() } }
+
+        assertIs<UnexpectedError>(assertIs<AppResult.Failure>(result).error)
+    }
+
+    @Test
+    fun appCatchingKeepsCancellationOfTheCaller() = runTest {
+        var reachedAfterCatching = false
+        val job = launch(start = CoroutineStart.UNDISPATCHED) {
+            appCatching { awaitCancellation() }
+            reachedAfterCatching = true
+        }
+
+        job.cancel()
+        job.join()
+
+        assertTrue(job.isCancelled)
+        assertFalse(reachedAfterCatching)
+    }
+
+    @Test
+    fun errorToStringOmitsCauseText() {
+        val error = StorageError(causeWithPath())
+
+        assertEquals("StorageError", error.toString())
+    }
+
+    private fun causeWithPath() = IllegalStateException("/storage/emulated/0/DCIM/secret.jpg")
 
     @Test
     fun mapTransformsSuccessAndKeepsFailure() {
