@@ -6,17 +6,19 @@ import app.pixroost.android.spike.run.RunSnapshot
 fun fullRunReport(snapshot: RunSnapshot): String {
     val state = if (snapshot.finished) "завершён" else "ОБОРВАН или остановлен"
     val battery = if (snapshot.batteryStart >= 0) {
-        "Батарея: ${snapshot.batteryStart} % → ${snapshot.batteryNow} % " +
-            "(${snapshot.batteryStart - snapshot.batteryNow} п.п.), " +
-            if (snapshot.charging) "ЗАРЯДКА ПОДКЛЮЧЕНА, цифра не годится" else "без зарядки"
+        val used = snapshot.batteryStart - snapshot.batteryNow
+        val charger = if (snapshot.charging) "ЗАРЯДКА ПОДКЛЮЧЕНА, цифра не годится" else "без зарядки"
+        "Батарея: ${snapshot.batteryStart} % → ${snapshot.batteryNow} % ($used п.п.), $charger"
     } else {
         "Батарея: нет данных"
     }
+    val counts = "Фото: ${snapshot.done} из ${snapshot.total}, не открылось ${snapshot.failed}, " +
+        "пустых кадров ${snapshot.blank}"
+    val seconds = snapshot.elapsedMs / ReportConstants.MILLIS_IN_SECOND
     return listOf(
         "== Вся галерея, только по превью: $state",
-        "Фото: ${snapshot.done} из ${snapshot.total}, не открылось ${snapshot.failed}, пустых кадров ${snapshot.blank}",
-        "Время ${snapshot.elapsedMs / ReportConstants.MILLIS_IN_SECOND} с; ${number(snapshot.photosPerSecond)} фото/с; " +
-            "${number(snapshot.photosPerMinute)} фото/мин",
+        counts,
+        "Время $seconds с; ${number(snapshot.photosPerSecond)} фото/с; ${number(snapshot.photosPerMinute)} фото/мин",
         battery,
     ).joinToString("\n")
 }
