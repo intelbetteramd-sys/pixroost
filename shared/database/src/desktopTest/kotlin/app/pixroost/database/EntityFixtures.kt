@@ -59,3 +59,10 @@ fun cleanupAction(instanceId: Long, keeperInstanceId: Long) = CleanupActionEntit
     action = CleanupActionType.TRASH,
     status = CleanupStatus.PLANNED,
 )
+
+suspend fun PixroostDatabase.insertPlannedCleanupAction(): Long {
+    val sourceId = sourceDao().insert(source())
+    val assetId = assetDao().insert(asset())
+    val copy = instanceDao().insert(instance(assetId, sourceId, remoteKey = "k${System.nanoTime()}"))
+    return cleanupActionDao().insert(cleanupAction(instanceId = copy, keeperInstanceId = copy))
+}

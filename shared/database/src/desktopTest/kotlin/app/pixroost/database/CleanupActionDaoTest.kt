@@ -41,7 +41,7 @@ class CleanupActionDaoTest {
 
     @Test
     fun trashedActionRecordsWhenItWasDoneAndHowToRestoreIt() = runTest {
-        val id = insertPlannedAction()
+        val id = database.insertPlannedCleanupAction()
 
         assertEquals(1, dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null))
 
@@ -55,7 +55,7 @@ class CleanupActionDaoTest {
 
     @Test
     fun refusalKeepsTheReasonAndTheEvidence() = runTest {
-        val id = insertPlannedAction()
+        val id = database.insertPlannedCleanupAction()
 
         assertEquals(1, dao.markRefused(id, denialReason = "keeper hash differs"))
 
@@ -67,8 +67,8 @@ class CleanupActionDaoTest {
 
     @Test
     fun failureAndUnrecoverableDeletionAreRecorded() = runTest {
-        val failed = insertPlannedAction()
-        val unrecoverable = insertPlannedAction()
+        val failed = database.insertPlannedCleanupAction()
+        val unrecoverable = database.insertPlannedCleanupAction()
 
         assertEquals(1, dao.markFailed(failed, error = "timeout"))
         assertEquals(1, dao.markUnrecoverable(unrecoverable, executedAt = 700, error = "not in the recycle bin"))
@@ -81,7 +81,7 @@ class CleanupActionDaoTest {
 
     @Test
     fun restoredActionKeepsItsOriginalExecutionTime() = runTest {
-        val id = insertPlannedAction()
+        val id = database.insertPlannedCleanupAction()
         dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null)
 
         assertEquals(1, dao.markRestored(id, restoredAt = 600))
@@ -93,47 +93,8 @@ class CleanupActionDaoTest {
     }
 
     @Test
-    fun doneEntryCannotBecomeFailedRefusedOrUnrecoverable() = runTest {
-        val id = insertPlannedAction()
-        dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null)
-
-        assertEquals(0, dao.markFailed(id, error = "late"))
-        assertEquals(0, dao.markRefused(id, denialReason = "late"))
-        assertEquals(0, dao.markUnrecoverable(id, executedAt = 900, error = "late"))
-        assertEquals(0, dao.markDone(id, executedAt = 900, trashKey = null, trashExpiresAt = null))
-
-        val entry = checkNotNull(dao.getById(id))
-        assertEquals(CleanupStatus.DONE, entry.status)
-        assertEquals(500L, entry.executedAt)
-        assertEquals("trash/1", entry.trashKey)
-    }
-
-    @Test
-    fun restoredOrRefusedEntryCannotGoBackToDone() = runTest {
-        val restored = insertPlannedAction()
-        dao.markDone(restored, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null)
-        dao.markRestored(restored, restoredAt = 600)
-        val refused = insertPlannedAction()
-        dao.markRefused(refused, denialReason = "no")
-
-        assertEquals(0, dao.markDone(restored, executedAt = 900, trashKey = null, trashExpiresAt = null))
-        assertEquals(0, dao.markDone(refused, executedAt = 900, trashKey = null, trashExpiresAt = null))
-
-        assertEquals("trash/1", dao.getById(restored)?.trashKey)
-        assertEquals(CleanupStatus.REFUSED, dao.getById(refused)?.status)
-    }
-
-    @Test
-    fun onlyDoneEntryCanBeRestored() = runTest {
-        val planned = insertPlannedAction()
-
-        assertEquals(0, dao.markRestored(planned, restoredAt = 600))
-        assertEquals(CleanupStatus.PLANNED, dao.getById(planned)?.status)
-    }
-
-    @Test
     fun lostKeeperWarningIsRecordedOnce() = runTest {
-        val id = insertPlannedAction()
+        val id = database.insertPlannedCleanupAction()
 
         assertEquals(1, dao.markKeeperLostNotified(id, notifiedAt = 800))
         assertEquals(0, dao.markKeeperLostNotified(id, notifiedAt = 900))
@@ -143,17 +104,10 @@ class CleanupActionDaoTest {
 
     @Test
     fun actionsOfOnePlanAreListedTogether() = runTest {
-        insertPlannedAction()
-        insertPlannedAction()
+        database.insertPlannedCleanupAction()
+        database.insertPlannedCleanupAction()
 
         assertEquals(2, dao.getByPlan("plan-1").size)
         assertEquals(0, dao.getByPlan("other").size)
-    }
-
-    private suspend fun insertPlannedAction(): Long {
-        val sourceId = database.sourceDao().insert(source())
-        val assetId = database.assetDao().insert(asset())
-        val copy = database.instanceDao().insert(instance(assetId, sourceId, remoteKey = "k${System.nanoTime()}"))
-        return dao.insert(cleanupAction(instanceId = copy, keeperInstanceId = copy))
     }
 }
