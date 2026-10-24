@@ -1,4 +1,4 @@
-<!-- Spike S-07. Put the built Pixroost-1.0.0.msi into C:\PixroostTest\ on the host, then open this file.
+<!-- Spike S-07. Put the built Pixroost-1.0.0.msi (or Pixroost-1.0.0-setup.exe) into C:\PixroostTest\ on the host, then open this file.
      The folder is mapped read-only to C:\Test inside the sandbox; run-test.ps1 lives next to this file. -->
 <Configuration>
   <Networking>Default</Networking>
@@ -10,6 +10,6 @@
     </MappedFolder>
   </MappedFolders>
   <LogonCommand>
-    <Command>powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Test\run-test.ps1</Command>
+    <Command>powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\Test\run-test.ps1</Command><!-- append " -Exe" to test the Inno setup .exe instead of the .msi -->
   </LogonCommand>
 </Configuration>

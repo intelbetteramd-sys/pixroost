@@ -47,7 +47,7 @@ tasks.register<Exec>("packageSpikeMsi") {
     group = "distribution"
     description = "Builds Pixroost.msi with a firewall rule (custom main.wxs) from the app image."
     dependsOn("createDistributable")
-    onlyIf { isWindowsHost }
+    enabled = isWindowsHost
     inputs.dir(appImageDir)
     inputs.dir(spikeDir)
     outputs.dir(installersDir)
@@ -67,7 +67,7 @@ tasks.register<Exec>("packageSpikeMsix") {
     group = "distribution"
     description = "Builds an unsigned Pixroost.msix (firewall rule, startup task) from the app image."
     dependsOn("createDistributable")
-    onlyIf { isWindowsHost }
+    enabled = isWindowsHost
     inputs.dir(appImageDir)
     inputs.dir(spikeDir)
     outputs.dir(installersDir)
@@ -82,8 +82,27 @@ tasks.register<Exec>("packageSpikeMsix") {
     )
 }
 
-// Spike only: lets the existing CI (which runs createDistributable) also prove that both installers build.
+tasks.register<Exec>("packageSpikeExe") {
+    group = "distribution"
+    description = "Builds Pixroost-<version>-setup.exe with Inno Setup (firewall rule, optional autostart)."
+    dependsOn("createDistributable")
+    enabled = isWindowsHost
+    inputs.dir(appImageDir)
+    inputs.dir(spikeDir)
+    outputs.dir(installersDir)
+    commandLine(
+        powershellScript(
+            "build-exe.ps1",
+            "-AppImage", appImageDir.get().asFile.absolutePath,
+            "-SpikeDir", spikeDir.asFile.absolutePath,
+            "-Output", installersDir.get().asFile.absolutePath,
+            "-Version", appVersion,
+        ),
+    )
+}
+
+// Spike only: lets the existing CI (which runs createDistributable) also prove that the installers build.
 // The CI token has no `workflow` scope, so a dedicated workflow could not be pushed.
 tasks.matching { it.name == "createDistributable" }.configureEach {
-    finalizedBy("packageSpikeMsi", "packageSpikeMsix")
+    finalizedBy("packageSpikeMsi", "packageSpikeMsix", "packageSpikeExe")
 }
