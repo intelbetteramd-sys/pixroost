@@ -9,9 +9,11 @@ enum class CleanupStatus {
     PLANNED,
     DONE,
     FAILED,
+
     /** CleanupSafetyPolicy refused the action on the re-check. */
     REFUSED,
     RESTORED,
+
     /** Windows deleted the file permanently instead of moving it to the trash. */
     UNRECOVERABLE,
 }

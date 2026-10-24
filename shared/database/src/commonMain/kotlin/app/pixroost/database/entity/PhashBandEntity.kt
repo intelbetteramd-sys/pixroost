@@ -21,8 +21,4 @@ import androidx.room3.Index
         Index(value = ["asset_id"]),
     ],
 )
-data class PhashBandEntity(
-    @ColumnInfo(name = "asset_id") val assetId: Long,
-    val band: Int,
-    val value: Int,
-)
+data class PhashBandEntity(@ColumnInfo(name = "asset_id") val assetId: Long, val band: Int, val value: Int)

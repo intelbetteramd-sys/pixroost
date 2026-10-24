@@ -18,20 +18,16 @@ fun source(title: String = "Dropbox", kind: SourceKind = SourceKind.DROPBOX) =
 
 fun asset(takenAt: Long? = null) = AssetEntity(mediaType = MediaType.PHOTO, takenAt = takenAt)
 
-fun instance(
-    assetId: Long,
-    sourceId: Long,
-    remoteKey: String = "IMG_1.jpg",
-    sha256: ByteArray? = null,
-) = InstanceEntity(
-    assetId = assetId,
-    sourceId = sourceId,
-    remoteKey = remoteKey,
-    sha256 = sha256,
-    quality = InstanceQuality.ORIGINAL,
-    state = InstanceState.PRESENT,
-    lastSeenAt = 0,
-)
+fun instance(assetId: Long, sourceId: Long, remoteKey: String = "IMG_1.jpg", sha256: ByteArray? = null) =
+    InstanceEntity(
+        assetId = assetId,
+        sourceId = sourceId,
+        remoteKey = remoteKey,
+        sha256 = sha256,
+        quality = InstanceQuality.ORIGINAL,
+        state = InstanceState.PRESENT,
+        lastSeenAt = 0,
+    )
 
 fun hash(seed: Byte) = ByteArray(size = 32) { seed }
 
