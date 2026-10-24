@@ -43,15 +43,17 @@ fun SpikeStatusScreen(
 
 @Composable
 private fun StatusLines(status: InstallStatus, listenError: String?, requests: Int) {
-    Text("Установка: ${status.installKind}")
-    Text("Исполняемый файл: ${status.executable}")
-    Text("Данные: ${status.dataDirectory}")
-    Text("Данные, проверка: ${status.dataNote}")
-    Text("Правило брандмауэра:\n${status.firewallRules}")
-    Text("Сетевой профиль:\n${status.networkProfiles}")
-    Text(listenError ?: "Слушаем порт ${SpikeConstants.LISTEN_PORT}, запросов: $requests")
-    Text("Проверить с телефона:")
-    status.addresses.forEach { Text("http://$it:${SpikeConstants.LISTEN_PORT}/") }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("Установка: ${status.installKind}")
+        Text("Исполняемый файл: ${status.executable}")
+        Text("Данные: ${status.dataDirectory}")
+        Text("Данные, проверка: ${status.dataNote}")
+        Text("Правило брандмауэра:\n${status.firewallRules}")
+        Text("Сетевой профиль:\n${status.networkProfiles}")
+        Text(listenError ?: "Слушаем порт ${SpikeConstants.LISTEN_PORT}, запросов: $requests")
+        Text("Проверить с телефона:")
+        status.addresses.forEach { Text("http://$it:${SpikeConstants.LISTEN_PORT}/") }
+    }
 }
 
 @Composable
