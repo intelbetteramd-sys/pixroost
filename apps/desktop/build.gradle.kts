@@ -84,6 +84,6 @@ tasks.register<Exec>("packageSpikeMsix") {
 
 // Spike only: lets the existing CI (which runs createDistributable) also prove that both installers build.
 // The CI token has no `workflow` scope, so a dedicated workflow could not be pushed.
-tasks.named("createDistributable") {
+tasks.matching { it.name == "createDistributable" }.configureEach {
     finalizedBy("packageSpikeMsi", "packageSpikeMsix")
 }
