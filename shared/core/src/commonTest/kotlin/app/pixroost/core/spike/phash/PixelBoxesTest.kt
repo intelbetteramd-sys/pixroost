@@ -6,6 +6,9 @@ import kotlin.test.assertEquals
 class PixelBoxesTest {
     private val black = 0xFF000000.toInt()
     private val photo = 0xFF909090.toInt()
+    private val shadow = 0xFF404040.toInt()
+
+    private fun texture(index: Int) = if (index % 2 == 0) photo else shadow
 
     @Test
     fun letterboxBarsAreTrimmed() {
@@ -14,7 +17,7 @@ class PixelBoxesTest {
         // Two black rows on top and bottom, a textured picture between.
         val pixels = IntArray(width * height) { index ->
             val y = index / width
-            if (y < 2 || y >= height - 2) black else if (index % 2 == 0) photo else 0xFF404040.toInt()
+            if (y < 2 || y >= height - 2) black else texture(index)
         }
         assertEquals(PixelBox(0, 2, 10, 8), trimBorders(pixels, width, height))
     }
@@ -25,14 +28,14 @@ class PixelBoxesTest {
         val height = 6
         val pixels = IntArray(width * height) { index ->
             val x = index % width
-            if (x < 3 || x >= width - 3) black else if (index % 2 == 0) photo else 0xFF404040.toInt()
+            if (x < 3 || x >= width - 3) black else texture(index)
         }
         assertEquals(PixelBox(3, 0, 7, 6), trimBorders(pixels, width, height))
     }
 
     @Test
     fun picturesWithoutBarsAreKept() {
-        val pixels = IntArray(16) { if (it % 2 == 0) photo else 0xFF404040.toInt() }
+        val pixels = IntArray(16) { texture(it) }
         assertEquals(PixelBox(0, 0, 4, 4), trimBorders(pixels, 4, 4))
     }
 
