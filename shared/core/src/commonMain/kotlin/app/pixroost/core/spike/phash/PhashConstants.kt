@@ -38,4 +38,12 @@ object PhashConstants {
 
     /** Confidence 95 %: with no hit in N trials the expected count is below 3 (the rule of three). */
     const val RULE_OF_THREE = 3.0
+
+    /** Rec. 601 luminance weights and the channel layout of a packed ARGB pixel. */
+    const val RED_WEIGHT = 0.299f
+    const val GREEN_WEIGHT = 0.587f
+    const val BLUE_WEIGHT = 0.114f
+    const val BYTE_MASK = 0xFF
+    const val RED_SHIFT = 16
+    const val GREEN_SHIFT = 8
 }

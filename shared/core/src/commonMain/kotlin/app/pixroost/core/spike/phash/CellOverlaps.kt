@@ -1,4 +1,4 @@
-package app.pixroost.desktop.spike.data
+package app.pixroost.core.spike.phash
 
 import kotlin.math.ceil
 import kotlin.math.floor
