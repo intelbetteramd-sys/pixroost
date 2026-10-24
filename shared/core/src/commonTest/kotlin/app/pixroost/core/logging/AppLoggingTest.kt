@@ -21,7 +21,7 @@ class AppLoggingTest {
     }
 
     @Test
-    fun dropsMessagesBelowMinSeverity() {
+    fun `drops messages below min severity`() {
         val writer = RecordingWriter()
         AppLogging.install(Severity.Info, listOf(writer))
 
@@ -30,5 +30,13 @@ class AppLoggingTest {
         logger.i { "shown" }
 
         assertEquals(listOf("Info/Test/shown"), writer.messages)
+    }
+
+    @Test
+    fun `severity from setting defaults to info`() {
+        assertEquals(Severity.Debug, AppLogging.severityFrom("DEBUG"))
+        assertEquals(Severity.Info, AppLogging.severityFrom("info"))
+        assertEquals(Severity.Info, AppLogging.severityFrom("verbose"))
+        assertEquals(Severity.Info, AppLogging.severityFrom(null))
     }
 }

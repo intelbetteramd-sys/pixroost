@@ -17,12 +17,12 @@ import kotlin.test.assertTrue
 
 class AppResultTest {
     @Test
-    fun appCatchingWrapsReturnValue() {
+    fun `appCatching wraps return value`() {
         assertEquals(AppResult.Success(42), appCatching { 42 })
     }
 
     @Test
-    fun appCatchingMapsExceptionToUnexpectedErrorByDefault() {
+    fun `appCatching maps exception to unexpected error by default`() {
         val boom = IllegalStateException("boom")
 
         val result = appCatching { throw boom }
@@ -32,35 +32,35 @@ class AppResultTest {
     }
 
     @Test
-    fun appCatchingUsesCustomMapper() {
+    fun `appCatching uses custom mapper`() {
         val result = appCatching(mapError = { NetworkError(it) }) { error("offline") }
 
         assertIs<NetworkError>(assertIs<AppResult.Failure>(result).error)
     }
 
     @Test
-    fun appCatchingRethrowsCancellation() {
+    fun `appCatching rethrows cancellation`() {
         assertFailsWith<CancellationException> {
             appCatching { throw CancellationException("cancelled") }
         }
     }
 
     @Test
-    fun appCatchingDoesNotCatchErrors() {
+    fun `appCatching does not catch errors`() {
         class TestError : Error()
 
         assertFailsWith<TestError> { appCatching { throw TestError() } }
     }
 
     @Test
-    fun appCatchingTurnsTimeoutIntoFailure() = runTest {
+    fun `appCatching turns timeout into failure`() = runTest {
         val result = appCatching { withTimeout(1) { awaitCancellation() } }
 
         assertIs<UnexpectedError>(assertIs<AppResult.Failure>(result).error)
     }
 
     @Test
-    fun appCatchingKeepsCancellationOfTheCaller() = runTest {
+    fun `appCatching keeps cancellation of the caller`() = runTest {
         var reachedAfterCatching = false
         val job = launch(start = CoroutineStart.UNDISPATCHED) {
             appCatching { awaitCancellation() }
@@ -75,7 +75,7 @@ class AppResultTest {
     }
 
     @Test
-    fun errorToStringOmitsCauseText() {
+    fun `error to string omits cause text`() {
         val error = StorageError(causeWithPath())
 
         assertEquals("StorageError", error.toString())
@@ -84,7 +84,7 @@ class AppResultTest {
     private fun causeWithPath() = IllegalStateException("/storage/emulated/0/DCIM/secret.jpg")
 
     @Test
-    fun mapTransformsSuccessAndKeepsFailure() {
+    fun `map transforms success and keeps failure`() {
         assertEquals(AppResult.Success(2), AppResult.Success(1).map { it + 1 })
 
         val failure: AppResult<Int> = AppResult.Failure(NotFoundError())
@@ -92,7 +92,7 @@ class AppResultTest {
     }
 
     @Test
-    fun flatMapStopsAtFirstFailure() {
+    fun `flatMap stops at first failure`() {
         val failure = AppResult.Failure(StorageError())
 
         val result = AppResult.Success(1).flatMap { failure }.flatMap { AppResult.Success(it) }
@@ -101,13 +101,13 @@ class AppResultTest {
     }
 
     @Test
-    fun foldPicksMatchingBranch() {
+    fun `fold picks matching branch`() {
         assertEquals("ok 1", AppResult.Success(1).fold({ "ok $it" }, { "err" }))
         assertEquals("err", AppResult.Failure(UnauthorizedError()).fold({ "ok" }, { "err" }))
     }
 
     @Test
-    fun getOrNullAndErrorOrNull() {
+    fun `getOrNull and errorOrNull`() {
         val success: AppResult<Int> = AppResult.Success(1)
         val failure: AppResult<Int> = AppResult.Failure(PermissionDeniedError())
 
