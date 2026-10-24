@@ -14,6 +14,14 @@ object YandexShareConstants {
     const val KIND_SUBFOLDER = "прямой: вложенная папка"
     const val KIND_FILE = "прямой: вложенный файл"
     const val KIND_CONTROL = "прямой: папка без share"
+    const val FLAT_URL = "https://cloud-api.yandex.net/v1/disk/resources/files"
+    const val FLAT_PAGE_SIZE = 1000
+    const val MAX_FLAT_PAGES = 30
+    const val FIELDS_WITHOUT_SHARE = "name,path,md5"
+    const val KIND_FIELDS = "с fields без share, "
+    const val KIND_FLAT_MEDIA = "плоский список image,video"
+    const val KIND_FLAT_ALL = "плоский список без media_type"
+    const val MEDIA_TYPES = "image,video"
     const val SHARE_KEY = "share"
     const val RIGHTS_KEY = "rights"
 

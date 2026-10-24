@@ -9,4 +9,7 @@ data class YandexShareNode(
     val depth: Int,
     val parent: String,
     val share: JsonObject?,
+    val resourceId: String? = null,
+    /** The item has `public_key` or `public_url`: published by link, which is not the same as shared. */
+    val published: Boolean = false,
 )

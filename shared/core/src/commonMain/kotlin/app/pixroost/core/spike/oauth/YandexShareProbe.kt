@@ -15,7 +15,12 @@ class YandexShareProbe(private val http: HttpClient) {
         val disk = YandexDiskClient(http, accessToken)
         val nodes = walk(disk)
         val checks = directChecks(disk, nodes)
-        return shareProbeResult(nodes, checks, disk)
+        val flatProbe = YandexFlatListProbe(disk)
+        val flat = listOf(
+            flatProbe.check(nodes, YandexShareConstants.KIND_FLAT_MEDIA, YandexShareConstants.MEDIA_TYPES),
+            flatProbe.check(nodes, YandexShareConstants.KIND_FLAT_ALL, null),
+        )
+        return shareProbeResult(nodes, checks, disk, flat)
     }
 
     private suspend fun walk(disk: YandexDiskClient): List<YandexShareNode> {
@@ -59,6 +64,8 @@ class YandexShareProbe(private val http: HttpClient) {
             depth = parent.depth + 1,
             parent = parent.path,
             share = item[YandexShareConstants.SHARE_KEY] as? JsonObject,
+            resourceId = (item["resource_id"] as? JsonPrimitive)?.contentOrNull,
+            published = "public_key" in item || "public_url" in item,
         )
     }
 
@@ -74,9 +81,21 @@ class YandexShareProbe(private val http: HttpClient) {
         }
         val control = nodes.firstOrNull { it.isDir && it.share == null }
         if (control != null) targets += YandexShareConstants.KIND_CONTROL to control.path
-        return targets.map { (kind, path) ->
-            val reply = disk.resource(kind, path)
-            YandexShareCheck(kind, path, reply.status, reply.body?.get(YandexShareConstants.SHARE_KEY) as? JsonObject)
+        val plain = targets.map { (kind, path) -> check(disk, kind, path, null) }
+        val filtered = targets.map { (kind, path) ->
+            check(disk, YandexShareConstants.KIND_FIELDS + kind, path, YandexShareConstants.FIELDS_WITHOUT_SHARE)
         }
+        return plain + filtered
+    }
+
+    private suspend fun check(disk: YandexDiskClient, kind: String, path: String, fields: String?): YandexShareCheck {
+        val reply = disk.resource(kind, path, fields = fields)
+        return YandexShareCheck(
+            kind = kind,
+            path = path,
+            status = reply.status,
+            share = reply.body?.get(YandexShareConstants.SHARE_KEY) as? JsonObject,
+            resourceId = (reply.body?.get("resource_id") as? JsonPrimitive)?.contentOrNull,
+        )
     }
 }

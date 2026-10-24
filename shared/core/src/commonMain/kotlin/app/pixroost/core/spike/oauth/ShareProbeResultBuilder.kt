@@ -5,6 +5,7 @@ fun shareProbeResult(
     nodes: List<YandexShareNode>,
     checks: List<YandexShareCheck>,
     disk: YandexDiskClient,
+    flat: List<YandexFlatResult>,
 ): ShareProbeResult {
     val folders = nodes.filter { it.isDir }
     val files = nodes.filterNot { it.isDir }
@@ -19,12 +20,15 @@ fun shareProbeResult(
         checks.groupBy { it.kind }.forEach { (kind, group) ->
             add("$kind: share есть в ${group.count { it.share != null }} из ${group.size}")
         }
+        addAll(flatLines(flat))
+        addAll(publishedLines(nodes))
+        addAll(rootLines(nodes, checks))
         add("неизвестные ключи ресурса: " + disk.unknownKeys.sorted().ifEmpty { listOf("нет") }.joinToString())
         disk.statuses.forEach { (kind, codes) ->
             add("HTTP, $kind: " + codes.entries.joinToString { "${it.key}×${it.value}" })
         }
     }
-    return ShareProbeResult(summary, screenLines(nodes, checks))
+    return ShareProbeResult(summary, rootScreenLines(nodes) + screenLines(nodes, checks))
 }
 
 private fun valueCounts(nodes: List<YandexShareNode>): String {
