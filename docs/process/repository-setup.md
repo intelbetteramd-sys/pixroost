@@ -23,7 +23,7 @@
   ```
   Every photo from every cloud in one feed — no duplicates, no subscription, originals at home.
   ```
-- [ ] **Website:** пока пусто; потом — адрес сайта (`https://pixroost.app` или GitHub Pages).
+- [ ] **Website:** пока пусто; когда сайт заработает — `https://pixroost.ru`.
 - [ ] **Topics:**
   ```
   kotlin-multiplatform compose-multiplatform photos photo-backup deduplication local-first privacy android ios desktop

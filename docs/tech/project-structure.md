@@ -108,7 +108,8 @@ flowchart TB
 | iOS bundle ID | `app.pixroost` | — |
 | Desktop | `app.pixroost.desktop` | — |
 
-Идентификаторы `app.pixroost` не требуют покупки домена `pixroost.app`: сторы проверяют только уникальность.
+Идентификаторы `app.pixroost` не требуют владения доменом `pixroost.app`: сторы проверяют только уникальность.
+Домен проекта — `pixroost.ru`.
 Важно не менять их после первой публикации (bundle ID и applicationId потом не меняются).
 
 ## Source sets
