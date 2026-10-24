@@ -16,7 +16,9 @@ OutputBaseFilename=Pixroost-{#Version}-setup
 Compression=lzma2
 SolidCompression=yes
 UninstallDisplayIcon={app}\Pixroost.exe
-CloseApplications=yes
+; The JVM launcher cannot hold a named mutex (AppMutex) and a tray app has no window to close, so the running
+; app is killed explicitly (see [Code]); Restart Manager is off to avoid its "files in use" dialog.
+CloseApplications=no
 WizardStyle=modern
 
 [Languages]
@@ -44,3 +46,25 @@ Filename: "{app}\Pixroost.exe"; Description: "{cm:LaunchProgram,Pixroost}"; Flag
 
 [UninstallRun]
 Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Pixroost"""; Flags: runhidden; RunOnceId: "PixroostFirewallRemove"
+
+[Code]
+procedure StopRunningApp;
+var
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/IM Pixroost.exe /F', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+end;
+
+// Install or upgrade over a running app.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  StopRunningApp;
+  Result := '';
+end;
+
+// Uninstall while the app sits in the tray.
+function InitializeUninstall(): Boolean;
+begin
+  StopRunningApp;
+  Result := True;
+end;
