@@ -15,6 +15,7 @@ enum class NavigationStyle {
 /** Picks the [NavigationStyle] for [platform] and a window [widthDp] wide. */
 fun navigationStyleFor(platform: AppPlatform, widthDp: Int): NavigationStyle = when (platform) {
     AppPlatform.Desktop -> NavigationStyle.Pane
+
     AppPlatform.Mobile ->
         if (widthDp < NavigationConstants.COMPACT_WIDTH_DP) NavigationStyle.BottomBar else NavigationStyle.Rail
 }

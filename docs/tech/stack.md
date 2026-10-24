@@ -62,7 +62,7 @@
 
 - **Версии.** Koin 4.2.2 и Navigation 3 для Compose Multiplatform 1.2.0 (`org.jetbrains.androidx.navigation3:navigation3-ui`) —
   обе стабильные. Navigation 3 собран под Compose 1.10, с нашим 1.12 работает.
-- **Koin.** Модуль на слой: `coreModule` (в `shared/core`: диспетчеры, часы), `platformModule` (какой это тип устройства),
+- **Koin.** Модуль на слой: `coreModule()` (в `shared/core`: диспетчеры, часы), `platformModule` (какой это тип устройства),
   `appModule` (разделы). Все собирает `appModules(platform)`; новый слой добавляет свой модуль в этот список.
   Запуск — `startPixroostKoin(platform)` один раз при старте, после настройки логов. `koin-android` не подключаем,
   пока Android-контекст не нужен ни одному модулю.

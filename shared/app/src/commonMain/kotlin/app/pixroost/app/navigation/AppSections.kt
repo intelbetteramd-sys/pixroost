@@ -32,6 +32,7 @@ class AppSections(val primary: List<AppDestination>, val secondary: List<AppDest
                 ),
                 secondary = listOf(AppDestination.Settings),
             )
+
             AppPlatform.Desktop -> AppSections(
                 primary = listOf(
                     AppDestination.Feed,
