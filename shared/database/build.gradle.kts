@@ -15,9 +15,10 @@ kotlin {
             // Room, SQLite and coroutines types appear in the public API (DAOs, builder, migrations).
             api(libs.room3.runtime)
             api(libs.androidx.sqlite)
+            // DispatcherProvider is in the public API of applyPixroostDefaults.
+            api(project(":shared:core"))
             api(libs.kotlinx.coroutines.core)
             implementation(libs.androidx.sqlite.bundled)
-            implementation(project(":shared:core"))
         }
         // Query and migration tests run on the JVM against a real SQLite file (the bundled driver).
         getByName("desktopTest").dependencies {

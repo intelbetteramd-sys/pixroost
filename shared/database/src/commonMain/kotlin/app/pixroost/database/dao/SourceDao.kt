@@ -8,7 +8,10 @@ import androidx.room3.Update
 import app.pixroost.database.entity.SourceEntity
 import kotlinx.coroutines.flow.Flow
 
-/** Connected sources. Deleting a source removes its copies (cascade) but never touches the files themselves. */
+/**
+ * Connected sources. Deleting a source removes its copies and their queue rows (cascade),
+ * but never touches the files themselves.
+ */
 @Dao
 interface SourceDao {
     @Insert

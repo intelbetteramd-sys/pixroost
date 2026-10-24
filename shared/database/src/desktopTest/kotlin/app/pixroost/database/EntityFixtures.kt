@@ -2,10 +2,13 @@ package app.pixroost.database
 
 import app.pixroost.database.entity.AssetEntity
 import app.pixroost.database.entity.CleanupActionEntity
+import app.pixroost.database.entity.DeviceEntity
 import app.pixroost.database.entity.InstanceEntity
 import app.pixroost.database.entity.SourceEntity
 import app.pixroost.database.model.CleanupActionType
 import app.pixroost.database.model.CleanupStatus
+import app.pixroost.database.model.DevicePlatform
+import app.pixroost.database.model.DeviceRole
 import app.pixroost.database.model.InstanceQuality
 import app.pixroost.database.model.InstanceState
 import app.pixroost.database.model.KeeperKind
@@ -28,6 +31,16 @@ fun instance(assetId: Long, sourceId: Long, remoteKey: String = "IMG_1.jpg", sha
         state = InstanceState.PRESENT,
         lastSeenAt = 0,
     )
+
+fun device(id: String = "pc-1", name: String = "PC") = DeviceEntity(
+    id = id,
+    name = name,
+    platform = DevicePlatform.WINDOWS,
+    role = DeviceRole.DESKTOP,
+    publicKey = hash(seed = 3),
+    permissions = "UPLOAD,BROWSE",
+    pairedAt = 1,
+)
 
 fun hash(seed: Byte) = ByteArray(size = 32) { seed }
 

@@ -21,7 +21,7 @@ import app.pixroost.database.model.TransferItemStatus
             entity = InstanceEntity::class,
             parentColumns = ["id"],
             childColumns = ["instance_id"],
-            onDelete = ForeignKey.NO_ACTION,
+            onDelete = ForeignKey.CASCADE,
         ),
     ],
     indices = [

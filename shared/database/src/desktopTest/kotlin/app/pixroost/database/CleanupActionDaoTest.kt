@@ -43,20 +43,21 @@ class CleanupActionDaoTest {
     fun trashedActionRecordsWhenItWasDoneAndHowToRestoreIt() = runTest {
         val id = insertPlannedAction()
 
-        dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = 900)
+        assertEquals(1, dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null))
 
         val entry = checkNotNull(dao.getById(id))
         assertEquals(CleanupStatus.DONE, entry.status)
         assertEquals(500L, entry.executedAt)
         assertEquals("trash/1", entry.trashKey)
-        assertEquals(900L, entry.trashExpiresAt)
+        // NULL means "the source does not say how long it keeps the file"; the observer relies on it.
+        assertNull(entry.trashExpiresAt)
     }
 
     @Test
     fun refusalKeepsTheReasonAndTheEvidence() = runTest {
         val id = insertPlannedAction()
 
-        dao.markNotDone(id, CleanupStatus.REFUSED, denialReason = "keeper hash differs", error = null)
+        assertEquals(1, dao.markRefused(id, denialReason = "keeper hash differs"))
 
         val entry = checkNotNull(dao.getById(id))
         assertEquals(CleanupStatus.REFUSED, entry.status)
@@ -65,16 +66,79 @@ class CleanupActionDaoTest {
     }
 
     @Test
+    fun failureAndUnrecoverableDeletionAreRecorded() = runTest {
+        val failed = insertPlannedAction()
+        val unrecoverable = insertPlannedAction()
+
+        assertEquals(1, dao.markFailed(failed, error = "timeout"))
+        assertEquals(1, dao.markUnrecoverable(unrecoverable, executedAt = 700, error = "not in the recycle bin"))
+
+        assertEquals(CleanupStatus.FAILED, dao.getById(failed)?.status)
+        val entry = checkNotNull(dao.getById(unrecoverable))
+        assertEquals(CleanupStatus.UNRECOVERABLE, entry.status)
+        assertEquals(700L, entry.executedAt)
+    }
+
+    @Test
     fun restoredActionKeepsItsOriginalExecutionTime() = runTest {
         val id = insertPlannedAction()
-        dao.markDone(id, executedAt = 500, trashKey = null, trashExpiresAt = null)
+        dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null)
 
-        dao.setRestored(id, CleanupStatus.RESTORED, restoredAt = 600)
+        assertEquals(1, dao.markRestored(id, restoredAt = 600))
 
         val entry = checkNotNull(dao.getById(id))
         assertEquals(CleanupStatus.RESTORED, entry.status)
         assertEquals(500L, entry.executedAt)
         assertEquals(600L, entry.restoredAt)
+    }
+
+    @Test
+    fun doneEntryCannotBecomeFailedRefusedOrUnrecoverable() = runTest {
+        val id = insertPlannedAction()
+        dao.markDone(id, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null)
+
+        assertEquals(0, dao.markFailed(id, error = "late"))
+        assertEquals(0, dao.markRefused(id, denialReason = "late"))
+        assertEquals(0, dao.markUnrecoverable(id, executedAt = 900, error = "late"))
+        assertEquals(0, dao.markDone(id, executedAt = 900, trashKey = null, trashExpiresAt = null))
+
+        val entry = checkNotNull(dao.getById(id))
+        assertEquals(CleanupStatus.DONE, entry.status)
+        assertEquals(500L, entry.executedAt)
+        assertEquals("trash/1", entry.trashKey)
+    }
+
+    @Test
+    fun restoredOrRefusedEntryCannotGoBackToDone() = runTest {
+        val restored = insertPlannedAction()
+        dao.markDone(restored, executedAt = 500, trashKey = "trash/1", trashExpiresAt = null)
+        dao.markRestored(restored, restoredAt = 600)
+        val refused = insertPlannedAction()
+        dao.markRefused(refused, denialReason = "no")
+
+        assertEquals(0, dao.markDone(restored, executedAt = 900, trashKey = null, trashExpiresAt = null))
+        assertEquals(0, dao.markDone(refused, executedAt = 900, trashKey = null, trashExpiresAt = null))
+
+        assertEquals("trash/1", dao.getById(restored)?.trashKey)
+        assertEquals(CleanupStatus.REFUSED, dao.getById(refused)?.status)
+    }
+
+    @Test
+    fun onlyDoneEntryCanBeRestored() = runTest {
+        val planned = insertPlannedAction()
+
+        assertEquals(0, dao.markRestored(planned, restoredAt = 600))
+        assertEquals(CleanupStatus.PLANNED, dao.getById(planned)?.status)
+    }
+
+    @Test
+    fun lostKeeperWarningIsRecordedOnce() = runTest {
+        val id = insertPlannedAction()
+
+        assertEquals(1, dao.markKeeperLostNotified(id, notifiedAt = 800))
+        assertEquals(0, dao.markKeeperLostNotified(id, notifiedAt = 900))
+
+        assertEquals(800L, dao.getById(id)?.keeperLostNotifiedAt)
     }
 
     @Test

@@ -2,6 +2,7 @@ package app.pixroost.database.entity
 
 import androidx.room3.ColumnInfo
 import androidx.room3.Entity
+import androidx.room3.ForeignKey
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
 import app.pixroost.database.model.MediaType
@@ -9,7 +10,16 @@ import app.pixroost.database.model.MediaType
 /** A logical photo or video; its physical copies are [InstanceEntity] rows. */
 @Entity(
     tableName = "asset",
+    foreignKeys = [
+        ForeignKey(
+            entity = InstanceEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["best_instance_id"],
+            onDelete = ForeignKey.SET_NULL,
+        ),
+    ],
     indices = [
+        Index(value = ["best_instance_id"]),
         Index(name = "asset_taken_at", value = ["taken_at"], orders = [Index.Order.DESC]),
     ],
 )

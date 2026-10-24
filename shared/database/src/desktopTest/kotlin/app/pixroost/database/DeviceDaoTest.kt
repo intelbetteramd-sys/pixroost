@@ -1,13 +1,12 @@
 package app.pixroost.database
 
-import app.pixroost.database.entity.DeviceEntity
-import app.pixroost.database.model.DevicePlatform
-import app.pixroost.database.model.DeviceRole
+import androidx.sqlite.SQLiteException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 class DeviceDaoTest {
@@ -19,7 +18,7 @@ class DeviceDaoTest {
 
     @Test
     fun deviceKeepsItsKeyAndDefaults() = runTest {
-        dao.upsert(device("pc-1"))
+        dao.insert(device("pc-1"))
 
         val stored = checkNotNull(dao.getById("pc-1"))
 
@@ -30,29 +29,31 @@ class DeviceDaoTest {
     }
 
     @Test
-    fun upsertReplacesTheRowOfTheSameDevice() = runTest {
-        dao.upsert(device("pc-1", name = "Old"))
-        dao.upsert(device("pc-1", name = "New"))
+    fun pairingAnExistingIdAgainIsRejected() = runTest {
+        dao.insert(device("pc-1"))
 
-        assertEquals("New", dao.getById("pc-1")?.name)
+        assertFailsWith<SQLiteException> { dao.insert(device("pc-1", name = "Again")) }
     }
 
     @Test
-    fun revokedDeviceKeepsItsRow() = runTest {
-        dao.upsert(device("phone-1"))
+    fun revocationSurvivesRenameAndLastSeenUpdates() = runTest {
+        dao.insert(device("phone-1"))
 
-        dao.markRevoked("phone-1", revokedAt = 700)
+        assertEquals(1, dao.markRevoked("phone-1", revokedAt = 700))
+        dao.rename("phone-1", "Renamed")
+        dao.updateLastSeen("phone-1", seenAt = 800, address = "192.168.0.2")
 
-        assertEquals(700L, dao.getById("phone-1")?.revokedAt)
+        val stored = checkNotNull(dao.getById("phone-1"))
+        assertEquals(700L, stored.revokedAt)
+        assertEquals("Renamed", stored.name)
     }
 
-    private fun device(id: String, name: String = "PC") = DeviceEntity(
-        id = id,
-        name = name,
-        platform = DevicePlatform.WINDOWS,
-        role = DeviceRole.DESKTOP,
-        publicKey = hash(seed = 3),
-        permissions = "UPLOAD,BROWSE",
-        pairedAt = 1,
-    )
+    @Test
+    fun secondRevocationKeepsTheFirstTime() = runTest {
+        dao.insert(device("phone-1"))
+        dao.markRevoked("phone-1", revokedAt = 700)
+
+        assertEquals(0, dao.markRevoked("phone-1", revokedAt = 900))
+        assertEquals(700L, dao.getById("phone-1")?.revokedAt)
+    }
 }

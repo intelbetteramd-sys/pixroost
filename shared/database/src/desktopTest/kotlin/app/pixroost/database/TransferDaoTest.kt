@@ -1,11 +1,8 @@
 package app.pixroost.database
 
 import app.pixroost.database.entity.ArchiveIndexEntity
-import app.pixroost.database.entity.DeviceEntity
 import app.pixroost.database.entity.TransferItemEntity
 import app.pixroost.database.entity.TransferJobEntity
-import app.pixroost.database.model.DevicePlatform
-import app.pixroost.database.model.DeviceRole
 import app.pixroost.database.model.TransferItemStatus
 import app.pixroost.database.model.TransferJobKind
 import app.pixroost.database.model.TransferJobStatus
@@ -43,7 +40,7 @@ class TransferDaoTest {
 
     @Test
     fun deviceKeepsItsArchiveIndex() = runTest {
-        database.deviceDao().upsert(device())
+        database.deviceDao().insert(device())
         database.archiveIndexDao().upsertAll(
             listOf(ArchiveIndexEntity("pc-1", hash(seed = 5), savedPath = "a.jpg")),
         )
@@ -54,7 +51,7 @@ class TransferDaoTest {
     }
 
     private suspend fun queueOneFile(): Pair<Long, Long> {
-        database.deviceDao().upsert(device())
+        database.deviceDao().insert(device())
         val sourceId = database.sourceDao().insert(source())
         val assetId = database.assetDao().insert(asset())
         val instanceId = database.instanceDao().insert(instance(assetId, sourceId))
@@ -71,14 +68,4 @@ class TransferDaoTest {
         )
         return jobId to instanceId
     }
-
-    private fun device() = DeviceEntity(
-        id = "pc-1",
-        name = "PC",
-        platform = DevicePlatform.WINDOWS,
-        role = DeviceRole.DESKTOP,
-        publicKey = hash(seed = 3),
-        permissions = "UPLOAD",
-        pairedAt = 1,
-    )
 }

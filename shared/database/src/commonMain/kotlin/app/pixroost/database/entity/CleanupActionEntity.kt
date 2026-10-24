@@ -57,4 +57,5 @@ data class CleanupActionEntity(
     @ColumnInfo(name = "trash_expires_at") val trashExpiresAt: Long? = null,
     @ColumnInfo(name = "restored_at") val restoredAt: Long? = null,
     val error: String? = null,
+    @ColumnInfo(name = "keeper_lost_notified_at") val keeperLostNotifiedAt: Long? = null,
 )

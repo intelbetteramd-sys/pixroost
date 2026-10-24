@@ -7,6 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class InstanceDaoTest {
     private val temporary = TemporaryDatabase()
@@ -64,5 +65,19 @@ class InstanceDaoTest {
 
         assertEquals(0, dao.countBySource(sourceId))
         assertNotNull(database.assetDao().getById(assetId))
+    }
+
+    @Test
+    fun unknownSharedFolderFlagStaysNullAndKnownValuesAreKept() = runTest {
+        val sourceId = database.sourceDao().insert(source())
+        val assetId = database.assetDao().insert(asset())
+        val unknown = dao.insert(instance(assetId, sourceId, remoteKey = "unknown"))
+        val shared = dao.insert(instance(assetId, sourceId, remoteKey = "shared").copy(inSharedFolder = true))
+        val own = dao.insert(instance(assetId, sourceId, remoteKey = "own").copy(inSharedFolder = false))
+
+        // NULL means "unknown, treated as shared" for the safety rule, so it must never turn into false.
+        assertNull(dao.getById(unknown)?.inSharedFolder)
+        assertEquals(true, dao.getById(shared)?.inSharedFolder)
+        assertEquals(false, dao.getById(own)?.inSharedFolder)
     }
 }

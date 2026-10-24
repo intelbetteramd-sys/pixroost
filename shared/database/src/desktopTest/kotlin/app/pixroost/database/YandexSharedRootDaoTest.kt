@@ -1,6 +1,5 @@
 package app.pixroost.database
 
-import app.pixroost.database.entity.YandexSharedRootEntity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -16,19 +15,20 @@ class YandexSharedRootDaoTest {
     @Test
     fun rootIsRecognisedByResourceIdAndItsPathIsUpdated() = runTest {
         val sourceId = temporary.database.sourceDao().insert(source())
-        dao.upsert(YandexSharedRootEntity(sourceId, "res-1", path = "/Shared/Old", firstSeenAt = 1, lastSeenAt = 1))
+        dao.upsert(sourceId, "res-1", path = "/Shared/Old", seenAt = 1)
 
-        dao.upsert(YandexSharedRootEntity(sourceId, "res-1", path = "/Shared/New", firstSeenAt = 1, lastSeenAt = 2))
+        dao.upsert(sourceId, "res-1", path = "/Shared/New", seenAt = 2)
 
         val roots = dao.getBySource(sourceId)
         assertEquals(listOf("/Shared/New"), roots.map { it.path })
         assertEquals(2L, roots.single().lastSeenAt)
+        assertEquals(1L, roots.single().firstSeenAt)
     }
 
     @Test
     fun rootsGoWithTheirSource() = runTest {
         val sourceId = temporary.database.sourceDao().insert(source())
-        dao.upsert(YandexSharedRootEntity(sourceId, "res-1", path = "/Shared", firstSeenAt = 1, lastSeenAt = 1))
+        dao.upsert(sourceId, "res-1", path = "/Shared", seenAt = 1)
 
         temporary.database.sourceDao().delete(checkNotNull(temporary.database.sourceDao().getById(sourceId)))
 
