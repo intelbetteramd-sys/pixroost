@@ -31,4 +31,12 @@ class AppLoggingTest {
 
         assertEquals(listOf("Info/Test/shown"), writer.messages)
     }
+
+    @Test
+    fun severityFromSettingDefaultsToInfo() {
+        assertEquals(Severity.Debug, AppLogging.severityFrom("DEBUG"))
+        assertEquals(Severity.Info, AppLogging.severityFrom("info"))
+        assertEquals(Severity.Info, AppLogging.severityFrom("verbose"))
+        assertEquals(Severity.Info, AppLogging.severityFrom(null))
+    }
 }
