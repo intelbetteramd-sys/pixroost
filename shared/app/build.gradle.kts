@@ -6,14 +6,10 @@ plugins {
 }
 
 kotlin {
-    // Compose resources (the section names) need Android resources in a KMP library.
-    android {
-        androidResources { enable = true }
-    }
-
     sourceSets {
         commonMain.dependencies {
             implementation(project(":shared:core"))
+            implementation(project(":shared:designsystem"))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.navigation3.ui)

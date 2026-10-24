@@ -123,7 +123,7 @@
 |---|---|
 | Тесты | kotlin.test, Turbine (Flow), kotlinx-coroutines-test |
 | UI-тесты | Compose UI testing (multiplatform) |
-| Скриншот-тесты компонентов | Roborazzi (JVM / Android) |
+| Скриншот-тесты компонентов | Roborazzi на desktop (JVM): Compose Desktop рисует через Skia, как и Android с iOS; эталоны записаны на Linux CI |
 | E2E на мобильных | Maestro |
 | Стиль и анализ | ktlint (через Spotless), detekt |
 | Покрытие | Kover |

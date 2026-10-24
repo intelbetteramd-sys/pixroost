@@ -366,6 +366,19 @@ git config commit.template .gitmessage
   Android только с API 30, а минимальная версия приложения — API 26. Там имена вида `groupsIdenticalPhotos_fromDifferentSources`.
 - Общий код тестируем в `commonTest`; платформенный — в `androidUnitTest` / `iosTest` / `desktopTest`.
 
+#### Скриншот-тесты
+
+- Скриншот-тесты — Roborazzi на desktop (`desktopTest`, `runDesktopComposeUiTest` + `captureRoboImage`), по одному
+  тестовому классу на компонент или раздел каталога. Рисуем в светлой и тёмной теме, на телефонной и desktop-шкале и
+  при тексте 200% (`LocalDensity` с `fontScale = 2f`), потому что на desktop системного масштаба текста нет.
+- Эталоны — PNG в `src/desktopTest/screenshots` модуля, в репозитории. Записывать их нужно на Linux: так же,
+  как их сверяет CI, иначе сглаживание шрифтов даст расхождения.
+- Обычный `check` ничего не снимает, только проверяет, что каталог рисуется. Сверка — `-Proborazzi.test.verify=true`
+  (на CI отдельный шаг), запись — `-Proborazzi.test.record=true`.
+- Изменили вид — запустите workflow [`screenshots.yml`](../../.github/workflows/screenshots.yml) на своей ветке
+  (Actions → *Record screenshots* → *Run workflow*), скачайте артефакт `screenshots`, положите файлы в папку эталонов,
+  посмотрите картинки глазами и закоммитьте. В PR покажите, что изменилось.
+
 ---
 
 ## 7. Документация

@@ -236,7 +236,7 @@ Android и Windows, светлая и тёмная тема. Там же — к�
 - [x] Liquid Glass: навигация на SwiftUI, экраны на Compose — [ADR 0009](../architecture/adr/0009-liquid-glass-native-navigation.md).
 - [ ] Проверить это решение в спайках S-08 (iPhone) и S-09 (Mac).
 - [ ] Сайт: лендинг в той же визуальной системе.
-- [ ] Перенести токены в `:shared:designsystem`.
+- [x] Перенести токены в `:shared:designsystem` ([components.md](components.md#токены)).
 
 ## Что уже зафиксировано требованиями
 
