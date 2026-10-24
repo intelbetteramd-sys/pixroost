@@ -10,5 +10,9 @@ data class ServiceUiState(
     val tokenInfo: String? = null,
     /** Which content hashes the first page of files came with. */
     val media: String? = null,
+    /** Counts and anonymised lines of the shared-folders probe; they go to the report. */
+    val shareSummary: List<String> = emptyList(),
+    /** Folder paths with their `share` value; shown on the screen only, never copied. */
+    val shareFolders: List<String> = emptyList(),
     val isBusy: Boolean = false,
 )

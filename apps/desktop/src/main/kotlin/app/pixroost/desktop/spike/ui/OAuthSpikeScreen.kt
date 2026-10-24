@@ -54,6 +54,7 @@ fun OAuthSpikeScreen(controller: OAuthSpikeController, modifier: Modifier = Modi
                 onRefresh = { controller.refresh(service.service) },
                 onSignOut = { controller.signOut(service.service) },
                 onSample = { controller.sample(service.service) },
+                onShares = { controller.shares() },
             )
         }
         PickerCard(

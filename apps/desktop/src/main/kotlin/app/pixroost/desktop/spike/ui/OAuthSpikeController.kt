@@ -11,6 +11,7 @@ import app.pixroost.core.spike.oauth.OAuthException
 import app.pixroost.core.spike.oauth.OAuthSpikeConstants
 import app.pixroost.core.spike.oauth.PkceFactory
 import app.pixroost.core.spike.oauth.TokenSet
+import app.pixroost.core.spike.oauth.YandexShareProbe
 import app.pixroost.core.spike.oauth.codeFromRedirect
 import app.pixroost.core.spike.oauth.tokenSummary
 import app.pixroost.desktop.spike.data.DataConstants
@@ -41,6 +42,7 @@ class OAuthSpikeController(private val scope: CoroutineScope) {
     private val oauth = OAuthClient(http, System::currentTimeMillis)
     private val probe = CloudProbe(http)
     private val sampler = CloudMediaSample(http)
+    private val shareProbe = YandexShareProbe(http)
     private val random = SecureRandom()
     private val pkce = PkceFactory(
         randomBytes = { size -> ByteArray(size).also(random::nextBytes) },
@@ -99,6 +101,16 @@ class OAuthSpikeController(private val scope: CoroutineScope) {
         val media = sampler.sample(service, tokens.accessToken)
         holder.change(service) { it.copy(status = "подключено", media = media) }
         holder.log("${service.label}: $media")
+    }
+
+    /** Yandex only: walks the Disk looking for the undocumented `share` field; paths stay on the screen. */
+    fun shares() = work(CloudService.Yandex, "ищу общие папки…") {
+        val tokens = store.load(CloudService.Yandex) ?: throw OAuthException("токена нет")
+        val result = shareProbe.probe(tokens.accessToken)
+        holder.change(CloudService.Yandex) {
+            it.copy(status = "подключено", shareSummary = result.summary, shareFolders = result.folders)
+        }
+        holder.log("Яндекс Диск, общие папки: " + result.summary.first())
     }
 
     fun signOut(service: CloudService) {

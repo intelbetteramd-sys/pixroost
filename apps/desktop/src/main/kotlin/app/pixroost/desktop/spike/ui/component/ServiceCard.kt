@@ -8,6 +8,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import app.pixroost.core.spike.oauth.CloudService
 import app.pixroost.desktop.spike.ui.UiConstants
 import app.pixroost.desktop.spike.ui.model.ServiceUiState
 
@@ -19,6 +20,7 @@ fun ServiceCard(
     onRefresh: () -> Unit,
     onSignOut: () -> Unit,
     onSample: () -> Unit,
+    onShares: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val style = MaterialTheme.typography.bodyMedium
@@ -27,6 +29,8 @@ fun ServiceCard(
         state.account?.let { Text(it, style = style) }
         state.tokenInfo?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
         state.media?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+        state.shareSummary.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
+        state.shareFolders.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
         // On a phone four buttons do not fit in one row; signed in, "Войти" gives way to the other actions.
         FlowRow(horizontalArrangement = Arrangement.spacedBy(UiConstants.ROW_SPACING)) {
             if (state.tokenInfo == null) {
@@ -34,6 +38,9 @@ fun ServiceCard(
             } else {
                 OutlinedButton(onClick = onRefresh, enabled = !state.isBusy) { Text("Обновить токен") }
                 OutlinedButton(onClick = onSample, enabled = !state.isBusy) { Text("Список фото") }
+                if (state.service == CloudService.Yandex) {
+                    OutlinedButton(onClick = onShares, enabled = !state.isBusy) { Text("Общие папки") }
+                }
                 OutlinedButton(onClick = onSignOut, enabled = !state.isBusy) { Text("Выйти") }
             }
         }
