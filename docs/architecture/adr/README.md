@@ -12,7 +12,7 @@ ADR (Architecture Decision Record) — короткая запись о реше
 | [0002](0002-local-first-no-backend.md) | Local-first: v1.0 без своего сервера | Принято |
 | [0003](0003-device-pairing-by-qr.md) | Связка устройств по QR вместо аккаунтов | Принято |
 | [0004](0004-sqldelight.md) | SQLDelight для локальной базы | Заменено 0010 |
-| [0005](0005-lan-transport.md) | Передача по локальной сети: HTTPS с пиннингом и докачкой | Принято, уточняется спайком |
+| [0005](0005-lan-transport.md) | Передача по локальной сети: HTTPS с пиннингом и докачкой | Принято, подтверждено спайками (iPhone позже) |
 | [0006](0006-apache-2-license.md) | Лицензия Apache-2.0 | Принято |
 | [0007](0007-device-keys-and-trust.md) | Двухслойные ключи устройств и модель доверия | Принято |
 | [0008](0008-android-windows-first.md) | Сначала Android и Windows, iOS и macOS — позже | Принято |
