@@ -31,7 +31,7 @@ class DisconnectAndCascadeTest {
         val assetId = database.assetDao().insert(asset())
         database.phashBandDao().insertAll(listOf(PhashBandEntity(assetId = assetId, band = 0, value = 7)))
         val group = database.similarGroupDao()
-            .insertGroup(SimilarGroupEntity(SimilarGroupKind.SIMILAR, createdAt = 1))
+            .insertGroup(SimilarGroupEntity(kind = SimilarGroupKind.SIMILAR, createdAt = 1))
         database.similarGroupDao().insertMembers(listOf(SimilarMemberEntity(group, assetId, distance = 0)))
 
         temporary.execute("DELETE FROM asset WHERE id = $assetId")
@@ -44,7 +44,7 @@ class DisconnectAndCascadeTest {
     fun deletingAGroupRemovesItsMembersButNotTheAssets() = runTest {
         val assetId = database.assetDao().insert(asset())
         val group = database.similarGroupDao()
-            .insertGroup(SimilarGroupEntity(SimilarGroupKind.SAME_SHOT, createdAt = 1))
+            .insertGroup(SimilarGroupEntity(kind = SimilarGroupKind.SAME_SHOT, createdAt = 1))
         database.similarGroupDao().insertMembers(listOf(SimilarMemberEntity(group, assetId, distance = 0)))
 
         temporary.execute("DELETE FROM similar_group WHERE id = $group")
