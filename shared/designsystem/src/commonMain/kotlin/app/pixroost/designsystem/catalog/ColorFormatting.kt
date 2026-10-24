@@ -2,6 +2,7 @@ package app.pixroost.designsystem.catalog
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import kotlin.math.roundToInt
 
 /** `#RRGGBB`, or `#RRGGBB / AA%` when the color is translucent. */
 internal fun Color.toHexString(): String {
@@ -9,7 +10,7 @@ internal fun Color.toHexString(): String {
     val rgb = (argb and CatalogConstants.RGB_MASK).toString(CatalogConstants.HEX_RADIX)
         .uppercase()
         .padStart(CatalogConstants.HEX_DIGITS, '0')
-    val alphaPercent = (alpha * CatalogConstants.PERCENT).toInt()
+    val alphaPercent = (alpha * CatalogConstants.PERCENT).roundToInt()
     return if ((argb ushr CatalogConstants.ALPHA_SHIFT) == CatalogConstants.OPAQUE_ALPHA) {
         "#$rgb"
     } else {

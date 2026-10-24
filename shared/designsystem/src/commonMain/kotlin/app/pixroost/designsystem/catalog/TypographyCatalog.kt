@@ -17,7 +17,7 @@ internal fun TypographyCatalog(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(PixroostSpacing.space16),
     ) {
         TypeSample("title", typography.title, "Лента фото. Photo feed")
-        TypeSample("figure", typography.figure, "Освобождено 6,3 ГБ")
+        TypeSample("figure", typography.figure, "Освобождено 6,3\u00A0ГБ")
         TypeSample("heading", typography.heading, "Где лежит это фото? Where it is")
         TypeSample("body", typography.body, "Съешь же ещё этих мягких французских булок, да выпей чаю. Pack my box.")
         TypeSample("bodyStrong", typography.bodyStrong, "Яндекс Диск · Dropbox · ПК «Дом»")

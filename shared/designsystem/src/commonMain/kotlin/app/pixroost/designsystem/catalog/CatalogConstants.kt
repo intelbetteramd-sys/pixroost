@@ -8,7 +8,7 @@ internal object CatalogConstants {
     const val SPACING_BAR_HEIGHT = 12
 
     /** A narrow column that makes long words break, to show hyphenation. */
-    const val HYPHENATION_WIDTH = 150
+    const val HYPHENATION_WIDTH = 96
 
     const val HEX_RADIX = 16
     const val HEX_DIGITS = 6
