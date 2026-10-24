@@ -20,7 +20,7 @@ kotlin {
             implementation(libs.compose.components.resources)
         }
         getByName("desktopTest").dependencies {
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
             implementation(compose.desktop.currentOs)
         }
     }
