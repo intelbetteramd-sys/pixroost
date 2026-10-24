@@ -984,6 +984,52 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 /* Ширина таблицы по содержимому, на узком экране — прокрутка внутри обёртки */
 .dt-wrap { overflow-x: auto; }
 .dt-wrap .dtable { min-width: 560px; }
+/* Визуальная проверка макетов (#29): на 360 px и при тексте 200% текст не обрезается, не вылезает и не наезжает */
+.kbd { height: auto; min-height: 20px; }
+.a .fbox label { top: 0; transform: translateY(-50%); line-height: 1.385; } /* 18 при 13: середина подписи на рамке и при крупном шрифте */
+html.text-200 .a .field .fbox { margin-top: 9px; }
+.note-box > p { min-width: 0; overflow-wrap: break-word; }
+html.text-200 .note-box > p { hyphens: auto; }
+.titlebar .search, .w .fbox { min-width: 0; }
+html.text-200 .titlebar .search { max-width: 720px; } /* подсказка поиска при крупном шрифте видна целиком на ПК */
+.win-content h4, .phone .under .ph-title { overflow-wrap: break-word; hyphens: auto; }
+/* Подписи нижней панели переносятся по слогам, с дефисом, а не посреди слова без него */
+.navbar a { overflow-wrap: normal; hyphens: auto; }
+html.text-200 .sheet .places li, html.text-200 .dialog .places li { flex-wrap: wrap; }
+html.text-200 .sheet .places .num, html.text-200 .dialog .places .num { margin-left: auto; white-space: normal; text-align: right; }
+html.text-200 .sheet .btns, html.text-200 .dialog .d-foot { flex-wrap: wrap; }
+html.text-200 .sheet .btns .btn, html.text-200 .dialog .d-foot .btn { flex: 1 1 auto; }
+html.text-200 .kv { grid-template-columns: auto minmax(0, 1fr); }
+html.text-200 .kv .r { grid-column: 2; text-align: left; }
+html.text-200 .card .head-row { flex-wrap: wrap; }
+html.text-200 .card .head-row > .txt, html.text-200 .card .head-row > .big-num { flex: 1 1 0; min-width: min(100%, 7em); }
+html.text-200 .navpane a { flex-wrap: wrap; padding-top: 4px; padding-bottom: 4px; }
+/* Крупный шрифт: заголовок раздела — отдельной строкой под действиями, как в большой верхней панели Material 3 */
+html.text-200 .appbar:not(.sub) { flex-wrap: wrap; justify-content: flex-end; }
+html.text-200 .appbar:not(.sub) .ttl { order: 1; flex: 1 1 100%; }
+html.text-200 .qr.expired { height: auto; min-height: 168px; }
+html.text-200 .qr.expired svg { position: absolute; left: 12px; top: 12px; width: calc(100% - 24px); height: calc(100% - 24px); }
+html.text-200 .qr.expired .over { position: relative; inset: auto; min-height: 144px; padding: 0; }
+html.text-200 .row { flex-wrap: wrap; }
+html.text-200 .row .txt { flex: 1 1 140px; }
+html.text-200 .row > .trail, html.text-200 .row > .add { margin-left: auto; }
+html.text-200 .navbar a { font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
+.type-row .sample { overflow-wrap: break-word; hyphens: auto; }
+/* Пути переносятся после «\» (<wbr> в разметке), а не посреди имени папки */
+.mono, .w-path, .radio .rtxt small { overflow-wrap: break-word; }
+html.text-200 .row .txt, html.text-200 .radio .rtxt { hyphens: auto; }
+.mono, .w-path { hyphens: manual; }
+.pair-txt .code { overflow-wrap: normal; }
+.dt-wrap .dtable { min-width: 35rem; } /* 560 при 100%; при 200% таблица шире, колонки не сжимаются до слога */
+.sg.c4 { grid-template-columns: max-content repeat(4, max-content); }
+.sg.c5 { grid-template-columns: max-content repeat(5, max-content); }
+.sg .vn, .sg .hd:first-child { min-width: 132px; }
+.intro code, .lead code, .note code, .decisions code { overflow-wrap: break-word; }
+.gd-win .np, .gd-win .pn { hyphens: auto; }
+@media (max-width: 720px) {
+  /* Превью Windows не сжимаются меньше 96: подпись состояния и метки мест не наезжают друг на друга */
+  .w .thumbs:not(.wthumbs) { grid-template-columns: repeat(auto-fill, minmax(96px, 112px)); }
+}
 </style>
 </head>
 <body>
@@ -1074,14 +1120,14 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 
 <main id="main">
   <p class="intro">Первый шаг восстановления макетов. Страница собрана заново по спецификации из
-    <code>docs/design/README.md</code> и <code>components.md</code>: те же токены, то же направление «Сумерки и свет в окне».
+    <code>docs/<wbr>design/<wbr>README.md</code> и <code>components.md</code>: те же токены, то же направление «Сумерки и свет в окне».
     Переключатель вверху показывает компоненты в светлой, тёмной теме или в обеих рядом. «Текст 200%» увеличивает
     только шрифт, «Зоны касания» подсвечивает зону нажатия: 48 dp на Android, 32 px на Windows.</p>
   <p class="intro">Здесь только общие компоненты. Компоненты одного сценария — <code>QrScanner</code>, <code>WhereSheet</code> /
     <code>WherePane</code>, <code>SourcePicker</code>, <code>IndexingCard</code>, <code>PermissionList</code>, <code>ConnectionLog</code>,
     <code>TrayPanel</code>, уведомления Android — появятся в макетах своих сценариев:
     они собираются из того, что есть на этой странице.</p>
-  <p class="intro">Всё на странице задано в <code>docs/design/README.md</code>, в том числе роли, состояния, скругления и осознанные
+  <p class="intro">Всё на странице задано в <code>docs/<wbr>design/<wbr>README.md</code>, в том числе роли, состояния, скругления и осознанные
     исключения. Метка <span class="choice">выбор</span> осталась только у пропорций знака «свет в окне»: их решим вместе с логотипом
     на шаге 2.2. Метка <span class="flag">не проходит</span> — пара не проходит WCAG AA, рядом — решение или исключение.</p>
 
@@ -1169,7 +1215,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
             <div class="type-row"><div class="meta">14 / 20<br>Onest 400 и 600<br>текст</div>
               <div class="sample" style="font:400 .875rem/1.43 var(--f-ui)">Принято 18 412 фото и видео, 212&nbsp;ГБ. <b style="font-weight:600">Показать в проводнике</b></div></div>
             <div class="type-row"><div class="meta">12 / 16<br>Onest 400<br>подписи</div>
-              <div class="sample" style="font:400 .75rem/1.33 var(--f-ui);color:var(--text2)">D:\Фото\Pixroost\2026\05 · свободно 812&nbsp;ГБ</div></div>
+              <div class="sample" style="font:400 .75rem/1.33 var(--f-ui);color:var(--text2)">D:\<wbr>Фото\<wbr>Pixroost\<wbr>2026\<wbr>05 · свободно 812&nbsp;ГБ</div></div>
           </div>
         </div>
       </div>
@@ -1204,7 +1250,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
             <div class="blk"></div>
           </div>
           <div class="gd-win" aria-label="Схема окна Windows: навигация слева, контент с полями 24, панель «Где лежит» справа">
-            <div class="np">NavigationPane<br>248 px</div>
+            <div class="np"><span lang="en">Navi&shy;gation<wbr>Pane</span><br>248 px</div>
             <div class="ct">поля 24 · превью 112 px, зазор 4
               <div class="gw"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
             <div class="pn">«Где лежит»<br>320 px</div>
@@ -1271,7 +1317,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <circle cx="78" cy="64" r="6" fill="#FFFFFF"/>
               <path d="M42 90 L57 72 L67 83 L75 76 L88 90 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
             </svg>
-            Временная заглушка<br><code>docs/assets/logo.svg</code>: градиент<br>и коралловый цвет вне направления
+            Временная заглушка<br><code>docs/<wbr>assets/<wbr>logo.svg</code>: градиент<br>и коралловый цвет вне направления
           </div>
         </div>
         <p class="note">Знак в интерфейсе скрыт от скринридера: рядом всегда есть текст («Проверено», «ПК „Дом“»). На тёмной теме контур
@@ -1629,7 +1675,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <h3 class="plat-title">Windows · CopyRow в панели «Где лежит», строка 56</h3>
           <ul class="list" aria-label="Где лежит IMG_2041.jpg" style="max-width:460px">
             <li><div class="row"><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span>
-              <span class="txt"><span class="t1">ПК «Дом» · оригинал</span><span class="t2 mono">D:\Фото\Pixroost\2026\05\IMG_2041.jpg</span></span>
+              <span class="txt"><span class="t1">ПК «Дом» · оригинал</span><span class="t2 mono">D:\<wbr>Фото\<wbr>Pixroost\<wbr>2026\<wbr>05\<wbr>IMG_2041.jpg</span></span>
               <span class="trail"><span class="badge b-lamp">Проверено</span></span></div></li>
             <li><div class="row sl is-hover"><span class="src src-32" aria-hidden="true">Я</span>
               <span class="txt"><span class="t1">Яндекс Диск · 4,2&nbsp;МБ</span><span class="t2">Наведение · /Фотокамера</span></span>
@@ -1649,7 +1695,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
               <thead><tr><th scope="col">Удалить</th><th scope="col">Где</th><th scope="col">Качество</th><th scope="col">Размер</th><th scope="col">Когда</th></tr></thead>
               <tbody>
                 <tr><td><span class="badge b-lamp"><svg class="lamp-svg" width="14" height="14" aria-hidden="true"><use href="#lamp"/></svg>Оставляем</span></td>
-                  <td><span class="place"><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span><span>ПК «Дом» · архив<small class="mono">D:\Фото\Pixroost\2026\05</small></span></span></td>
+                  <td><span class="place"><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span><span>ПК «Дом» · архив<small class="mono">D:\<wbr>Фото\<wbr>Pixroost\<wbr>2026\<wbr>05</small></span></span></td>
                   <td>Оригинал</td><td class="num">4,2&nbsp;МБ</td><td class="num">12 мая</td></tr>
                 <tr class="is-hover"><td><label class="cb"><input type="checkbox" checked aria-label="Удалить копию из Яндекс Диска"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></label></td>
                   <td><span class="place"><span class="src src-32" aria-hidden="true">Я</span><span>Яндекс Диск<small>/Фотокамера</small></span></span></td>
@@ -1798,21 +1844,21 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <div class="row-gap" style="max-width:640px">
             <div class="card set-card">
               <svg class="ic ic-20" aria-hidden="true"><use href="#i-download"/></svg>
-              <span style="flex:1"><span class="h" style="display:block" id="sc-recv">Принимать фото с телефонов</span><span style="color:var(--text2);font-size:var(--t-w-cap)">Только в домашней сети, когда Pixroost открыт или свёрнут в трей</span></span>
+              <span><span class="h" style="display:block" id="sc-recv">Принимать фото с телефонов</span><span style="color:var(--text2);font-size:var(--t-w-cap)">Только в домашней сети, когда Pixroost открыт или свёрнут в трей</span></span>
               <button class="sw-w" role="switch" aria-checked="true" aria-labelledby="sc-recv"><span class="track"></span><span class="val">Вкл.</span></button>
             </div>
             <div class="card set-card sl is-hover">
               <svg class="ic ic-20" aria-hidden="true"><use href="#i-folder"/></svg>
-              <span style="flex:1"><span class="h" style="display:block">Папка архива <span style="font-weight:400;color:var(--text2)">· наведение</span></span><span class="mono" style="color:var(--text2);font-size:var(--t-w-cap)">D:\Фото\Pixroost · свободно 812&nbsp;ГБ</span></span>
+              <span><span class="h" style="display:block">Папка архива <span style="font-weight:400;color:var(--text2)">· наведение</span></span><span class="mono" style="color:var(--text2);font-size:var(--t-w-cap)">D:\<wbr>Фото\<wbr>Pixroost · свободно 812&nbsp;ГБ</span></span>
               <button class="btn btn-secondary sl fc hit">Изменить</button>
             </div>
             <div class="card set-card">
               <svg class="ic ic-20" aria-hidden="true"><use href="#i-play"/></svg>
-              <span style="flex:1"><span class="h" style="display:block;color:color-mix(in srgb,var(--text) 38%,transparent)" id="sc-video">Принимать видео больше 4&nbsp;ГБ</span><span style="color:var(--text2);font-size:var(--t-w-cap)">Недоступно: на диске D: меньше 50&nbsp;ГБ</span></span>
+              <span><span class="h" style="display:block;color:color-mix(in srgb,var(--text) 38%,transparent)" id="sc-video">Принимать видео больше 4&nbsp;ГБ</span><span style="color:var(--text2);font-size:var(--t-w-cap)">Недоступно: на диске D: меньше 50&nbsp;ГБ</span></span>
               <button class="sw-w" role="switch" aria-checked="false" aria-labelledby="sc-video" disabled><span class="track"></span><span class="val">Выкл.</span></button>
             </div>
           </div>
-          <div class="cards-grid" style="margin-top:16px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));max-width:640px">
+          <div class="cards-grid" style="margin-top:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,10rem),1fr));max-width:640px">
             <div class="card"><p class="big-num" style="font-size:var(--t-w-head);font-family:var(--f-display)">18&nbsp;412</p><p>фото и видео принято</p></div>
             <div class="card"><p class="big-num" style="font-size:var(--t-w-head);font-family:var(--f-display)">212&nbsp;ГБ</p><p>в архиве</p></div>
             <div class="card"><p class="big-num" style="font-size:var(--t-w-head);font-family:var(--f-display)">1&nbsp;904</p><p>дубля не копируем</p></div>
@@ -2057,10 +2103,10 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <h4 style="margin-top:20px">LayoutRulePicker · раскладка архива</h4>
           <fieldset style="border:0;margin:0;padding:0" role="radiogroup" aria-labelledby="lr-legend">
             <legend id="lr-legend" style="font-size:var(--t-w-body);font-weight:600;margin-bottom:4px">Как раскладывать фото в папке архива</legend>
-            <label class="radio"><input type="radio" name="layout" checked><span class="dot"></span><span class="rtxt">Год, внутри месяц<small>D:\Фото\Pixroost\2026\05\IMG_2041.jpg</small></span></label>
-            <label class="radio"><input type="radio" name="layout"><span class="dot is-focus"></span><span class="rtxt">Только год <span style="color:var(--text2)">· фокус</span><small>D:\Фото\Pixroost\2026\IMG_2041.jpg</small></span></label>
-            <label class="radio"><input type="radio" name="layout"><span class="dot"></span><span class="rtxt">По устройствам<small>D:\Фото\Pixroost\Pixel 8 Лены\IMG_2041.jpg</small></span></label>
-            <label class="radio"><input type="radio" name="layout" disabled><span class="dot"></span><span class="rtxt">Как в облаке — недоступно, пока облака не подключены<small>D:\Фото\Pixroost\Яндекс Диск\Фотокамера\IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout" checked><span class="dot"></span><span class="rtxt">Год, внутри месяц<small>D:\<wbr>Фото\<wbr>Pixroost\<wbr>2026\<wbr>05\<wbr>IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout"><span class="dot is-focus"></span><span class="rtxt">Только год <span style="color:var(--text2)">· фокус</span><small>D:\<wbr>Фото\<wbr>Pixroost\<wbr>2026\<wbr>IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout"><span class="dot"></span><span class="rtxt">По устройствам<small>D:\<wbr>Фото\<wbr>Pixroost\<wbr>Pixel 8 Лены\<wbr>IMG_2041.jpg</small></span></label>
+            <label class="radio"><input type="radio" name="layout" disabled><span class="dot"></span><span class="rtxt">Как в облаке — недоступно, пока облака не подключены<small>D:\<wbr>Фото\<wbr>Pixroost\<wbr>Яндекс Диск\<wbr>Фотокамера\<wbr>IMG_2041.jpg</small></span></label>
           </fieldset>
         </div>
       </div>
@@ -2394,7 +2440,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 
   <!-- ======================= ПЛАНШЕТ ======================= -->
   <section class="doc-section" id="rail" aria-labelledby="h-rail">
-    <h2 id="h-rail">Планшет: MainNavigationRail</h2>
+    <h2 id="h-rail">Планшет: Main<wbr>Navigation<wbr>Rail</h2>
     <p class="lead"><code>MainNavigationRail</code> — навигация планшета Android на всех экранах: те же четыре раздела, что в нижней панели
       телефона, настройки внизу, сверху кнопка «Отправить на ПК» (<code>components.md</code>). Пока ничего не выбрано, кнопка
       недоступна, но остаётся в фокусе с клавиатуры и в TalkBack: её имя объясняет почему — «Отправить на ПК. Сначала выберите фото».
@@ -2478,7 +2524,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
   <!-- ======================= ДИАЛОГИ ======================= -->
   <section class="doc-section" id="dialogs" aria-labelledby="h-dialogs">
     <h2 id="h-dialogs">Диалоги и подтверждение удаления</h2>
-    <p class="lead"><code>DeleteConfirmSheet</code> — подтверждение по правилу безопасности удаления (<code>docs/architecture/data-model.md</code>):
+    <p class="lead"><code>DeleteConfirmSheet</code> — подтверждение по правилу безопасности удаления (<code>docs/<wbr>architecture/<wbr>data-model.md</code>):
       удаляем копию, только если есть другая проверенная копия того же файла в доверенном месте. Лист показывает сводку по местам,
       что остаётся, правило безопасности и куда уходят файлы. На телефоне — нижний лист, на ПК — диалог. В приложении объявляется как модальный
       диалог (Д11); на этой странице образцы без <code>aria-modal</code>, чтобы не прятать от скринридера остальную страницу. На ПК фокус по умолчанию — на «Отмена», Enter не удаляет: удаление — самое опасное действие.</p>
@@ -2549,7 +2595,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
                     <ul class="places">
                       <li><span class="src src-32" aria-hidden="true">Я</span><span class="txt">Яндекс Диск<small>в корзину Диска</small></span><span class="num">815 файлов · 4,1&nbsp;ГБ</span></li>
                       <li><span class="src src-32" aria-hidden="true">O</span><span class="txt">OneDrive<small>в корзину OneDrive</small></span><span class="num">425 файлов · 2,2&nbsp;ГБ</span></li>
-                      <li><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span><span class="txt">Архив на этом ПК<small class="mono">D:\Фото\Pixroost</small></span><span class="num">остаётся</span></li>
+                      <li><span class="src src-32 src-lamp" aria-hidden="true"><svg class="lamp-svg" width="18" height="18"><use href="#lamp"/></svg></span><span class="txt">Архив на этом ПК<small class="mono">D:\<wbr>Фото\<wbr>Pixroost</small></span><span class="num">остаётся</span></li>
                     </ul>
                     <div class="note-box n-safety"><svg class="lamp-svg" width="20" height="20" aria-hidden="true"><use href="#lamp"/></svg>
                       <p>Удаляем только копии, оригинал которых лежит в архиве и проверен.</p></div>
@@ -2598,7 +2644,7 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
           <p class="note">QR всегда тёмный на белом и не меняется с темой (И3). Белая подложка QR берёт роли светлой темы
             целиком — кнопка и кольцо фокуса на ней тоже светлые, иначе в тёмной теме кольцо <code>#9DB0F0</code> на белом дало бы 2,1:1
             Срок действия — 5 минут, как у секрета сопряжения
-            (<code>docs/architecture/devices-and-transfer.md</code>).</p>
+            (<code>docs/<wbr>architecture/<wbr>devices-and-transfer.md</code>).</p>
         </div>
       </div>
     </div>

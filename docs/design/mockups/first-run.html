@@ -984,6 +984,52 @@ html.text-200 .phone .sheet, html.text-200 .phone .a-dialog { position: relative
 /* Ширина таблицы по содержимому, на узком экране — прокрутка внутри обёртки */
 .dt-wrap { overflow-x: auto; }
 .dt-wrap .dtable { min-width: 560px; }
+/* Визуальная проверка макетов (#29): на 360 px и при тексте 200% текст не обрезается, не вылезает и не наезжает */
+.kbd { height: auto; min-height: 20px; }
+.a .fbox label { top: 0; transform: translateY(-50%); line-height: 1.385; } /* 18 при 13: середина подписи на рамке и при крупном шрифте */
+html.text-200 .a .field .fbox { margin-top: 9px; }
+.note-box > p { min-width: 0; overflow-wrap: break-word; }
+html.text-200 .note-box > p { hyphens: auto; }
+.titlebar .search, .w .fbox { min-width: 0; }
+html.text-200 .titlebar .search { max-width: 720px; } /* подсказка поиска при крупном шрифте видна целиком на ПК */
+.win-content h4, .phone .under .ph-title { overflow-wrap: break-word; hyphens: auto; }
+/* Подписи нижней панели переносятся по слогам, с дефисом, а не посреди слова без него */
+.navbar a { overflow-wrap: normal; hyphens: auto; }
+html.text-200 .sheet .places li, html.text-200 .dialog .places li { flex-wrap: wrap; }
+html.text-200 .sheet .places .num, html.text-200 .dialog .places .num { margin-left: auto; white-space: normal; text-align: right; }
+html.text-200 .sheet .btns, html.text-200 .dialog .d-foot { flex-wrap: wrap; }
+html.text-200 .sheet .btns .btn, html.text-200 .dialog .d-foot .btn { flex: 1 1 auto; }
+html.text-200 .kv { grid-template-columns: auto minmax(0, 1fr); }
+html.text-200 .kv .r { grid-column: 2; text-align: left; }
+html.text-200 .card .head-row { flex-wrap: wrap; }
+html.text-200 .card .head-row > .txt, html.text-200 .card .head-row > .big-num { flex: 1 1 0; min-width: min(100%, 7em); }
+html.text-200 .navpane a { flex-wrap: wrap; padding-top: 4px; padding-bottom: 4px; }
+/* Крупный шрифт: заголовок раздела — отдельной строкой под действиями, как в большой верхней панели Material 3 */
+html.text-200 .appbar:not(.sub) { flex-wrap: wrap; justify-content: flex-end; }
+html.text-200 .appbar:not(.sub) .ttl { order: 1; flex: 1 1 100%; }
+html.text-200 .qr.expired { height: auto; min-height: 168px; }
+html.text-200 .qr.expired svg { position: absolute; left: 12px; top: 12px; width: calc(100% - 24px); height: calc(100% - 24px); }
+html.text-200 .qr.expired .over { position: relative; inset: auto; min-height: 144px; padding: 0; }
+html.text-200 .row { flex-wrap: wrap; }
+html.text-200 .row .txt { flex: 1 1 140px; }
+html.text-200 .row > .trail, html.text-200 .row > .add { margin-left: auto; }
+html.text-200 .navbar a { font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
+.type-row .sample { overflow-wrap: break-word; hyphens: auto; }
+/* Пути переносятся после «\» (<wbr> в разметке), а не посреди имени папки */
+.mono, .w-path, .radio .rtxt small { overflow-wrap: break-word; }
+html.text-200 .row .txt, html.text-200 .radio .rtxt { hyphens: auto; }
+.mono, .w-path { hyphens: manual; }
+.pair-txt .code { overflow-wrap: normal; }
+.dt-wrap .dtable { min-width: 35rem; } /* 560 при 100%; при 200% таблица шире, колонки не сжимаются до слога */
+.sg.c4 { grid-template-columns: max-content repeat(4, max-content); }
+.sg.c5 { grid-template-columns: max-content repeat(5, max-content); }
+.sg .vn, .sg .hd:first-child { min-width: 132px; }
+.intro code, .lead code, .note code, .decisions code { overflow-wrap: break-word; }
+.gd-win .np, .gd-win .pn { hyphens: auto; }
+@media (max-width: 720px) {
+  /* Превью Windows не сжимаются меньше 96: подпись состояния и метки мест не наезжают друг на друга */
+  .w .thumbs:not(.wthumbs) { grid-template-columns: repeat(auto-fill, minmax(96px, 112px)); }
+}
 </style>
 <style>
 /* ============================================================
@@ -1288,7 +1334,7 @@ html.text-200 .scr .row .txt { flex: 1 1 140px; }
 html.text-200 .scr .row > .add, html.text-200 .scr .row > .trail { margin-left: auto; }
 .thumb, .thumb .src { font-family: var(--f-ui); }
 .empty .h { color: var(--text); }
-html.text-200 .scr .navbar a { overflow-wrap: anywhere; hyphens: auto; font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
+html.text-200 .scr .navbar a { overflow-wrap: normal; hyphens: auto; font-size: .625rem; } /* 13 sp при 200%: Android 14 масштабирует мелкий текст нелинейно, примерно до 20 */
 html.text-200 .seltb { border-radius: 28px; }
 .syncq { padding: 12px 16px; border-radius: var(--r-win); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); gap: 2px; }
 .syncq legend { float: left; width: 100%; margin-bottom: 2px; }
@@ -1306,6 +1352,9 @@ html.text-200 .seltb { border-radius: 28px; }
 .stepper .skipped .sk { font-size: var(--t-w-cap); }
 
 
+/* Визуальная проверка (#29): шаг, который не помещается в экран 760, показан целиком, кнопки внизу не обрезаны */
+.scr:has(> .scr-body > .ob) { height: auto; min-height: 760px; }
+html.text-200 .ob { padding-left: 16px; padding-right: 16px; } /* поля экрана 16, как в сетке телефона */
 </style>
 </head>
 <body>
@@ -1411,7 +1460,7 @@ html.text-200 .seltb { border-radius: 28px; }
 
 <main id="main">
   <p class="intro">Сценарий «Первый запуск» на Android (телефон) и Windows. Собран из токенов и компонентов
-    <a href="foundation.html">основы</a> по <code>docs/design/information-architecture.md</code> и требованиям E1 и E8.2. Каждый экран
+    <a href="foundation.html">основы</a> по <code>docs/<wbr>design/<wbr>information-architecture.md</code> и требованиям E1 и E8.2. Каждый экран
     нарисован в состояниях, которые встретятся на деле: полный, частичный и запрещённый доступ к фото, ошибки входа, нет сети,
     нет камеры, папка архива внутри облака, мало места. Тексты и цифры — из одного сценария: на телефоне 20&nbsp;412 фото,
     ПК называется «Дом», телефон — «Pixel 8 Лены».</p>
@@ -1462,7 +1511,7 @@ html.text-200 .seltb { border-radius: 28px; }
             <div class="scr"><div class="sbar" aria-hidden="true"><span>14:20</span><span class="sys"><svg><use href="#i-wf"/></svg><svg><use href="#i-sig"/></svg><svg><use href="#i-bat"/></svg></span></div>
               <div class="scr-body"><div class="ob">
                 <div class="app-icon sm" style="margin-top:24px"><svg class="lamp-svg" width="36" height="36" aria-hidden="true"><use href="#lamp"/></svg></div>
-                <h4 class="ob-title">Все фото — в&nbsp;одной ленте</h4>
+                <h4 class="ob-title">Все фото — в одной ленте</h4>
                 <p class="ob-lede">С телефона и из ваших облаков. Pixroost покажет, где что лежит, и поможет освободить место.</p>
                 <ul class="ob-points">
                   <li><span class="pi"><svg class="ic" aria-hidden="true"><use href="#i-photos"/></svg></span>
@@ -1575,7 +1624,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <li><button class="row clickable sl fc" aria-label="Подключить Яндекс Диск. Все фото и видео"><span class="src src-40" aria-hidden="true">Я</span><span class="txt"><span class="t1">Яндекс Диск</span><span class="t2">Все фото и видео</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить Dropbox. Все фото и видео"><span class="src src-40" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2">Все фото и видео</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить OneDrive. Все фото и видео"><span class="src src-40" aria-hidden="true">O</span><span class="txt"><span class="t1">OneDrive</span><span class="t2">Все фото и видео</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
-                  <li><button class="row clickable sl fc" aria-label="Подключить WebDAV. Nextcloud, NAS, платное Облако Mail.ru"><span class="src src-40" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, платное Облако Mail.ru</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
+                  <li><button class="row clickable sl fc" aria-label="Подключить WebDAV. Nextcloud, NAS, Облако Mail.ru"><span class="src src-40" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, Облако Mail.ru</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить Google Фото. Только фото, которые вы выберете"><span class="src src-40" aria-hidden="true">G</span><span class="txt"><span class="t1">Google Фото</span><span class="t2">Только фото, которые вы выберете</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                 </ul>
                 <div class="ob-spacer"></div>
@@ -1595,7 +1644,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <li><div class="row"><span class="src src-40" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2 err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Вход не завершён. Нажмите «Повторить» — откроется браузер</span></span>
                     <span class="trail"><button class="icon-btn sl fc hit" aria-label="Повторить вход в Dropbox"><svg class="ic" aria-hidden="true"><use href="#i-retry"/></svg></button></span></div></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить OneDrive. Все фото и видео"><span class="src src-40" aria-hidden="true">O</span><span class="txt"><span class="t1">OneDrive</span><span class="t2">Все фото и видео</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
-                  <li><button class="row clickable sl fc" aria-label="Подключить WebDAV. Nextcloud, NAS, платное Облако Mail.ru"><span class="src src-40" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, платное Облако Mail.ru</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
+                  <li><button class="row clickable sl fc" aria-label="Подключить WebDAV. Nextcloud, NAS, Облако Mail.ru"><span class="src src-40" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, Облако Mail.ru</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                   <li><button class="row clickable sl fc" aria-label="Подключить Google Фото. Только фото, которые вы выберете"><span class="src src-40" aria-hidden="true">G</span><span class="txt"><span class="t1">Google Фото</span><span class="t2">Только фото, которые вы выберете</span></span><span class="add" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></li>
                 </ul>
                 <div class="ob-spacer"></div>
@@ -1838,8 +1887,8 @@ html.text-200 .seltb { border-radius: 28px; }
   <section class="doc-section" id="w-archive" aria-labelledby="h-w-archive">
     <h2 id="h-w-archive">Windows: папка архива и раскладка</h2>
     <p class="lead">Папка предложена сразу: <code>Pixroost</code> на внутреннем несъёмном диске, где больше всего места, вне папок синхронизации
-      облаков; если такого диска нет — <code>Изображения\Pixroost</code> <span class="choice">выбор</span>; раскладка по умолчанию —
-      <code>{год}\{год}-{месяц}\{имя файла}</code> (E6.5). Пример пути показывает, как ляжет настоящее фото (<code>LayoutRulePicker</code>).
+      облаков; если такого диска нет — <code>Изображения\<wbr>Pixroost</code> <span class="choice">выбор</span>; раскладка по умолчанию —
+      <code>{год}\<wbr>{год}-{месяц}\<wbr>{имя файла}</code> (E6.5). Пример пути показывает, как ляжет настоящее фото (<code>LayoutRulePicker</code>).
       Если папка внутри папки синхронизации облака, ПК предупреждает: удаление из этого облака удалит и копию в архиве (E8.2).
       Если папку ПК не узнал, он спрашивает, не папка ли это синхронизации облака (правило 3 «Папки синхронизации на ПК» в
       <code>data-model.md</code>): так же и при «Добавить папку» на следующем шаге. Подсказки не красные: это не удаление и не ошибка ввода.</p>
@@ -1860,10 +1909,10 @@ html.text-200 .seltb { border-radius: 28px; }
                     <div class="folder"><div class="fbox"><svg class="ic ic-16" aria-hidden="true" style="color:var(--text2)"><use href="#i-folder"/></svg><input id="arch1" class="mono" value="D:\Фото\Pixroost" aria-describedby="arch1-h"></div><button class="btn btn-secondary sl fc hit">Выбрать…</button></div>
                     <span class="fhelp" id="arch1-h">Свободно 812&nbsp;ГБ на диске D:</span></div>
                   <fieldset class="layout-group"><legend>Раскладка</legend>
-                    <label class="radio"><input type="radio" name="lay1" checked><span class="dot"></span><span class="rtxt">По году и месяцу<small>2026\2026-05\IMG_2041.HEIC</small></span></label>
-                    <label class="radio"><input type="radio" name="lay1"><span class="dot"></span><span class="rtxt">По году<small>2026\IMG_2041.HEIC</small></span></label>
-                    <label class="radio"><input type="radio" name="lay1"><span class="dot"></span><span class="rtxt">По телефонам<small>Pixel 8 Лены\2026-05\IMG_2041.HEIC</small></span></label>
-                    <label class="radio"><input type="radio" name="lay1"><span class="dot"></span><span class="rtxt">Свой шаблон<small>{год}\{месяц}\{имя}</small></span></label>
+                    <label class="radio"><input type="radio" name="lay1" checked><span class="dot"></span><span class="rtxt">По году и месяцу<small>2026\<wbr>2026-05\<wbr>IMG_2041.HEIC</small></span></label>
+                    <label class="radio"><input type="radio" name="lay1"><span class="dot"></span><span class="rtxt">По году<small>2026\<wbr>IMG_2041.HEIC</small></span></label>
+                    <label class="radio"><input type="radio" name="lay1"><span class="dot"></span><span class="rtxt">По телефонам<small>Pixel 8 Лены\<wbr>2026-05\<wbr>IMG_2041.HEIC</small></span></label>
+                    <label class="radio"><input type="radio" name="lay1"><span class="dot"></span><span class="rtxt">Свой шаблон<small>{год}\<wbr>{месяц}\<wbr>{имя}</small></span></label>
                   </fieldset>
                   <p class="wiz-free">Раскладку можно поменять позже в разделе «Архив».</p>
                 </div>
@@ -1888,8 +1937,8 @@ html.text-200 .seltb { border-radius: 28px; }
                     <div class="body"><strong>Эта папка внутри OneDrive</strong><span>Удаление из OneDrive удалит и копию в архиве, поэтому для уборки в OneDrive такой архив не будет опорой.</span>
                       <button class="btn btn-secondary sl fc hit compact">Выбрать другую папку</button></div></div>
                   <fieldset class="layout-group"><legend>Раскладка</legend>
-                    <label class="radio"><input type="radio" name="lay2" checked><span class="dot"></span><span class="rtxt">По году и месяцу<small>2026\2026-05\IMG_2041.HEIC</small></span></label>
-                    <label class="radio"><input type="radio" name="lay2"><span class="dot"></span><span class="rtxt">По году<small>2026\IMG_2041.HEIC</small></span></label>
+                    <label class="radio"><input type="radio" name="lay2" checked><span class="dot"></span><span class="rtxt">По году и месяцу<small>2026\<wbr>2026-05\<wbr>IMG_2041.HEIC</small></span></label>
+                    <label class="radio"><input type="radio" name="lay2"><span class="dot"></span><span class="rtxt">По году<small>2026\<wbr>IMG_2041.HEIC</small></span></label>
                   </fieldset>
                 </div>
                 <div class="wiz-foot"><button class="btn btn-secondary sl fc hit left">Назад</button><button class="btn btn-primary sl fc hit">Далее</button></div>
@@ -1985,9 +2034,9 @@ html.text-200 .seltb { border-radius: 28px; }
                   <p>Папки и облака появятся в общей ленте. Pixroost только читает их и ничего не меняет без вашей команды.</p>
                   <h5 class="h-grp">Папки на этом ПК</h5>
                   <ul class="list">
-                    <li><div class="row"><label class="cb"><input type="checkbox" checked><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><span class="txt"><span class="t1">Изображения</span><span class="t2"><span class="w-path">C:\Users\Сергей\Pictures</span> · 3&nbsp;214 фото</span></span></label></div></li>
-                    <li><div class="row"><label class="cb"><input type="checkbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><span class="txt"><span class="t1">OneDrive — папка синхронизации</span><span class="t2"><span class="w-path">C:\Users\Сергей\OneDrive\Изображения</span> · 1&nbsp;902 фото</span></span></label></div></li>
-                    <li><div class="row"><label class="cb"><input type="checkbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><span class="txt"><span class="t1">Внешний диск E:</span><span class="t2"><span class="w-path">E:\DCIM</span> · 6&nbsp;540 фото</span></span></label></div></li>
+                    <li><div class="row"><label class="cb"><input type="checkbox" checked><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><span class="txt"><span class="t1">Изображения</span><span class="t2"><span class="w-path">C:\<wbr>Users\<wbr>Сергей\<wbr>Pictures</span> · 3&nbsp;214 фото</span></span></label></div></li>
+                    <li><div class="row"><label class="cb"><input type="checkbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><span class="txt"><span class="t1">OneDrive — папка синхронизации</span><span class="t2"><span class="w-path">C:\<wbr>Users\<wbr>Сергей\<wbr>OneDrive\<wbr>Изображения</span> · 1&nbsp;902 фото</span></span></label></div></li>
+                    <li><div class="row"><label class="cb"><input type="checkbox"><span class="box"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><span class="txt"><span class="t1">Внешний диск E:</span><span class="t2"><span class="w-path">E:\<wbr>DCIM</span> · 6&nbsp;540 фото</span></span></label></div></li>
                   </ul>
                   <div><button class="btn btn-secondary sl fc hit"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Добавить папку</button></div>
                   <h5 class="h-grp">Облака</h5>
@@ -1997,7 +2046,7 @@ html.text-200 .seltb { border-radius: 28px; }
                     <li><div class="row"><span class="src src-32" aria-hidden="true">Я</span><span class="txt"><span class="t1">Яндекс Диск</span><span class="t2">Вход в браузере</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить Яндекс Диск">Подключить</button></span></div></li>
                     <li><div class="row"><span class="src src-32" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2">Вход в браузере</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить Dropbox">Подключить</button></span></div></li>
                     <li><div class="row"><span class="src src-32" aria-hidden="true">O</span><span class="txt"><span class="t1">OneDrive</span><span class="t2">Вход в браузере</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить OneDrive">Подключить</button></span></div></li>
-                    <li><div class="row"><span class="src src-32" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, платное Облако Mail.ru</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить WebDAV">Подключить</button></span></div></li>
+                    <li><div class="row"><span class="src src-32" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, Облако Mail.ru</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить WebDAV">Подключить</button></span></div></li>
                   </ul>
                   <p class="wiz-free">Google Фото отдаёт сторонним приложениям только выбранные фото. Всю библиотеку можно перенести через Google Takeout: «Хранилища» → «Импорт Takeout».</p>
                 </div>
@@ -2021,7 +2070,7 @@ html.text-200 .seltb { border-radius: 28px; }
                     <li><div class="row"><span class="src src-32" aria-hidden="true">D</span><span class="txt"><span class="t1">Dropbox</span><span class="t2 err"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Вход не завершён. Нажмите «Повторить» — откроется браузер</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Повторить вход в Dropbox">Повторить</button></span></div></li>
                     <li><div class="row"><span class="src src-32" aria-hidden="true">O</span><span class="txt"><span class="t1">OneDrive</span><span class="t2"><span class="ok">Подключён</span> · проверяем файлы: 1&nbsp;240 из 4&nbsp;310</span>
                       <span class="mini-bar" role="progressbar" aria-label="Проверка файлов OneDrive" aria-valuemin="0" aria-valuemax="4310" aria-valuenow="1240"><i style="width:29%"></i></span></span></div></li>
-                    <li><div class="row"><span class="src src-32" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, платное Облако Mail.ru</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить WebDAV">Подключить</button></span></div></li>
+                    <li><div class="row"><span class="src src-32" aria-hidden="true">W</span><span class="txt"><span class="t1">WebDAV</span><span class="t2">Nextcloud, NAS, Облако Mail.ru</span></span><span class="trail"><button class="btn btn-secondary sl fc hit" aria-label="Подключить WebDAV">Подключить</button></span></div></li>
                   </ul>
                 </div>
                 <div class="wiz-foot"><button class="btn btn-secondary sl fc hit left">Назад</button><button class="btn btn-primary sl fc hit">Далее</button></div>
@@ -2061,7 +2110,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="af-t">
                     <div class="d-body">
                       <h4 id="af-t">Добавить папку</h4>
-                      <p><span class="w-path">E:\Облако\Фото 2019–2023</span> · 4&nbsp;870 фото</p>
+                      <p><span class="w-path">E:\<wbr>Облако\<wbr>Фото 2019–2023</span> · 4&nbsp;870 фото</p>
                       <fieldset class="layout-group syncq"><legend>Это папка синхронизации облака?</legend>
                     <p class="wiz-free">Спрашиваем, потому что облако повторяет удаление: удалите файл в облаке — пропадёт и здесь.</p>
                     <div class="syncq-yes"><label class="radio"><input type="radio" name="sq-add" checked><span class="dot"></span><span class="rtxt">Да, это папка</span></label>
@@ -2191,7 +2240,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <div class="done-ic"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
                   <h4 class="h-step">Готово</h4>
                   <dl class="sum">
-                    <dt>Папка архива</dt><dd><span class="w-path">D:\Фото\Pixroost</span> · по году и месяцу</dd>
+                    <dt>Папка архива</dt><dd><span class="w-path">D:\<wbr>Фото\<wbr>Pixroost</span> · по году и месяцу</dd>
                     <dt>Папки</dt><dd>Изображения · 3&nbsp;214 фото</dd>
                     <dt>Облака</dt><dd>OneDrive · проверяем файлы</dd>
                     <dt>Телефоны</dt><dd>Pixel 8 Лены · подключён</dd>
@@ -2214,7 +2263,7 @@ html.text-200 .seltb { border-radius: 28px; }
                   <div class="done-ic"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
                   <h4 class="h-step">Готово</h4>
                   <dl class="sum">
-                    <dt>Папка архива</dt><dd><span class="w-path">D:\Фото\Pixroost</span> · по году и месяцу</dd>
+                    <dt>Папка архива</dt><dd><span class="w-path">D:\<wbr>Фото\<wbr>Pixroost</span> · по году и месяцу</dd>
                     <dt>Папки</dt><dd>Изображения · 3&nbsp;214 фото</dd>
                     <dt>Облака</dt><dd>Пока нет — подключите в «Хранилищах»</dd>
                     <dt>Телефоны</dt><dd>Пока нет — добавьте в «Устройствах»</dd>
@@ -2243,7 +2292,7 @@ html.text-200 .seltb { border-radius: 28px; }
       <li><b>«Пропустить» — одинаковая контурная кнопка на всех шагах, в том числе без сети; «Далее» — после первого облака.</b> Одно действие выглядит одинаково, подпись говорит, что произойдёт.</li>
       <li><b>Автоархив на экране «Готово» выключен; когда его включают, Android 13+ спрашивает разрешение на уведомления.</b> Без вашей команды Pixroost никуда не отправляет — как обещает экран доступа; разрешение просим в момент, когда оно понятно зачем.</li>
       <li><b>Окно настройки Windows — мастер с этапами и кнопками внизу справа.</b> Так устроены установщики и мастера Windows; этапы видны сразу.</li>
-      <li><b>Шаг «Папка архива» не пропускается; предложена папка <code>Pixroost</code> на внутреннем несъёмном диске с наибольшим свободным местом вне папок синхронизации, иначе <code>Изображения\Pixroost</code>.</b> Съёмный, сетевой диск или папка облака не годятся для архива по умолчанию.</li>
+      <li><b>Шаг «Папка архива» не пропускается; предложена папка <code>Pixroost</code> на внутреннем несъёмном диске с наибольшим свободным местом вне папок синхронизации, иначе <code>Изображения\<wbr>Pixroost</code>.</b> Съёмный, сетевой диск или папка облака не годятся для архива по умолчанию.</li>
       <li><b>Найденная папка «Изображения» отмечена, папки синхронизации облаков и внешние диски — нет.</b> Папки синхронизации повторяют облака, которые лучше подключить напрямую; внешний диск может быть отключён.</li>
       <li><b>Папка архива, в которой уже есть фото, принимается с подсказкой «те же файлы с телефонов повторно не скопируются».</b> Частый случай переустановки; хэши защищают от дублей (E6.6).</li>
       <li><b>Вопрос «Это папка синхронизации облака?» — прямо на шаге папки архива и в диалоге «Добавить папку»; облако выбирается списком.</b> Правило 3 из <code>data-model.md</code>; одна строка объясняет, зачем спрашиваем.</li>
