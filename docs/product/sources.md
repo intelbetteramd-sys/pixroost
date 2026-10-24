@@ -56,16 +56,14 @@
   файл предлагает сам Pixroost: «Восстановить» в журнале уборки (`createTrashRequest(uris, false)`, системный
   диалог).
 - Samsung Gallery синхронизировалась с OneDrive, удаление и правки шли в обе стороны
-  (по данным [Samsung Support](https://www.samsung.com/latin_en/support/apps-services/can-i-sync-gallery-photos-with-onedrive/)).
-  С 30 сентября 2026 Microsoft прекратила прямую синхронизацию Samsung Gallery с OneDrive: новую связь настроить
-  нельзя, а уже синхронизированные фото остаются в OneDrive
-  ([Microsoft](https://support.microsoft.com/en-US/onedrive/using-samsung-gallery-with-onedrive)).
-  Связь, настроенная до этой даты, на конкретном телефоне могла остаться, а надёжно отличить такой телефон от
-  остальных нельзя, поэтому правило безопасности не меняется (ниже).
-  Папку в OneDrive пользователи называют «Samsung Gallery», но официально её имя не описано (⚠️ проверить
-  в прототипе на телефоне Samsung). Поэтому на телефоне Samsung весь подключённый личный OneDrive
-  и галерея для правила безопасности — одно хранилище
-  ([домен хранения](../architecture/data-model.md#домен-хранения)), а имя папки — только дополнительный признак.
+  (по данным [Samsung Support](https://www.samsung.com/latin_en/support/apps-services/can-i-sync-gallery-photos-with-onedrive/) и [Microsoft](https://support.microsoft.com/en-US/onedrive/changes-to-samsung-gallery-sync-and-onedrive)).
+  С 30 сентября 2026 Samsung Gallery перестаёт синхронизироваться с OneDrive, фото из OneDrive пропадают из
+  галереи, а в самом OneDrive остаются ([Microsoft](https://support.microsoft.com/en-US/onedrive/changes-to-samsung-gallery-sync-and-onedrive)). Папку в OneDrive Microsoft называет «Samsung Gallery».
+  Связь после этой даты не сохраняется, но Pixroost не может проверить, что синхронизация на конкретном телефоне
+  действительно выключена (старые версии Gallery и OneDrive, поэтапное включение изменений), а ошибка стоит
+  потерянных файлов. Поэтому на телефоне Samsung весь подключённый личный OneDrive и галерея для правила
+  безопасности — одно хранилище ([домен хранения](../architecture/data-model.md#домен-хранения)); имя папки —
+  только дополнительный признак. Смягчить правило можно только отдельным решением с изменением ADR.
 
 ### Яндекс Диск
 
@@ -225,8 +223,8 @@
 ### Облако Mail.ru
 
 - Официального публичного API нет; WebDAV есть ([см. выше](#webdav)), но доступность на бесплатном тарифе не
-  подтверждена (⚠️ проверить на бесплатном аккаунте). Mail.ru с 02.2026 тестирует платный доступ к почте сторонних
-  клиентов; для WebDAV Облака такое не подтверждено.
+  подтверждена (⚠️ проверить на бесплатном аккаунте). ⚠️ По сообщению [Onliner](https://tech.onliner.by/2026/02/20/mail-ru) (2026-02-20), Mail.ru с 02.2026 тестирует
+  платный доступ к почте сторонних клиентов; для WebDAV Облака это не подтверждено.
 - **Если WebDAV недоступен:** папка синхронизации приложения «Облако Mail» на ПК → источник-папка.
 - Неофициальные API не используем: они ломаются и нарушают правила сервиса.
 
@@ -235,28 +233,31 @@
 Объём v1.0 и план не меняются. Порядок — по пользе и по тому, насколько ясен законный способ доступа.
 
 1. **Immich** — свой сервер фото. Открытый API (OpenAPI), ключ API, SHA-1 `checksum` у каждого файла, дельта
-   через `/sync/stream`, корзина с восстановлением. Первый кандидат.
+   через `/sync/stream`, корзина с восстановлением ([API](https://api.immich.app/)). Первый кандидат.
 2. **Google Диск под `drive.file`** — только после спайка: даёт ли выбор папки в Picker доступ к её содержимому.
-   Без этого не берём.
+   Без этого не берём ([Google](https://developers.google.com/workspace/drive/api/guides/api-specific-auth)).
 3. **S3-совместимые хранилища** (Yandex Object Storage, Backblaze B2 и др.) — ETag не равен MD5 при multipart-загрузке,
-   корзины нет: удаление, как у WebDAV, не включаем.
-4. **pCloud** — OAuth только в implicit-потоке; хэши SHA-1 и MD5 (регион US), SHA-256 (EU).
-5. **PhotoPrism** — свой сервер фото, REST API.
+   корзины нет: удаление, как у WebDAV, не включаем ([Yandex Object Storage](https://yandex.cloud/ru/docs/storage/s3/)).
+4. **pCloud** — OAuth только в implicit-потоке; хэши SHA-1 и MD5 (регион US), SHA-256 (EU) ([pCloud](https://docs.pcloud.com/)).
+5. **PhotoPrism** — свой сервер фото, REST API ([документация](https://docs.photoprism.app/developer-guide/api/)).
 
 ### Не подключаем
 
-| Сервис | Причина |
-|---|---|
-| Сбер Диск, МТС «Вторая память», Билайн | нет публичного API |
-| iCloud (вне PhotoKit), Amazon Photos | нет публичного API |
-| Xiaomi Cloud, Samsung Cloud | нет API для сторонних приложений |
-| Huawei Drive Kit | не проверено |
-| TeraBox | нет законного API |
-| Flickr | OAuth 1.0a с секретом приложения |
-| Telegram | хранение файлов вразрез с правилами сервиса |
-| Box | PKCE не подтверждён |
-| MEGA | только C++ SDK, сквозное шифрование |
-| Proton Drive | пока нет готового SDK (ожидается не раньше конца 2026) |
+Ссылки — на первичные источники, где они есть. «Не проверено» значит, что вывод исследования не подтверждён
+первичным источником и перед любым решением перепроверяется.
+
+| Сервис | Причина | Источник |
+|---|---|---|
+| Сбер Диск, МТС «Вторая память», Билайн | нет публичного API | не проверено |
+| iCloud (вне PhotoKit), Amazon Photos | нет публичного API | не проверено |
+| Xiaomi Cloud, Samsung Cloud | нет API для сторонних приложений | не проверено |
+| Huawei Drive Kit | не изучен | не проверено |
+| TeraBox | нет законного API | не проверено |
+| Flickr | OAuth 1.0a с секретом приложения | [Flickr](https://www.flickr.com/services/api/auth.oauth.html) |
+| Telegram | хранение файлов вразрез с правилами сервиса | не проверено |
+| Box | PKCE не подтверждён | не проверено |
+| MEGA | только C++ SDK, сквозное шифрование | [SDK](https://github.com/meganz/sdk) |
+| Proton Drive | пока нет готового SDK (срок, не раньше конца 2026, не проверен) | не проверено |
 
 ### Папки и диски на ПК
 
