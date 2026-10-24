@@ -21,7 +21,7 @@
 | Сериализация | kotlinx.serialization (JSON) | — |
 | Сеть (клиент) | **Ktor Client 3** (OkHttp на Android и desktop, Darwin на iOS) | — |
 | Сеть (сервер приёма на ПК, relay) | **Ktor Server 3**, движок Netty (проверено в S-03) | — |
-| Локальная БД | **Room 3** (KSP, `BundledSQLiteDriver`) + Paging 3 ([ADR 0010](../architecture/adr/0010-room3.md)) | SQLDelight 2 |
+| Локальная БД | **Room 3.0.3** (KSP 2.3.12, `BundledSQLiteDriver`, androidx.sqlite 2.7.1) + Paging 3 (в шаге ленты) ([ADR 0010](../architecture/adr/0010-room3.md)) | SQLDelight 2 |
 | Настройки | DataStore (KMP) | multiplatform-settings |
 | DI | **Koin 4** | Metro, kotlin-inject |
 | Навигация | Navigation 3 (поддерживается в Compose Multiplatform с 1.10) | Decompose |
@@ -55,6 +55,22 @@
   `Dispatchers.*` в прикладном коде не используем.
 - **Логи.** `AppLogging.install(minSeverity)` один раз при старте приложения; в журнал не пишем токены, пути и имена
   файлов на уровнях INFO и выше.
+
+## Основа `shared/database`
+
+Шаг 3.5 плана. Модуль `:shared:database`, пакет `app.pixroost.database`:
+
+- **Сущности и DAO** — в `commonMain`: `entity/` (по одному файлу на таблицу из [модели данных](../architecture/data-model.md)),
+  `model/` (перечисления), `dao/`. База — `PixroostDatabase`, версия в `DatabaseConstants.VERSION`.
+- **Сборка базы.** Платформа даёт билдер (`pixroostDatabaseBuilder(Context)` на Android, `(File)` на desktop,
+  `(String)` на iOS), общий код донастраивает его в `applyPixroostDefaults(DispatcherProvider)`: `BundledSQLiteDriver`,
+  WAL, миграции, диспетчер `io` для запросов. Готовую базу создаёт DI-слой (шаг 3.4).
+- **KSP** подключается отдельно к каждому таргету: `kspAndroid`, `kspDesktop`, `kspIosArm64`, `kspIosSimulatorArm64`.
+- **Схема** экспортируется плагином `androidx.room3` в `shared/database/schemas/` и лежит в репозитории.
+- **Тесты** — `desktopTest` на реальном файле SQLite во временной папке (тот же драйвер, что в приложении):
+  запросы каждого DAO, каскады и внешние ключи, WAL, `MigrationTestHelper` для миграций.
+- Пагинация (Paging 3) пока не подключена: `AssetDao.getFeedPage` читает страницу по `LIMIT/OFFSET`. `room3-paging`
+  добавим в шаге ленты, когда появится потребитель.
 
 ## Навигация и DI
 

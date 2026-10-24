@@ -31,7 +31,10 @@ erDiagram
   INSTANCE |o--o{ CLEANUP_ACTION : "удаляется в"
 ```
 
-## Схема (черновик)
+## Схема
+
+Ниже — SQL-описание схемы версии 1. Код — сущности в `shared/database` (модуль `:shared:database`); отличия кода
+от этого описания перечислены после блока.
 
 ```sql
 -- Подключённые источники
@@ -61,7 +64,8 @@ CREATE TABLE asset (
   duration_ms       INTEGER,
   phash             INTEGER,           -- 64-битный pHash целого кадра (превью с проверкой пропорций или оригинал, см. «Как считаем pHash»); NULL — ещё не посчитан
   is_blank          INTEGER NOT NULL DEFAULT 0, -- 1 — пустой кадр: хэш хранится, но в поиск не попадает (см. «Как считаем pHash»)
-  best_instance_id  INTEGER            -- копия лучшего качества (только для просмотра, не для уборки)
+  best_instance_id  INTEGER REFERENCES instance(id) ON DELETE SET NULL  -- копия лучшего качества (только для просмотра,
+                                       -- не для уборки); NULL после отключения её источника, пересчитывает индексатор
 );
 CREATE INDEX asset_taken_at ON asset(taken_at DESC);
 
@@ -153,6 +157,7 @@ CREATE TABLE connection_log (
   event       TEXT    NOT NULL,        -- PAIRED, CONNECTED, UPLOAD, DOWNLOAD, REJECTED_REVOKED, PAIRING_FAILED
   details     TEXT
 );
+CREATE INDEX connection_log_device_at ON connection_log(device_id, at);
 
 -- Очередь передачи
 CREATE TABLE transfer_job (
@@ -165,7 +170,7 @@ CREATE TABLE transfer_job (
 CREATE TABLE transfer_item (
   id           INTEGER PRIMARY KEY,
   job_id       INTEGER NOT NULL REFERENCES transfer_job(id) ON DELETE CASCADE,
-  instance_id  INTEGER NOT NULL REFERENCES instance(id),
+  instance_id  INTEGER NOT NULL REFERENCES instance(id) ON DELETE CASCADE,  -- см. «Отключение источника» ниже
   upload_id    TEXT,                   -- id загрузки на стороне ПК (для докачки)
   bytes_total  INTEGER,
   bytes_sent   INTEGER NOT NULL DEFAULT 0,
@@ -209,12 +214,49 @@ CREATE TABLE cleanup_action (
   executed_at         INTEGER,
   trash_expires_at    INTEGER,                -- до какого времени копию гарантированно можно вернуть; NULL — срок неизвестен
   restored_at         INTEGER,
-  error               TEXT
+  error               TEXT,
+  keeper_lost_notified_at INTEGER             -- когда наблюдатель предупредил, что хранитель исчез или за ним больше
+                                              -- не следят; NULL — предупреждение ещё не показано (см. «Наблюдатель»)
 );
 ```
 
-Схема — отправная точка; окончательная появится в модуле `:shared:database` и будет меняться только
-через миграции.
+Версия 1 включает все таблицы выше: первая версия схемы должна быть полной, чтобы журнал уборки, очередь передачи
+и список устройств не требовали миграций сразу после выхода. Схема меняется только через миграции
+([ниже](#миграции)).
+
+Отличия сущностей Room от SQL выше (все — детали реализации, поведение то же):
+
+- **Типы.** Виды, статусы и роли (`kind`, `status`, `quality`, …) в коде — `enum class`; Room хранит их как `TEXT`
+  с именем константы. Переименовывать константу можно только миграцией. Флаги — `INTEGER 0/1` (`Boolean`).
+  `permissions` остаётся строкой через запятую: разбирает её доменный слой.
+- **Ключи.** `id` с автогенерацией создаются как `INTEGER PRIMARY KEY AUTOINCREMENT`: номера удалённых строк
+  не используются повторно.
+- **Индексы по внешним ключам.** К индексам из SQL добавлены индексы на столбцы внешних ключей, у которых нет своего:
+  `phash_band(asset_id)`, `similar_member(asset_id)`, `transfer_job(device_id)`, `transfer_item(job_id)`,
+  `transfer_item(instance_id)`, `asset(best_instance_id)`, `connection_log(device_id, at)`, `cleanup_action(plan_id)`, `cleanup_action(instance_id)`,
+  `cleanup_action(keeper_instance_id)`. Без них каскадное удаление (отключение источника) сканировало бы
+  дочернюю таблицу целиком. Индекс `UNIQUE (source_id, remote_key)` называется `index_instance_source_id_remote_key`.
+- **Отключение источника.** `DELETE FROM source` каскадом удаляет его копии (`instance`), а те — строки очереди
+  `transfer_item`, `yandex_shared_root`; `asset.best_instance_id` и ссылки журнала уборки обнуляются (`SET NULL`).
+  `transfer_item` ссылается на копию с `CASCADE`, а не `NO ACTION`: иначе после первой передачи на ПК источник
+  нельзя было бы отключить (`FOREIGN KEY constraint failed`). Истории передач в продукте нет: факт «файл уже на ПК»
+  хранит `archive_index` по SHA-256, а строки очереди нужны только пока идёт передача. Тест
+  `DisconnectAndCascadeTest` отключает источник с полным набором дочерних строк.
+- **Новые значения перечислений.** Добавление константы в `enum` (вид источника, статус, событие…) меняет набор
+  допустимых значений в базе: сборка без этой константы не прочтёт такую строку. Поэтому новая константа —
+  новая версия схемы с миграцией (даже если таблицы не менялись), а откат на старую сборку не поддерживается.
+- **Журнал уборки.** Поля и внешние ключи (`ON DELETE SET NULL`) в точности как в SQL, плюс `keeper_lost_notified_at`. У
+  `CleanupActionDao` нет удаления и нет обновления строки целиком: только вставка и узкие переходы статуса, каждый
+  с условием на текущий статус и числом изменённых строк в ответе: `PLANNED → DONE | REFUSED | FAILED | UNRECOVERABLE`
+  (для `UNRECOVERABLE` пишется `executed_at`) и `DONE → RESTORED`. Из `DONE` обратно в `FAILED` или `REFUSED`, из
+  `RESTORED`/`REFUSED` в `DONE` перейти нельзя. Так улики прошлого действия (хэши, имя, хранитель) не переписать. Удалением файлов
+  модуль базы не занимается.
+- **Устройства и корни Яндекса.** `DeviceDao` не перезаписывает строку целиком: сопряжение — `insert` (повторный `id`
+  отвергается, отзыв не снимается), имя, адрес и отзыв меняют узкие `UPDATE`. `YandexSharedRootDao.upsert` не
+  трогает `first_seen_at` существующего корня.
+- **Лента.** Постраничное чтение `AssetDao.getFeedPage` по `LIMIT/OFFSET` временное; keyset-пагинация по
+  `(taken_at, id)` и исключение asset без копий — в шаге 3.9.
+- **WAL.** Режим журнала — `WRITE_AHEAD_LOGGING`, внешние ключи включены; оба условия проверены тестами.
 
 ## Как определяем одинаковые фото
 
@@ -839,7 +881,7 @@ fun evaluate(
 |---|---|
 | копия стала `MISSING` или `TRASHED`, и другой проверенной копии нет | предупреждает: «Копия, на которую опиралось удаление, исчезла — восстановите <файл> из корзины <источник> до <дата>», с кнопкой «Восстановить» |
 | файл в архиве: ПК на `verify` ответил, что файла нет, и другой проверенной копии нет | то же. Синхронизация телефона архив не видит, поэтому наблюдатель спрашивает ПК при каждом подключении к нему |
-| `keeper_instance_id` стал `NULL`: источник хранителя отключили | один раз предупреждает: «Pixroost больше не следит за копией, на которую опиралось удаление <файла>: источник <название> отключён» |
+| `keeper_instance_id` стал `NULL`: источник хранителя отключили | один раз (время записывается в `keeper_lost_notified_at`, повторно не предупреждает) предупреждает: «Pixroost больше не следит за копией, на которую опиралось удаление <файла>: источник <название> отключён» |
 
 «Другая проверенная копия» — копия, которая сама прошла бы проверку хранителем для этого кандидата: тот же
 SHA-256 для её текущей ревизии, `PRESENT`, надёжный источник не из Picker и не из Takeout, не в общей папке,
@@ -873,5 +915,10 @@ SHA-256 для её текущей ревизии, `PRESENT`, надёжный �
 
 - Миграции Room: схема каждой версии экспортируется в `shared/database/schemas/` и хранится в репозитории,
   каждая миграция покрыта тестом, CI проверяет их на JVM.
+- Как добавить версию: поднять `DatabaseConstants.VERSION`, дописать `Migration` в `DatabaseMigrations.all`,
+  закоммитить новый `schemas/app.pixroost.database.PixroostDatabase/<версия>.json` (его создаёт плагин `androidx.room3`
+  при сборке) и добавить в `DatabaseMigrationTest` тест: база версии N создаётся через `MigrationTestHelper`,
+  заполняется строками, проходит `runMigrationsAndValidate`, строки на месте. Тест `everyVersionHasAnExportedSchema`
+  не даст забыть файл схемы.
 - Никаких «удалим базу и пересоздадим» после релиза: индексация большой медиатеки занимает время,
   а журнал уборки нельзя терять.

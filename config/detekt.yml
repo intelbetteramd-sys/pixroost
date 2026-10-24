@@ -18,3 +18,20 @@ naming:
       - '**/desktopTest/**'
       - '**/androidHostTest/**'
       - '**/androidDeviceTest/**'
+
+style:
+  MagicNumber:
+    # The default test exclusions, plus desktopTest and androidHostTest: this project runs JVM tests there.
+    excludes:
+      - '**/test/**'
+      - '**/androidTest/**'
+      - '**/commonTest/**'
+      - '**/jvmTest/**'
+      - '**/androidUnitTest/**'
+      - '**/androidInstrumentedTest/**'
+      - '**/androidHostTest/**'
+      - '**/androidDeviceTest/**'
+      - '**/desktopTest/**'
+      - '**/jsTest/**'
+      - '**/iosTest/**'
+      - '**/*.kts'

@@ -84,5 +84,6 @@ include(
     ":apps:ios-framework",
     ":shared:app",
     ":shared:core",
+    ":shared:database",
     ":shared:designsystem",
 )

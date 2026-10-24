@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.room3) apply false
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.spotless)
     alias(libs.plugins.detekt)
