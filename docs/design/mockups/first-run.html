@@ -1114,7 +1114,7 @@ html.text-200 .feed-scroll { overflow: visible; }
 .overlay-bottom { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; padding: 0 12px;
   pointer-events: none; z-index: 5; }
 .overlay-bottom > * { pointer-events: auto; }
-.seltb { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 4px; background: var(--surface);
+.seltb { display: flex; align-items: center; justify-content: center; gap: 0; padding: 4px; background: var(--surface);
   border-radius: var(--r-full); box-shadow: var(--shadow); border: 1px solid var(--line); max-width: 100%; flex-wrap: wrap; }
 .seltb .btn { white-space: normal; text-align: center; }
 .overlay-bottom .snack { width: 100%; }
@@ -1279,6 +1279,10 @@ html.text-200 .scr .row { flex-wrap: wrap; }
 html.text-200 .scr .row .txt { flex: 1 1 140px; }
 .pair-txt .code { overflow-wrap: normal; }
 html.text-200 .scr .row > .add, html.text-200 .scr .row > .trail { margin-left: auto; }
+.thumb, .thumb .src { font-family: var(--f-ui); }
+.empty .h { color: var(--text); }
+html.text-200 .scr .navbar a { overflow-wrap: break-word; hyphens: auto; }
+html.text-200 .seltb { border-radius: 28px; }
 
 
 </style>
@@ -1700,7 +1704,7 @@ html.text-200 .scr .row > .add, html.text-200 .scr .row > .trail { margin-left: 
                 </ul>
                 <ul class="list">
                   <li><div class="row"><span class="txt"><span class="t1" id="aa-t">Автоархив</span><span class="t2" id="aa-d">Новые фото сами уходят на ПК «Дом», когда телефон дома в <span class="nw">Wi-Fi</span></span></span>
-                    <button class="sw-a" role="switch" aria-checked="true" aria-labelledby="aa-t" aria-describedby="aa-d"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
+                    <button class="sw-a hit" role="switch" aria-checked="true" aria-labelledby="aa-t" aria-describedby="aa-d"><span class="thumb"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span></button></div></li>
                 </ul>
                 <div class="ob-spacer"></div>
                 <div class="ob-foot"><button class="btn btn-primary sl fc hit">Открыть ленту</button></div>

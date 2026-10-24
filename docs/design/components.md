@@ -121,8 +121,12 @@
 состояния `MediaThumbnail` «загружается» и «недоступно», `SelectionToolbar` с верхней панелью режима выбора,
 группа «Тот же кадр, другое качество» с ПК и без ПК.
 
+В [первом запуске](mockups/first-run.html) появились `QrScanner`, `SourcePicker`, `PermissionList` (в подтверждении телефона),
+`FolderPicker`, `LayoutRulePicker`, `Stepper` и `PairingCode` в работе; в [ленте](mockups/feed.html) — `MediaGrid` в состояниях,
+`WherePane` на планшете и ПК, `IndexingCard`, `OfferCard`, `LimitedAccessBanner`, `ErrorSnackbar` и `SelectionToolbar` на экранах.
+
 | Чего нет | Когда появится |
 |---|---|
-| `QrScanner`, `WhereSheet` / `WherePane`, `SourcePicker`, `IndexingCard`, `PermissionList`, `ConnectionLog`, `TrayPanel`, `ArchiveNotifications` | в макетах своих сценариев: собираются из компонентов основы |
-| экраны сценариев Android и Windows | следующими файлами в `mockups/` |
+| `WhereSheet` (лист «Где лежит» на телефоне), `ConnectionLog`, `TrayPanel`, `ArchiveNotifications` | в макетах своих сценариев: собираются из компонентов основы |
+| экраны хранилищ, уборки, устройств и настроек Android и Windows | следующими файлами в `mockups/` |
 | iPhone, iPad и macOS, светлая и тёмная тема | когда дойдём до этих платформ |
