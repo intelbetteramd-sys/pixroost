@@ -61,7 +61,7 @@
 | Подпись macOS | Developer ID + нотаризация (`notarytool`) |
 | Microsoft Store | MSIX (в Compose такого формата нет, сборка скриптом), подпись выполняет Microsoft |
 | Трей / строка меню | Compose `Tray` на Windows и Linux; на macOS — `NSStatusItem` с панелью на SwiftUI |
-| Автозапуск | LaunchAgent (macOS); Windows: ключ `HKCU\…\Run` для `.exe`, `windows.startupTask` для MSIX |
+| Автозапуск | LaunchAgent (macOS); Windows: ключ `HKCU\…\Run`, который приложение пишет само при первом запуске, для `.exe`; `windows.startupTask` для MSIX (переключатель реестра там не работает) |
 | Горячая перезагрузка UI | Compose Hot Reload |
 
 ## Сервер (v1.1, relay)
