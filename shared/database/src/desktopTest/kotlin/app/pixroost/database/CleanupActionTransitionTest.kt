@@ -1,10 +1,10 @@
 package app.pixroost.database
 
 import app.pixroost.database.model.CleanupStatus
+import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlinx.coroutines.test.runTest
 
 /** Status changes of the cleanup journal that must be refused: they would rewrite what really happened. */
 class CleanupActionTransitionTest {
