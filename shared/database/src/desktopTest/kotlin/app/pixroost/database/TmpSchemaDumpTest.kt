@@ -11,5 +11,6 @@ class TmpSchemaDumpTest {
         val target = Path.of("../../build/reports/schema1.json")
         Files.createDirectories(target.parent)
         Files.writeString(target, text)
+        kotlin.test.fail("dumped")
     }
 }
