@@ -45,6 +45,8 @@ do not change the visual direction without the maintainer's approval.
 Claude Code roles for this repository live in `.claude/agents/`: `developer`, `reviewer`, `architect-pragmatist`
 and `architect-skeptic` (debate decisions that are hard to reverse), `designer`, `tester`, `researcher`.
 A lead session hands out issues to them and reports to the maintainer. Builds and checks run in CI only.
+Everything the maintainer has to check by hand on devices is kept in the pinned issue #83 «Что проверить
+мейнтейнеру»: the lead adds new checks there and ticks them off after the maintainer reports.
 
 ## Building in a cloud session
 
