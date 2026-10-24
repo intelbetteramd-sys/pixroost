@@ -51,8 +51,11 @@ class NavigationState(private val sections: AppSections, initial: AppDestination
 
     private fun stackFor(destination: AppDestination): List<AppDestination> = when {
         !sections.returnsToStart -> listOf(destination)
+
         destination == sections.start -> listOf(sections.start)
+
         destination in sections.primary -> listOf(sections.start, destination)
+
         // A secondary destination goes on top of the main section that is visible now.
         else -> _backStack.value.filter { it in sections.primary }.let { it + destination }
     }
