@@ -8,6 +8,8 @@ composeMaterial3 = "1.9.0"
 androidxActivity = "1.13.0"
 kotlinxCoroutines = "1.11.0"
 kermit = "2.2.0"
+# Screenshot tests: https://github.com/takahirom/roborazzi
+roborazzi = "1.77.0"
 
 # Code quality: docs/process/conventions.md#проверки-кода
 spotless = "8.10.2"
@@ -33,6 +35,9 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
+roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
 
 # Gradle plugins used by build-logic.
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -50,6 +55,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
 # Convention plugins from build-logic.
 pixroost-kmp-library = { id = "pixroost.kmp.library" }

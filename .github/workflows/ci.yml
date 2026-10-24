@@ -67,6 +67,13 @@ jobs:
       - name: Check and build
         run: ./gradlew check :apps:android:assembleDebug :apps:desktop:createDistributable
 
+      # Golden images are recorded on Linux (the screenshots workflow), so they are compared there only.
+      - name: Verify screenshots
+        if: runner.os == 'Linux'
+        run: >
+          ./gradlew :shared:designsystem:cleanDesktopTest :shared:designsystem:desktopTest
+          -Proborazzi.test.verify=true
+
       - name: Upload the APK
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -84,6 +91,7 @@ jobs:
           path: |
             build/reports/
             */*/build/reports/
+            */*/build/outputs/roborazzi/
           retention-days: 7
 
   ios:
