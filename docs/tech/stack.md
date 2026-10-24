@@ -57,11 +57,11 @@
 | Что | Выбор |
 |---|---|
 | UI | Compose for Desktop (JVM 25, встроенная JRE) |
-| Упаковка | Compose Gradle plugin (jpackage): `.dmg` (macOS), `.msi` (Windows), `.deb` (Linux) |
+| Упаковка | Compose `createDistributable` (образ приложения) + jpackage: `.dmg` (macOS), `.deb` (Linux). Windows: `.exe` на Inno Setup (сайт), MSIX собираем сами (`makeappx` из Windows SDK по своему `AppxManifest.xml`); `.msi` через jpackage со своим `main.wxs` — только для корпоративной раздачи ([S-07](https://github.com/intelbetteramd-sys/pixroost/issues/27)) |
 | Подпись macOS | Developer ID + нотаризация (`notarytool`) |
-| Microsoft Store | MSIX, подпись выполняет Microsoft |
+| Microsoft Store | MSIX (в Compose такого формата нет, сборка скриптом), подпись выполняет Microsoft |
 | Трей / строка меню | Compose `Tray` на Windows и Linux; на macOS — `NSStatusItem` с панелью на SwiftUI |
-| Автозапуск | LaunchAgent (macOS), реестр / ярлык в автозагрузке (Windows) |
+| Автозапуск | LaunchAgent (macOS); Windows: ключ `HKCU\…\Run` для `.exe`, `windows.startupTask` для MSIX |
 | Горячая перезагрузка UI | Compose Hot Reload |
 
 ## Сервер (v1.1, relay)
