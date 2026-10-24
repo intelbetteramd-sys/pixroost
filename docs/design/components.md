@@ -12,7 +12,7 @@
 | Объект в коде | Что внутри | Источник |
 |---|---|---|
 | `PixroostColors` | светлая и тёмная палитры | [README](README.md#цвета) |
-| `PixroostTypography` | шкала телефона 28/18/15/13 и ПК 28/20/14/12, Unbounded и Onest | [README](README.md#шрифты) |
+| `PixroostTypography` | шкала телефона 28/18/15/13 и ПК 28/20/14/12, Unbounded и Onest; стили основного текста, строк списков, плашек и подписей нижней панели — с `Hyphens.Auto` | [README](README.md#шрифты) |
 | `PixroostSpacing` | 4, 8, 12, 16, 24, 32, 48 | [README](README.md#сетка-и-формы) |
 | `PixroostShapes` | телефон: 8, 16, 20, 28, полное скругление; Windows: 4 везде, включая диалоги | [README](README.md#сетка-и-формы) |
 | `PixroostTheme` | собирает всё выше; на Android — поверх `MaterialTheme` | — |
@@ -52,7 +52,7 @@
 
 | Компонент | Платформа | Что делает | Основа |
 |---|---|---|---|
-| `MainNavigationBar` | Android | нижняя навигация, 4 раздела | `NavigationBar` |
+| `MainNavigationBar` | Android | нижняя навигация, 4 раздела; подписи при крупном шрифте переносятся по слогам, с дефисом | `NavigationBar` |
 | `MainNavigationRail` | планшет Android | rail с кнопкой «Отправить на ПК»: недоступна, пока ничего не выбрано, имя объясняет почему | `NavigationRail` |
 | `SelectionToolbar` | Android | действия с выбранными фото: «Поделиться», «Отправить на ПК», «Ещё» («Удалить из…» — лист мест с числами и причинами, потом `DeleteConfirmSheet`); в одну строку на 360; «Где лежит» — у одного фото | плавающая панель Material 3 Expressive, если есть в версии Compose Multiplatform; иначе своя |
 | `WhereSheet` / `WherePane` | телефон / планшет и ПК | «Где лежит»: лист снизу или панель справа | `ModalBottomSheet` / свой |
