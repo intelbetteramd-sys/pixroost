@@ -58,14 +58,13 @@ object InstallStatusReader {
         return CommandRunner.powershell(script).output.ifBlank { "unknown" }
     }
 
-    private fun localAddresses(): List<String> =
-        try {
-            NetworkInterface.getNetworkInterfaces().toList()
-                .filter { it.isUp && !it.isLoopback }
-                .flatMap { it.inetAddresses.toList() }
-                .filterIsInstance<Inet4Address>()
-                .map { it.hostAddress }
-        } catch (e: IOException) {
-            listOf("failed: ${e.message}")
-        }
+    private fun localAddresses(): List<String> = try {
+        NetworkInterface.getNetworkInterfaces().toList()
+            .filter { it.isUp && !it.isLoopback }
+            .flatMap { it.inetAddresses.toList() }
+            .filterIsInstance<Inet4Address>()
+            .map { it.hostAddress }
+    } catch (e: IOException) {
+        listOf("failed: ${e.message}")
+    }
 }

@@ -14,15 +14,14 @@ class ConnectivityServer {
     val requests: Int get() = counter.get()
 
     /** Returns null on success or the error text. */
-    fun start(): String? =
-        try {
-            val socket = ServerSocket(SpikeConstants.LISTEN_PORT)
-            serverSocket = socket
-            thread(isDaemon = true, name = "s07-listener") { acceptLoop(socket) }
-            null
-        } catch (e: IOException) {
-            "cannot listen on ${SpikeConstants.LISTEN_PORT}: ${e.message}"
-        }
+    fun start(): String? = try {
+        val socket = ServerSocket(SpikeConstants.LISTEN_PORT)
+        serverSocket = socket
+        thread(isDaemon = true, name = "s07-listener") { acceptLoop(socket) }
+        null
+    } catch (e: IOException) {
+        "cannot listen on ${SpikeConstants.LISTEN_PORT}: ${e.message}"
+    }
 
     fun stop() {
         serverSocket?.close()
