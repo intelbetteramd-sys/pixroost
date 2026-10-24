@@ -3,7 +3,6 @@ package app.pixroost.database
 import androidx.room3.RoomDatabase
 import androidx.room3.testing.MigrationTestHelper
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import androidx.sqlite.use
 import app.pixroost.core.dispatchers.DefaultDispatcherProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
