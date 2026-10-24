@@ -4,3 +4,19 @@ naming:
   FunctionNaming:
     # Composable functions are named like types: LampMark, PixroostPlaceholder.
     ignoreAnnotated: ['Composable']
+
+style:
+  MagicNumber:
+    # The default test exclusions, plus desktopTest and androidHostTest: this project runs JVM tests there.
+    excludes:
+      - '**/test/**'
+      - '**/androidTest/**'
+      - '**/commonTest/**'
+      - '**/jvmTest/**'
+      - '**/androidUnitTest/**'
+      - '**/androidInstrumentedTest/**'
+      - '**/androidHostTest/**'
+      - '**/desktopTest/**'
+      - '**/jsTest/**'
+      - '**/iosTest/**'
+      - '**/*.kts'

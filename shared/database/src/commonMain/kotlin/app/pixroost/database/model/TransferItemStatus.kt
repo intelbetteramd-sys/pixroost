@@ -1,0 +1,15 @@
+package app.pixroost.database.model
+
+/**
+ * State of one file in a transfer job.
+ *
+ * Stored as the constant name; never rename a constant without a migration.
+ */
+enum class TransferItemStatus {
+    QUEUED,
+    UPLOADING,
+    VERIFYING,
+    DONE,
+    SKIPPED_EXISTS,
+    FAILED,
+}
