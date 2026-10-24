@@ -14,6 +14,7 @@ fun pixroostTypography(fonts: PixroostFonts, formFactor: PixroostFormFactor): Pi
         PixroostFormFactor.Mobile -> TypographyConstants.MobileScale
         PixroostFormFactor.Desktop -> TypographyConstants.DesktopScale
     }
+
     // Hyphens.Auto needs a quality line breaker on Android; headings use the balanced one.
     fun display(family: FontFamily, size: Int, line: Int) = TextStyle(
         fontFamily = family,

@@ -13,12 +13,11 @@ internal fun contrastRatio(first: Color, second: Color): Double {
 private fun luminance(color: Color): Double =
     RED_WEIGHT * linear(color.red) + GREEN_WEIGHT * linear(color.green) + BLUE_WEIGHT * linear(color.blue)
 
-private fun linear(channel: Float): Double =
-    if (channel <= LINEAR_THRESHOLD) {
-        channel / LINEAR_DIVISOR
-    } else {
-        ((channel + GAMMA_OFFSET) / GAMMA_DIVISOR).toDouble().pow(GAMMA)
-    }
+private fun linear(channel: Float): Double = if (channel <= LINEAR_THRESHOLD) {
+    channel / LINEAR_DIVISOR
+} else {
+    ((channel + GAMMA_OFFSET) / GAMMA_DIVISOR).toDouble().pow(GAMMA)
+}
 
 private const val LUMINANCE_OFFSET = 0.05
 private const val RED_WEIGHT = 0.2126

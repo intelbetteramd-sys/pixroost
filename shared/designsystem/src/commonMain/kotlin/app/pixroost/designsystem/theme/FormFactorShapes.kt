@@ -17,6 +17,7 @@ fun pixroostShapes(formFactor: PixroostFormFactor): PixroostShapes {
             field = smallest,
             round = round,
         )
+
         PixroostFormFactor.Desktop -> PixroostShapes(
             small = smallest,
             plate = smallest,
