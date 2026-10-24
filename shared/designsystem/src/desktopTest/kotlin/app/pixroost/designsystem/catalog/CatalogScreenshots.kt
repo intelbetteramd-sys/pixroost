@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import app.pixroost.designsystem.theme.PixroostFormFactor
 import app.pixroost.designsystem.theme.PixroostTheme
 import app.pixroost.designsystem.theme.PixroostTokens
-import com.github.takahirom.roborazzi.captureRoboImage
+import io.github.takahirom.roborazzi.captureRoboImage
 
 /**
  * Draws [content] in the theme and compares it with (or records) the golden image `<name>.png`.
