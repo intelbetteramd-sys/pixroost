@@ -111,7 +111,7 @@ Takeout нет удаления ([источники](../../product/sources.md))
   в корне архива выдаёт архив, попавший в облако через неизвестного клиента. Исключение — другой файл в том же
   источнике, причём «другой» определяется по file ID, а не по пути. Samsung Gallery синхронизировала удаление
   с OneDrive в обе стороны; с 30.09.2026 синхронизация прекращается ([Microsoft](https://support.microsoft.com/en-US/onedrive/changes-to-samsung-gallery-sync-and-onedrive)), но проверить, что она
-  выключена на конкретном телефоне, нельзя (старые версии Gallery и OneDrive, поэтапное включение), а ошибка
+  выключена на конкретном телефоне, нельзя (например, старые версии Gallery и OneDrive), а ошибка
   стоит потерянных файлов. Поэтому на телефоне Samsung весь подключённый личный OneDrive — один домен с галереей;
   папка «Samsung Gallery» — только дополнительный признак.
   Папки синхронизации ПК узнаёт по клиенту (`CfGetSyncRootInfoByPath`, реестр OneDrive, `info.json` Dropbox,
@@ -294,9 +294,9 @@ fun evaluate(
   устройстве, а не со списком облаков этого ПК) и неизвестный признак общей папки.
 - **Samsung Gallery и OneDrive.** Удаление шло в обе стороны (Samsung Support). С 30.09.2026 Samsung Gallery
   перестаёт синхронизироваться с OneDrive: фото из OneDrive пропадают из галереи, в OneDrive остаются
-  ([Microsoft](https://support.microsoft.com/en-US/onedrive/changes-to-samsung-gallery-sync-and-onedrive)). Pixroost не может проверить, что синхронизация выключена на конкретном телефоне (старые версии
-  Gallery и OneDrive, поэтапное включение), а ошибка стоит потерянных файлов, поэтому весь подключённый личный
-  OneDrive на телефоне Samsung — один домен с галереей, а имя папки «Samsung Gallery» (его называет Microsoft) —
+  ([Microsoft](https://support.microsoft.com/en-US/onedrive/changes-to-samsung-gallery-sync-and-onedrive)). Pixroost не может проверить, что синхронизация выключена на конкретном телефоне (например, старые версии
+  Gallery и OneDrive), а ошибка стоит потерянных файлов, поэтому весь подключённый личный
+  OneDrive на телефоне Samsung — один домен с галереей, а имя папки «Samsung Gallery» (его называет [Microsoft](https://support.microsoft.com/en-US/onedrive/using-samsung-gallery-with-onedrive)) —
   только дополнительный признак. Смягчение правила — отдельное решение с изменением этого ADR.
 - **Хэши OneDrive.** Гарантирован только quickXorHash; `sha1Hash` для личных аккаунтов устарел с июля 2023 и
   приходит без гарантий. Ни тот, ни другой удаления не разрешают.
