@@ -22,7 +22,7 @@ internal fun TypographyCatalog(modifier: Modifier = Modifier) {
         TypeSample("body", typography.body, "Съешь же ещё этих мягких французских булок, да выпей чаю. Pack my box.")
         TypeSample("bodyStrong", typography.bodyStrong, "Яндекс Диск · Dropbox · ПК «Дом»")
         TypeSample("label", typography.label, "Отправить на ПК")
-        TypeSample("caption", typography.caption, "Сохранено дома · 12 июня 2026 · 4,2 МБ")
+        TypeSample("caption", typography.caption, "Сохранено дома · 12 июня 2026 · 4,2\u00A0МБ")
         TypeSample("navigationLabel", typography.navigationLabel, "Хранилища")
         HyphenationSample("hyphens: heading", typography.heading)
         HyphenationSample("hyphens: body", typography.body)

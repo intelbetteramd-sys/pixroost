@@ -3,6 +3,7 @@ package app.pixroost.designsystem.theme
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -46,10 +47,19 @@ class PixroostTypographyTest {
     }
 
     @Test
-    fun `button and rail labels never break inside a word`() {
+    fun `button and rail labels do not hyphenate`() {
         for (typography in listOf(mobile, desktop)) {
             assertEquals(Hyphens.None, typography.label.hyphens)
             assertEquals(Hyphens.None, typography.caption.hyphens)
+        }
+    }
+
+    @Test
+    fun `every line keeps its full height`() {
+        val full = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
+        val styles = with(mobile) { listOf(title, figure, heading, body, bodyStrong, label, caption, navigationLabel) }
+        for (style in styles) {
+            assertEquals(full, style.lineHeightStyle)
         }
     }
 

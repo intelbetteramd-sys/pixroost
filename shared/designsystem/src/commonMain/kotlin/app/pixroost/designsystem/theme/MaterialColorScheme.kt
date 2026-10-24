@@ -37,7 +37,8 @@ internal fun PixroostColors.toMaterialColorScheme(): ColorScheme = lightColorSch
     onErrorContainer = text,
     outline = outline,
     outlineVariant = line,
-    // Material applies its own alpha to the scrim, so the color goes in opaque.
+    // Material applies its own alpha (32%) to the scrim, so the color goes in opaque. The spec asks for 48% and 64%:
+    // sheets and dialogs pass `scrimColor = PixroostTokens.colors.scrim` explicitly.
     scrim = scrim.copy(alpha = 1f),
     surfaceBright = surface,
     surfaceDim = background,

@@ -8,7 +8,11 @@ import androidx.compose.ui.text.TextStyle
  * (docs/design/README.md, "Шрифты").
  *
  * Styles of headings, body text, list rows and bottom-bar labels hyphenate long words (`Hyphens.Auto`);
- * [caption] and [label] do not: a button label and a navigation rail label never break inside a word.
+ * [caption] and [label] do not hyphenate. That only switches the hyphens off: keeping a button or a navigation rail
+ * label whole is up to the component, which grows or wraps between words (README, "Компоненты").
+ *
+ * `Hyphens.Auto` works on Android only; Skia (desktop, iOS) breaks a word that does not fit without a hyphen
+ * (docs/design/components.md, "Токены"). Lines have their full height, as in the mockups.
  * Plates (`SafetyNote`, `InfoNote`) use [body].
  */
 @Immutable
@@ -27,6 +31,10 @@ class PixroostTypography(
     val label: TextStyle,
     /** Onest 400, 13/18 and 12/16: captions, secondary lines. */
     val caption: TextStyle,
-    /** Onest 400 at the size of [caption], with hyphens: labels of the bottom navigation bar. */
+    /**
+     * Onest 400 at the size of [caption], with hyphens: labels of the bottom navigation bar. Material's
+     * `NavigationBarItem` and `NavigationRailItem` both take `labelMedium` (= [caption]), so the bottom bar
+     * has to pass this style explicitly; the rail keeps [caption].
+     */
     val navigationLabel: TextStyle,
 )

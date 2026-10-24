@@ -16,3 +16,5 @@ naming:
       - '**/jsTest/**'
       - '**/iosTest/**'
       - '**/desktopTest/**'
+      - '**/androidHostTest/**'
+      - '**/androidDeviceTest/**'

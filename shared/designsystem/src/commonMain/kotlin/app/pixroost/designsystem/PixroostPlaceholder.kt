@@ -30,12 +30,10 @@ fun PixroostPlaceholder(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(PixroostSpacing.space12),
             ) {
-                LampMark(outline = colors.onLamp, modifier = Modifier.size(LAMP_SIZE.dp))
+                LampMark(outline = colors.onLamp, modifier = Modifier.size(PixroostPlaceholderConstants.LAMP_SIZE.dp))
                 Text(AppInfo.NAME, color = colors.text, style = PixroostTokens.typography.title)
                 Text(platformName(), color = colors.textSecondary, style = PixroostTokens.typography.body)
             }
         }
     }
 }
-
-private const val LAMP_SIZE = 64

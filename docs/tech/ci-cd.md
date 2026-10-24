@@ -26,6 +26,10 @@ GitHub Actions. Для **публичных** репозиториев мину�
   Эталоны лежат в репозитории (`shared/designsystem/src/desktopTest/screenshots`), записаны на Linux; на Windows
   скриншоты не сверяются (шрифты и сглаживание отличаются). При расхождении картинки лежат в артефакте
   `reports-ubuntu-latest`, в `shared/designsystem/build/outputs/roborazzi`.
+- Сравнение строгое (порог Roborazzi по умолчанию 1%): обновление Compose, Skiko, шрифтов или образа раннера может
+  сдвинуть сглаживание. Тогда эталоны перезаписывают: *Actions → Record screenshots → Run workflow* на ветке обновления,
+  скачать артефакт `screenshots`, положить в `src/desktopTest/screenshots`, посмотреть глазами и закоммитить
+  ([как](../process/conventions.md#скриншот-тесты)).
 - Actions закреплены по SHA коммита, версия — в комментарии; обновляет их Dependabot. Права — только чтение.
 - Кэш Gradle — `gradle/actions/setup-gradle` с открытым провайдером `basic`, кэш Kotlin/Native — `~/.konan`.
   Кэш Gradle пополняют только сборки `main`, PR его только читают.

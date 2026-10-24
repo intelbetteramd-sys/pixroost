@@ -4,9 +4,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+
+// The mockups (CSS line-height) give every line its full height; Compose trims the first and the last line by default.
+private val FullLineHeight = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
 
 /** The text styles of [formFactor] set in [fonts]. */
 fun pixroostTypography(fonts: PixroostFonts, formFactor: PixroostFormFactor): PixroostTypography {
@@ -21,6 +25,7 @@ fun pixroostTypography(fonts: PixroostFonts, formFactor: PixroostFormFactor): Pi
         fontWeight = FontWeight.SemiBold,
         fontSize = size.sp,
         lineHeight = line.sp,
+        lineHeightStyle = FullLineHeight,
         letterSpacing = TypographyConstants.DISPLAY_LETTER_SPACING_EM.em,
         lineBreak = LineBreak.Heading,
         hyphens = Hyphens.Auto,
@@ -31,6 +36,7 @@ fun pixroostTypography(fonts: PixroostFonts, formFactor: PixroostFormFactor): Pi
         fontWeight = weight,
         fontSize = size.sp,
         lineHeight = line.sp,
+        lineHeightStyle = FullLineHeight,
         lineBreak = if (hyphens == Hyphens.Auto) LineBreak.Paragraph else LineBreak.Simple,
         hyphens = hyphens,
     )
