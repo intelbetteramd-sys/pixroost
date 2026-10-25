@@ -21,7 +21,7 @@ ksp = "2.3.12"
 junit = "4.13.2"
 
 # Code quality: docs/process/conventions.md#проверки-кода
-spotless = "8.10.2"
+spotless = "8.10.4"
 ktlint = "1.8.0"
 # Compose API guidelines as ktlint rules: https://mrmans0n.github.io/compose-rules/
 composeRules = "0.6.7"
