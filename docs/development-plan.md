@@ -97,6 +97,12 @@ iPhone, iPad и macOS в светлой и тёмной теме.
 
 Эпик [#4](https://github.com/intelbetteramd-sys/pixroost/issues/4). Результат: на телефоне и ПК видна лента своих фото, 50 000 элементов прокручиваются без рывков.
 
+На 2026-11-18 завершены шаги 3.1 ([#90](https://github.com/intelbetteramd-sys/pixroost/issues/90)),
+3.3 ([#92](https://github.com/intelbetteramd-sys/pixroost/issues/92)),
+3.4 ([#93](https://github.com/intelbetteramd-sys/pixroost/issues/93)) и
+3.5 ([#94](https://github.com/intelbetteramd-sys/pixroost/issues/94)). В коде есть тема, ядро, оболочка
+навигации и самостоятельный модуль Room 3; источники и лента ещё не реализованы.
+
 | № | Шаг | Что делаем | Макеты | Ч |
 |---|---|---|---|---:|
 | 3.1 | Тема и токены | `PixroostTheme`: цвета-роли светлой и тёмной темы, шрифты Unbounded и Onest внутри приложения (лицензия OFL в `NOTICE`), отступы, скругления; скриншот-тесты Roborazzi | `DS-Tokens` | 10 |

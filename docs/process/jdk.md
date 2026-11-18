@@ -49,12 +49,12 @@ echo $env:JAVA_HOME      # C:\Program Files\Eclipse Adoptium\jdk-25...
 В папке проекта:
 
 ```powershell
-.\gradlew --stop         # остановить старые процессы Gradle на 21
-.\gradlew --version      # строки Launcher JVM и Daemon JVM — 25
+.\gradlew.bat --stop         # остановить старые процессы Gradle на 21
+.\gradlew.bat --version      # строки Launcher JVM и Daemon JVM — 25
 ```
 
-Если `java -version` и обе строки `.\gradlew --version` показывают 25, всё в порядке — даже когда
-`JAVA_HOME` пустая: тогда `.\gradlew` берёт Java из `PATH`. Но `JAVA_HOME` лучше всё же задать — её ищут
+Если `java -version` и обе строки `.\gradlew.bat --version` показывают 25, всё в порядке — даже когда
+`JAVA_HOME` пустая: тогда `.\gradlew.bat` берёт Java из `PATH`. Но `JAVA_HOME` лучше всё же задать — её ищут
 и другие инструменты. Одной командой в PowerShell (путь берётся из той `java`, что уже находится):
 
 ```powershell
@@ -69,7 +69,7 @@ echo $env:JAVA_HOME      # C:\Program Files\Eclipse Adoptium\jdk-25...
 | Что видно | Что сделать |
 |---|---|
 | `echo $env:JAVA_HOME` показывает старую JDK | Пуск → «Изменение системных переменных среды» → Переменные среды → `JAVA_HOME` = папка JDK 25 → OK. Открыть новый терминал |
-| `java -version` показывает 26 или 21 | не страшно: `.\gradlew` берёт Java из `JAVA_HOME`, а не из `PATH`. Если мешает — поднять папку `…\jdk-25…\bin` выше в `Path` |
+| `java -version` показывает 26 или 21 | не страшно: `.\gradlew.bat` берёт Java из `JAVA_HOME`, а не из `PATH`. Если мешает — поднять папку `…\jdk-25…\bin` выше в `Path` |
 | в Android Studio сборка на 21 | шаг 3: *Gradle JDK* = 25 |
 | в папке проекта есть `gradle\gradle-daemon-jvm.properties` с `toolchainVersion=21` | проект сам просит 21. В шаблоне KMP это не мешает; в Pixroost после шага 1.1 там будет 25 |
 
@@ -106,6 +106,6 @@ Xcode своя JDK не нужна: Java нужна только Gradle, кот�
 
 ## После шага 1.1
 
-В Pixroost версию JDK зафиксирует сам проект: toolchain Gradle и файл `gradle/gradle-daemon-jvm.properties`
-укажут 25, а если её нет — Gradle скачает её сам. Настройки выше останутся нужны для шаблона и для
-случаев, когда Android Studio спрашивает, какую JDK взять.
+В Pixroost JDK 25 уже задана convention-плагинами в `build-logic` и файлом
+`gradle/gradle-daemon-jvm.properties`. Настройки выше нужны также для шаблона и случаев,
+когда Android Studio спрашивает, какую JDK использовать.

@@ -2,6 +2,9 @@
 
 Каркас создан в шаге 1.1: `apps/android`, `apps/desktop`, `shared/core`, `shared/designsystem` и `build-logic`.
 iOS-оболочка — в шаге A.2: `apps/ios` и `apps/ios-framework`.
+В Фазе 3 добавлены `shared/app` (Koin и Navigation 3) и `shared/database` (Room 3, схема v1 и DAO).
+Android и desktop уже используют `PixroostTheme`, но разделы пока показывают заглушки.
+База данных ещё не подключена к `allModules`: платформенные билдеры и тесты реализованы отдельно.
 Остальные модули ниже — целевая структура, они появляются по [плану](../development-plan.md).
 
 ## Дерево
