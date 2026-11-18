@@ -45,7 +45,13 @@ other screens are not drawn yet. Do not change the visual direction without the 
 
 Claude Code roles for this repository live in `.claude/agents/`: `developer`, `reviewer`, `architect-pragmatist`
 and `architect-skeptic` (debate decisions that are hard to reverse), `designer`, `tester`, `researcher`.
-A lead session hands out issues to them and reports to the maintainer. Builds and checks run in CI only.
+A lead session hands out issues to them and reports to the maintainer. Codex definitions live locally in
+`.codex/agents/`; do not assume that Claude-specific tools or model names exist in Codex.
+Local builds, tests and application checks are allowed. On Windows use `gradlew.bat`, JDK 25 and the
+Android SDK from `local.properties`. When the `gradle-run` skill is available, use its compact-output wrapper
+for agent-initiated Gradle commands. CI remains required before merging; iOS builds require macOS.
+Read `.claude/notes/lead-state.md` at session start when it exists, and update it before context compaction.
+The handoff records historical plans; it does not authorize starting old tasks or launching agents.
 Everything the maintainer has to check by hand on devices is kept in the pinned issue #83 «Что проверить
 мейнтейнеру»: the lead adds new checks there, ticks them off after the maintainer reports, and moves finished sections
 into an archive comment of the issue so that the description lists only open checks.

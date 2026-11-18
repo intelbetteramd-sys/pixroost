@@ -4,8 +4,30 @@
 Для iPhone и macOS нужен Mac — [раздел 7](#7-mac-iphone-и-macos).
 
 Команды для Windows написаны для **PowerShell** — это терминал Windows и Android Studio по умолчанию.
-Gradle там запускается как `.\gradlew`: PowerShell не ищет программы в текущей папке, поэтому без `.\`
-команда не найдётся. В старой командной строке (cmd) `.\gradlew` тоже работает.
+Gradle там запускается как `.\gradlew.bat`: PowerShell не ищет программы в текущей папке, поэтому без `.\`
+команда не найдётся. В старой командной строке (cmd) `.\gradlew.bat` тоже работает.
+
+## Локальная работа через Codex
+
+Локальные сборки, тесты и проверки приложения разрешены; перед слиянием требуется зелёный CI.
+Codex читает `CLAUDE.md` через `project_doc_fallback_filenames` в локальном `.codex/config.toml`.
+Определения ролей для Codex находятся в `.codex/agents/`, исходные инструкции — в `.claude/agents/`.
+При переносе на другую машину нужно проверить оба набора: локальная папка `.codex/` может быть исключена из Git.
+
+Если установлен навык `chrisbanes-skills:gradle-run`, агент запускает Gradle через его
+`scripts/gradle_run.py`: отдельные команды `create`, `run`, `finish`. В `run` передаётся
+`.\gradlew.bat`; обёртка сохраняет полный журнал временно и возвращает ограниченную диагностику.
+Python нужен для этой обёртки, а не для сборки приложения из Android Studio.
+
+Перед первым запуском проверить `python3 --version`. На Windows команда может указывать на
+неработающий alias Microsoft Store, хотя `python --version` работает. В этом случае нужен рабочий
+`python3` в PATH. При локальном переносе это исправлено добавлением копии установленного `python.exe`
+под именем `python3.exe` рядом с ним, без замены существующего файла и без изменения PATH.
+После переустановки Python доступность `python3` нужно проверить снова.
+
+Текущая передача контекста хранится в локальном `.claude/notes/lead-state.md`. Исследовательские заметки
+и история сессии не заменяют текущий код и ADR. Хуки Claude Code нельзя подключать к Codex без проверки
+совместимости формата событий; старый хук `/compact` автоматически не переносится.
 
 ## Что понадобится
 
@@ -51,8 +73,7 @@ Gradle там запускается как `.\gradlew`: PowerShell не ище�
 
 **Почему 25, а не новее.** JDK 25 — LTS: обновления безопасности выходят годами. Desktop-версия везёт JDK
 внутри установщика, поэтому версия с долгой поддержкой важна и для пользователей. 26 — промежуточный
-выпуск: обновления для него закончились, когда 15 сентября 2026 вышла 27. А 27 Gradle 9.7 пока
-не умеет запускать.
+выпуск: обновления для него закончились, когда 15 сентября 2026 вышла 27. В проекте используется JDK 25; версию Gradle задаёт `gradle/wrapper/gradle-wrapper.properties`.
 
 ## 3. Android Studio
 
@@ -63,7 +84,7 @@ Gradle там запускается как `.\gradlew`: PowerShell не ище�
    ([подробнее](jdk.md#3-android-studio)).
 4. Settings → Languages & Frameworks → Android SDK: в *SDK Platforms* отмечена последняя стабильная версия
    Android, в *SDK Tools* — Android SDK Build-Tools и Platform-Tools.
-5. Задать `ANDROID_HOME`, чтобы `.\gradlew` в терминале находил Android SDK в любой папке проекта.
+5. Задать `ANDROID_HOME`, чтобы `.\gradlew.bat` в терминале находил Android SDK в любой папке проекта.
    Android Studio пишет путь в `local.properties` сама, но только после синхронизации проекта. Одной командой
    в PowerShell, затем открыть новое окно терминала:
 
@@ -92,8 +113,8 @@ Gradle там запускается как `.\gradlew`: PowerShell не ище�
 
 ### Телефон — APK через Telegram
 
-1. Собрать APK: в Android Studio *Build → Build APK(s)* или `.\gradlew :apps:android:assembleDebug`
-   (в шаблоне из раздела 6 — `.\gradlew :androidApp:assembleDebug`). Файл `.apk` появится в папке
+1. Собрать APK: в Android Studio *Build → Build APK(s)* или `.\gradlew.bat :apps:android:assembleDebug`
+   (в шаблоне из раздела 6 — `.\gradlew.bat :androidApp:assembleDebug`). Файл `.apk` появится в папке
    `build\outputs\apk\debug` этого модуля.
 2. Отправить его себе в Telegram («Избранное»), открыть на телефоне, разрешить Telegram установку приложений.
 3. Новая сборка ставится поверх старой, данные сохраняются. Если телефон пишет «Приложение не установлено» —
@@ -127,10 +148,10 @@ Gradle там запускается как `.\gradlew`: PowerShell не ище�
 1. На [kmp.jetbrains.com](https://kmp.jetbrains.com) заполнить форму по таблице ниже, скачать шаблон, открыть его
    в Android Studio. В репозиторий Pixroost его не добавляем.
 2. Запустить конфигурацию Android на эмуляторе; собрать APK и поставить его на телефон через Telegram.
-3. Запустить desktop-приложение: конфигурация *desktopApp* или `.\gradlew :desktopApp:run`.
+3. Запустить desktop-приложение: конфигурация *desktopApp* или `.\gradlew.bat :desktopApp:run`.
 
 Модули в шаблоне называются не так, как будут в Pixroost: `androidApp`, `desktopApp`, `shared`.
-Точный список показывает `.\gradlew projects`. Команды с `:apps:…` — только для Pixroost после шага 1.1.
+Точный список показывает `.\gradlew.bat projects`. Команды с `:apps:…` — только для Pixroost после шага 1.1.
 
 Предупреждение `Native task 'iosSimulatorArm64Test' is disabled` на Windows — нормально: iOS собирается
 только на Mac. Убрать его можно строкой `kotlin.native.ignoreDisabledTargets=true` в `gradle.properties`.
@@ -153,10 +174,10 @@ Gradle там запускается как `.\gradlew`: PowerShell не ище�
 Из терминала:
 
 ```powershell
-.\gradlew :apps:android:installDebug   # поставить на запущенный эмулятор
-.\gradlew :apps:android:assembleDebug  # собрать APK для телефона
-.\gradlew :apps:desktop:run            # запустить на Windows
-.\gradlew check                        # всё, что проверяет CI
+.\gradlew.bat :apps:android:installDebug   # поставить на запущенный эмулятор
+.\gradlew.bat :apps:android:assembleDebug  # собрать APK для телефона
+.\gradlew.bat :apps:desktop:run            # запустить на Windows
+.\gradlew.bat check                        # всё, что проверяет CI
 ```
 
 ## 7. Mac: iPhone и macOS
@@ -241,11 +262,11 @@ Gradle там запускается как `.\gradlew`: PowerShell не ище�
 | Эмулятор тормозит | закрыть лишние программы; эмулятору нужно 2–4 ГБ памяти |
 | APK: «Приложение не установлено» | удалить старую версию: её подписал другой отладочный ключ |
 | Xiaomi не даёт включить «Установка через USB» | нужна SIM-карта и Mi-аккаунт, см. раздел 4 |
-| `gradlew.bat is not recognized` | в PowerShell писать `.\gradlew` |
+| `gradlew.bat is not recognized` | в PowerShell писать `.\gradlew.bat` |
 | `The project is using an incompatible version (AGP …)` | обновить Android Studio: Help → Check for Updates (на Mac — Android Studio → Check for Updates). Проект держит версию AGP, которую поддерживает последняя стабильная Android Studio |
 | `project 'apps' not found` | команды `:apps:…` — для Pixroost после шага 1.1; в шаблоне — `:desktopApp:run`, `:androidApp:installDebug` |
 | Gradle берёт Java 21, хотя стоит 25 | [откуда она берётся и что сделать](jdk.md#если-всё-равно-21) |
-| Gradle ругается на версию Java | *Gradle JDK* = 25 в настройках, `JAVA_HOME` указывает на JDK 25 (или 26). На Java 27 Gradle 9.7 не запускается |
+| Gradle ругается на версию Java | *Gradle JDK* = 25 в настройках, `JAVA_HOME` указывает на JDK 25 (или 26). Версию Gradle задаёт wrapper проекта; для воспроизводимой сборки используем JDK 25 |
 | `Filename too long` | `git config --global core.longpaths true`, короткий путь к проекту |
 | Сборка очень долгая | исключения в Defender (раздел 5) |
 | iPhone: приложение перестало открываться через неделю | срок бесплатной подписи 7 дней: запустить из Xcode ещё раз |

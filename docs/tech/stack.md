@@ -64,7 +64,8 @@
   `model/` (перечисления), `dao/`. База — `PixroostDatabase`, версия в `DatabaseConstants.VERSION`.
 - **Сборка базы.** Платформа даёт билдер (`pixroostDatabaseBuilder(Context)` на Android, `(File)` на desktop,
   `(String)` на iOS), общий код донастраивает его в `applyPixroostDefaults(DispatcherProvider)`: `BundledSQLiteDriver`,
-  WAL, миграции, диспетчер `io` для запросов. Готовую базу создаёт DI-слой (шаг 3.4).
+  WAL, миграции, диспетчер `io` для запросов. Подключение базы к DI ещё предстоит: текущий `allModules`
+  содержит только модули ядра, платформы и оболочки; приложение пока не открывает базу.
 - **KSP** подключается отдельно к каждому таргету: `kspAndroid`, `kspDesktop`, `kspIosArm64`, `kspIosSimulatorArm64`.
 - **Схема** экспортируется плагином `androidx.room3` в `shared/database/schemas/` и лежит в репозитории.
 - **Тесты** — `desktopTest` на реальном файле SQLite во временной папке (тот же драйвер, что в приложении):
@@ -99,7 +100,8 @@
   Пока там заглушки, терять нечего; до шага 3.11 это нужно решить (записи всех основных разделов, рецепт
   Navigation 3 «multiple back stacks»): [#112](https://github.com/intelbetteramd-sys/pixroost/issues/112). Для iOS сохранение состояния вкладок — критерий успеха спайка S-08.
 - **Вид.** `NavigationStyle.forWindow`: телефон уже 600 dp — нижняя панель, шире — rail, ПК — левая панель
-  (`PermanentNavigationDrawer`). Экраны — заглушки на Material 3 по умолчанию, без темы (она в шаге 3.1).
+  (`PermanentNavigationDrawer`). Экраны — заглушки Material 3 внутри уже реализованной `PixroostTheme`;
+  базовые компоненты приложения остаются шагом 3.2.
   Тесты: логика в `commonTest`, запуск `PixroostApp` с настоящим `NavDisplay` — UI-тест на desktop
   (`runComposeUiTest`), он ловит несовместимость Navigation 3 (собран под Compose 1.10) с нашей версией Compose.
 - **Состояние.** `rememberSaveable` хранит стек (ids через запятую): переживает поворот и смерть процесса на Android.
